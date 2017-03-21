@@ -9,6 +9,7 @@ php:
 before_script:
   - phpenv config-rm xdebug.ini
   - cp .env.travis .env
+  - mkdir bootstrap/cache
   - composer self-update
   - composer install --prefer-source --no-interaction --dev
   - php artisan key:generate
