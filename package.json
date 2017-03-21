@@ -3,7 +3,7 @@
   "scripts": {
     "dev-watch": "cd ./ClientApp && ng build --watch",
     "dev-build": "cd ./ClientApp && ng build",
-    "prod-build": "cd ./ClientApp && ng build -e prod",
+    "prod-build": "cd ./ClientApp && ng build -e prod && cd ../public/client-app && rm -rf index.html && mv favicos ../",
     "serve": "php artisan serve",
     "db": "npm run dev-build && npm run serve",
     "dw": "concurrently --kill-others \"npm run dev-watch\" \"npm run serve\"",
