@@ -7,7 +7,7 @@ php:
 before_script:
   - phpenv config-rm xdebug.ini
   - cp .env.example .env
-  - npm install -g "@angular/cli"
+  - npm install -g @angular/cli
   - mysql -e 'create database test;'
   - mkdir bootstrap/cache
   - composer self-update
