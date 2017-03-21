@@ -6,7 +6,8 @@
     "serve": "php artisan serve",
     "db": "npm run dev-build && npm run serve",
     "dw": "concurrently --kill-others \"npm run dev-watch\" \"npm run serve\"",
-    "prod": "cd ./ClientApp && npm install && ng build -e prod"
+    "prod": "cd ./ClientApp && npm install && ng build -e prod",
+    "install-all": "npm install && cd ./ClientApp && npm install"
   },
   "devDependencies": {
     "axios": "^0.15.3",
