@@ -13,3 +13,6 @@ bootstrap/cache/
 
 # Rocketeer PHP task runner and deployment package. https://github.com/rocketeers/rocketeer
 .rocketeer/
+
+# Ignore the client application that gets build.
+public/client-app
