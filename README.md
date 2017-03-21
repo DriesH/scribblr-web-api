@@ -1,7 +1,11 @@
-# scribblr-web-ng2
-Official Scribblr website build in Laravel 5.4 and Angular 2
+# <center>Scribblr</center>
 
-### Build state on travis: [![Build Status](https://travis-ci.org/DriesH/scribblr-web-ng2.svg?branch=master)](https://travis-ci.org/DriesH/scribblr-web-ng2)
+<p align="center">
+    <img src="https://travis-ci.org/DriesH/scribblr-web-ng2.svg?branch=master" alt="build status">
+</p>
+
+
+<p align="center">Official Scribblr website build in Laravel 5.4 and Angular 2</p>
 
 ## What is Scribblr?
 
