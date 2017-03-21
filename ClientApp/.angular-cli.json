@@ -6,7 +6,7 @@
   "apps": [
     {
       "root": "src",
-      "outDir": "./public",
+      "outDir": "../public/client-app",
       "assets": [
         "assets",
         "favicos"
