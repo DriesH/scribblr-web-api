@@ -1,4 +1,4 @@
-# <center>Scribblr</center>
+<h1 align="center">Scribblr</h1>
 
 <p align="center">
     <img src="https://travis-ci.org/DriesH/scribblr-web-ng2.svg?branch=master" alt="build status">
