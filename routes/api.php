@@ -16,3 +16,15 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::group(['prefix' => 'application'], function () {
+    Route::group(['prefix' => 'children'], function () {
+        Route::get('/', 'ChildController@index');
+        Route::get('/{shortId}', 'ChildController@getChild');
+        Route::get('/{shortId}/quotes', 'ChildController@allQuotes');
+        Route::post('/new', 'ChildController@new');
+        Route::post('/upload', 'ChildController@uploadImage');
+        Route::delete('/{shortId}/delete', 'ChildController@delete');
+        Route::put('/{shortId}/edit', 'ChildController@update');
+    });
+});
