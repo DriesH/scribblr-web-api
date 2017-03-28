@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use App\Classes\ShortIdGenerator;
 
+use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Registered;
+use Jrean\UserVerification\Traits\VerifiesUsers;
+use Jrean\UserVerification\Facades\UserVerification;
+
 class RegisterController extends Controller
 {
     /*
@@ -21,7 +26,7 @@ class RegisterController extends Controller
     |
     */
 
-    use RegistersUsers;
+    use RegistersUsers, VerifiesUsers;
 
     /**
     * Where to redirect users after registration.
@@ -39,7 +44,7 @@ class RegisterController extends Controller
     public function __construct(ShortIdGenerator $shortId)
     {
         $this->shortId = $shortId;
-        $this->middleware('guest');
+        $this->middleware('guest', ['except' => ['getVerification', 'getVerificationError']]);
     }
     /**
     * Get a validator for an incoming registration request.
@@ -79,6 +84,24 @@ class RegisterController extends Controller
             'email' => $data['email'],
             // 'password' => bcrypt($data['password']),
         ]);
+    }
+
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        $user = $this->create($request->all());
+
+        event(new Registered($user));
+
+        $this->guard()->login($user);
+
+        UserVerification::generate($user);
+
+        UserVerification::send($user, 'My Custom E-mail Subject');
+
+        return $this->registered($request, $user)
+        ?: redirect($this->redirectPath());
     }
 
 
