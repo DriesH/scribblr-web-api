@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "00d68f30601e7c7d72960f5f99634887",
-    "content-hash": "fa0cacd348903451e07e9eedc99839a9",
+    "hash": "64a87a607ae5474c11091d898f309163",
+    "content-hash": "02d0841517fb4ff2d62f7ae682a0f549",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -362,6 +362,59 @@
                 }
             ],
             "time": "2015-04-20 18:58:01"
+        },
+        {
+            "name": "jrean/laravel-user-verification",
+            "version": "v4.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jrean/laravel-user-verification.git",
+                "reference": "72e6412718350b9ffcdb7018a0195707b1e2c450"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jrean/laravel-user-verification/zipball/72e6412718350b9ffcdb7018a0195707b1e2c450",
+                "reference": "72e6412718350b9ffcdb7018a0195707b1e2c450",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "5.4.*",
+                "php": ">=5.6.4"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^1.12",
+                "fzaninotto/faker": "^1.6",
+                "mockery/mockery": "^0.9.5",
+                "phpunit/phpunit": "^5.5",
+                "satooshi/php-coveralls": "^1.0",
+                "sllh/php-cs-fixer-styleci-bridge": "^2.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Jrean\\UserVerification\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jean Ragouin",
+                    "email": "go@askjong.com"
+                }
+            ],
+            "description": "User Email Verification For Laravel 5.*",
+            "keywords": [
+                "email activation",
+                "email verification",
+                "framework",
+                "laravel",
+                "user activation",
+                "user verification"
+            ],
+            "time": "2017-03-27 14:14:57"
         },
         {
             "name": "laravel/framework",
@@ -2444,12 +2497,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tymondesigns/jwt-auth.git",
-                "reference": "66a7339ea4946ab75bb6b0d96d3d4477da47631b"
+                "reference": "2893e1c9ad83e83626b2a7962f48fb48677e317d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tymondesigns/jwt-auth/zipball/66a7339ea4946ab75bb6b0d96d3d4477da47631b",
-                "reference": "66a7339ea4946ab75bb6b0d96d3d4477da47631b",
+                "url": "https://api.github.com/repos/tymondesigns/jwt-auth/zipball/2893e1c9ad83e83626b2a7962f48fb48677e317d",
+                "reference": "2893e1c9ad83e83626b2a7962f48fb48677e317d",
                 "shasum": ""
             },
             "require": {
@@ -2501,7 +2554,7 @@
                 "jwt",
                 "laravel"
             ],
-            "time": "2017-03-25 22:50:20"
+            "time": "2017-03-28 19:09:43"
         },
         {
             "name": "vlucas/phpdotenv",
