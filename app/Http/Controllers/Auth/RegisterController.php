@@ -6,6 +6,12 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Classes\ShortIdGenerator;
+
+use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Registered;
+use Jrean\UserVerification\Traits\VerifiesUsers;
+use Jrean\UserVerification\Facades\UserVerification;
 
 class RegisterController extends Controller
 {
@@ -20,52 +26,83 @@ class RegisterController extends Controller
     |
     */
 
-    use RegistersUsers;
+    use RegistersUsers, VerifiesUsers;
 
     /**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
+    * Where to redirect users after registration.
+    *
+    * @var string
+    */
     protected $redirectTo = '/home';
+    protected $shortId;
 
     /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    * Create a new controller instance.
+    *
+    * @return void
+    */
+    public function __construct(ShortIdGenerator $shortId)
     {
-        $this->middleware('guest');
+        $this->shortId = $shortId;
+        $this->middleware('guest', ['except' => ['getVerification', 'getVerificationError']]);
     }
-
     /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
+    * Get a validator for an incoming registration request.
+    *
+    * @param  array  $data
+    * @return \Illuminate\Contracts\Validation\Validator
+    */
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|max:255',
+            'fullname' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|min:6|confirmed',
+            // 'password' => 'required|min:6|confirmed',
         ]);
     }
 
     /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return User
-     */
+    * Create a new user instance after a valid registration.
+    *
+    * @param  array  $data
+    * @return User
+    */
     protected function create(array $data)
     {
+        //explode fullname in 2 pieces. Split on first space
+        $fullnameExploded = explode(' ', $data['fullname'], 2);
+        $firstName = $fullnameExploded[0];
+        $lastName = (!empty($fullnameExploded[1]))?$fullnameExploded[1]:'';
+        do {
+            $shortId = $this->shortId->generateId(8);
+        } while (count(User::where('short_id', $shortId)->first()) >= 1);
+
         return User::create([
-            'name' => $data['name'],
+            'short_id' => $shortId,
+            'first_name' => $firstName,
+            'last_name' => $lastName,
             'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+            // 'password' => bcrypt($data['password']),
         ]);
     }
+
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        $user = $this->create($request->all());
+
+        event(new Registered($user));
+
+        $this->guard()->login($user);
+
+        UserVerification::generate($user);
+
+        UserVerification::send($user, 'My Custom E-mail Subject');
+
+        return $this->registered($request, $user)
+        ?: redirect($this->redirectPath());
+    }
+
+
 }
