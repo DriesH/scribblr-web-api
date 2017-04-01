@@ -14,30 +14,25 @@ use Illuminate\Http\Request;
 */
 
 // TODO: Check this route! Do we need it? I don't think we do. DUBBLE CHECK!
-
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
-// Login
+
+// Login-
 Route::post('login', 'Auth\LoginController@login');
 
-Route::group([
-    'middleware' => 'auth:api',
-], function () {
-
+Route::group(['middleware' => 'auth:api'], function () {
     // Authentication Routes...
     Route::get('logout', 'Auth\LoginController@logout');
 
     Route::get('test', function () {
         return 'authenticated';
     });
-
 });
 
 Route::get('/user', function (Request $request) {
-    dd($request->header());
-    return $request->user();
-});
+    return response()->json(array($request->user()));
+})->middleware('auth:api');
 
 
 /*

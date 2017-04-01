@@ -12,7 +12,7 @@
             <h2 id="new-face" class="sub-header-text theme-1-subcolor">Let's put a name to the new face!</h2>
         </div>
 
-        <form class="register-container__form" action="{{ route('register') }}" method="POST">
+        <form id="register_form" class="register-container__form" action="{{ route('register') }}" method="POST">
             {{ csrf_field() }}
             <div class="register-form__input-field-container">
                 <div class="register-form-input-field">
@@ -51,17 +51,43 @@
 
 @section('scripts')
     <script type="text/javascript">
-    $('button[type=submit]').on('click', function() {
-        $.ajax({
-            type: 'GET',
-            url: '/api/user',
-            success: function(user) {
-                console.log(user);
-            },
-            dataType: 'json',
-            headers: { Authorization:  }
-        });
-    });
+        $(function() {
+            // form
+            var form$ = $('#register_form');
 
+            // submit form
+            form$.submit(function(e) {
+                e.preventDefault();
+                register();
+            });
+
+            // register user
+            function register() {
+                $.ajax({
+                    type: 'POST',
+                    data: form$.serializeArray(),
+                    dataType: 'json',
+                    success: getUser,
+                    error: function (error) {
+                        console.log(error, 'Vies hard geerrordddddd!');
+                    }
+                });
+            }
+
+            // get user data
+            function getUser(data) {
+                $.ajax({
+                    type: 'GET',
+                    url: '/api/user',
+                    dataType: 'json',
+                    headers: {
+                        'Authorization': 'Bearer ' + data.token
+                    },
+                    success: function(successData) {
+                        console.log(successData);
+                    }
+                });
+            }
+        });
     </script>
 @endsection

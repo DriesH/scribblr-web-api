@@ -4,15 +4,16 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\Http\Controllers\Controller;
+use App\Classes\ShortIdGenerator;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use App\Classes\ShortIdGenerator;
 
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Registered;
 use Jrean\UserVerification\Traits\VerifiesUsers;
 use Jrean\UserVerification\Facades\UserVerification;
 use Auth;
+
 class RegisterController extends Controller
 {
     /*
@@ -73,6 +74,7 @@ class RegisterController extends Controller
         $fullnameExploded = explode(' ', $data['fullname'], 2);
         $firstName = $fullnameExploded[0];
         $lastName = (!empty($fullnameExploded[1]))?$fullnameExploded[1]:'';
+
         do {
             $shortId = $this->shortId->generateId(8);
         } while (count(User::where('short_id', $shortId)->first()) >= 1);
@@ -94,7 +96,7 @@ class RegisterController extends Controller
 
         event(new Registered($user));
 
-        $token = $this->guard()->login($user);
+        $token = $this->guard('web')->login($user);
 
         UserVerification::generate($user);
 
@@ -104,9 +106,5 @@ class RegisterController extends Controller
             'success' => true,
             'token' => $token
         ]);
-        // return $this->registered($request, $user)
-        // ?: redirect($this->redirectPath());
     }
-
-
 }
