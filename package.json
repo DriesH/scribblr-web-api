@@ -2,11 +2,12 @@
   "private": true,
   "scripts": {
     "dev-watch": "cd ./ClientApp && ng build --watch",
+    "run-dev-watch-webpack": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "dev-build": "cd ./ClientApp && ng build",
     "prod-build": "cd ./ClientApp && ng build -e prod && cd ../public/client-app && rm -rf index.html && mv favicos ../",
     "serve": "php artisan serve",
     "db": "npm run dev-build && npm run serve",
-    "dw": "concurrently --kill-others \"npm run dev-watch\" \"npm run serve\"",
+    "dw": "concurrently --kill-others \"npm run dev-watch\" \"npm run serve\" \"npm run run-dev-watch-webpack\"",
     "prod": "cd ./ClientApp && npm install && ng build -e prod",
     "install-all": "cp env.example env && npm install && cd ./bootstrap && mkdir cache && cd ../ && composer update && cd ./ClientApp && npm install && npm install -g @angular/cli && php artisan key:generate"
   },

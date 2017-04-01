@@ -30,3 +30,6 @@ cache:
 
 env:
   - TRAVIS_NODE_VERSION="6.10.0"
+
+notifications:
+  slack: scribblr-team:1GpFYzcSsRza8KOJdY0xuMuh
