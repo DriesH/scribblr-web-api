@@ -109,16 +109,16 @@
         },
         {
             "name": "erusev/parsedown",
-            "version": "1.6.1",
+            "version": "1.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/erusev/parsedown.git",
-                "reference": "20ff8bbb57205368b4b42d094642a3e52dac85fb"
+                "reference": "1bf24f7334fe16c88bf9d467863309ceaf285b01"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/erusev/parsedown/zipball/20ff8bbb57205368b4b42d094642a3e52dac85fb",
-                "reference": "20ff8bbb57205368b4b42d094642a3e52dac85fb",
+                "url": "https://api.github.com/repos/erusev/parsedown/zipball/1bf24f7334fe16c88bf9d467863309ceaf285b01",
+                "reference": "1bf24f7334fe16c88bf9d467863309ceaf285b01",
                 "shasum": ""
             },
             "require": {
@@ -147,7 +147,7 @@
                 "markdown",
                 "parser"
             ],
-            "time": "2016-11-02 15:56:58"
+            "time": "2017-03-29 16:04:15"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -478,16 +478,16 @@
         },
         {
             "name": "jrean/laravel-user-verification",
-            "version": "v4.1.2",
+            "version": "v4.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jrean/laravel-user-verification.git",
-                "reference": "72e6412718350b9ffcdb7018a0195707b1e2c450"
+                "reference": "b753ee03c7aa96d63af0967a0d377e95b964dba4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jrean/laravel-user-verification/zipball/72e6412718350b9ffcdb7018a0195707b1e2c450",
-                "reference": "72e6412718350b9ffcdb7018a0195707b1e2c450",
+                "url": "https://api.github.com/repos/jrean/laravel-user-verification/zipball/b753ee03c7aa96d63af0967a0d377e95b964dba4",
+                "reference": "b753ee03c7aa96d63af0967a0d377e95b964dba4",
                 "shasum": ""
             },
             "require": {
@@ -527,7 +527,7 @@
                 "user activation",
                 "user verification"
             ],
-            "time": "2017-03-27 14:14:57"
+            "time": "2017-03-31 01:09:37"
         },
         {
             "name": "laravel/framework",
@@ -1500,16 +1500,16 @@
         },
         {
             "name": "spatie/laravel-medialibrary",
-            "version": "5.8.0",
+            "version": "5.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-medialibrary.git",
-                "reference": "72fbfa940d4dabf847bbceb5fff524d8e84229a5"
+                "reference": "df9c07dfc3c2344e549eafc48747fdd98c148c0e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-medialibrary/zipball/72fbfa940d4dabf847bbceb5fff524d8e84229a5",
-                "reference": "72fbfa940d4dabf847bbceb5fff524d8e84229a5",
+                "url": "https://api.github.com/repos/spatie/laravel-medialibrary/zipball/df9c07dfc3c2344e549eafc48747fdd98c148c0e",
+                "reference": "df9c07dfc3c2344e549eafc48747fdd98c148c0e",
                 "shasum": ""
             },
             "require": {
@@ -1567,7 +1567,7 @@
                 "media",
                 "spatie"
             ],
-            "time": "2017-03-24 13:26:33"
+            "time": "2017-03-30 10:05:33"
         },
         {
             "name": "spatie/pdf-to-image",
@@ -2610,12 +2610,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tymondesigns/jwt-auth.git",
-                "reference": "14dbaf3ecc06479ee03b3e9e455d16ae58da0587"
+                "reference": "41c2cffd8454bb5b8134c06c87721b22950939e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tymondesigns/jwt-auth/zipball/14dbaf3ecc06479ee03b3e9e455d16ae58da0587",
-                "reference": "14dbaf3ecc06479ee03b3e9e455d16ae58da0587",
+                "url": "https://api.github.com/repos/tymondesigns/jwt-auth/zipball/41c2cffd8454bb5b8134c06c87721b22950939e0",
+                "reference": "41c2cffd8454bb5b8134c06c87721b22950939e0",
                 "shasum": ""
             },
             "require": {
@@ -2667,7 +2667,7 @@
                 "jwt",
                 "laravel"
             ],
-            "time": "2017-03-28 19:23:32"
+            "time": "2017-03-30 18:21:45"
         },
         {
             "name": "vlucas/phpdotenv",

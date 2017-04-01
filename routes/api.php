@@ -35,8 +35,9 @@ Route::group([
 });
 
 Route::get('/user', function (Request $request) {
+    dd($request->header());
     return $request->user();
-})->middleware('auth:api');
+});
 
 
 /*

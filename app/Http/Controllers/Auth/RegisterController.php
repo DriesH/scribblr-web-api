@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Registered;
 use Jrean\UserVerification\Traits\VerifiesUsers;
 use Jrean\UserVerification\Facades\UserVerification;
-
+use Auth;
 class RegisterController extends Controller
 {
     /*
@@ -57,7 +57,7 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'fullname' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
-            // 'password' => 'required|min:6|confirmed',
+            'password' => 'required|min:8',
         ]);
     }
 
@@ -82,7 +82,7 @@ class RegisterController extends Controller
             'first_name' => $firstName,
             'last_name' => $lastName,
             'email' => $data['email'],
-            // 'password' => bcrypt($data['password']),
+            'password' => bcrypt($data['password']),
         ]);
     }
 
@@ -94,14 +94,18 @@ class RegisterController extends Controller
 
         event(new Registered($user));
 
-        $this->guard()->login($user);
+        $token = $this->guard()->login($user);
 
         UserVerification::generate($user);
 
         UserVerification::send($user, 'My Custom E-mail Subject');
 
-        return $this->registered($request, $user)
-        ?: redirect($this->redirectPath());
+        return response()->json([
+            'success' => true,
+            'token' => $token
+        ]);
+        // return $this->registered($request, $user)
+        // ?: redirect($this->redirectPath());
     }
 
 

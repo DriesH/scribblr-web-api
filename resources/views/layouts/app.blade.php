@@ -26,10 +26,15 @@
     @yield('content')
 
     <!-- Scripts -->
+    <script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
     <script type="text/javascript" src="{{ asset('client-app/polyfills.bundle.js') }}"></script>
     <script type="text/javascript" src="{{ asset('client-app/main.bundle.js') }}"></script>
     <script type="text/javascript" src="{{ asset('client-app/styles.bundle.js') }}"></script>
     <script type="text/javascript" src="{{ asset('client-app/vendor.bundle.js') }}"></script>
     <script type="text/javascript" src="{{ asset('client-app/inline.bundle.js') }}"></script>
+    @yield('scripts')
 </body>
 </html>

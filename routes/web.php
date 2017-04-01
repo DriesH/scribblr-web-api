@@ -18,6 +18,8 @@ Route::get('/', function () {
 Auth::routes();
 
 
-Route::group(['middleware' => ['web', 'isVerified']], function () {
+
+
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/home', 'HomeController@index');
 });
