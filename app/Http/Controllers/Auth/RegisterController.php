@@ -77,7 +77,7 @@ class RegisterController extends Controller
 
         do {
             $shortId = $this->shortId->generateId(8);
-        } while (count(User::where('short_id', $shortId)->first()) >= 1);
+        } while ( count( User::where('short_id', $shortId)->first()) >= 1 );
 
         return User::create([
             'short_id' => $shortId,

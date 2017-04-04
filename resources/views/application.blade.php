@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- FACICONS -->
+    <!-- FAVICONS -->
     <link rel="icon" href="{{ asset('favicos/favicon.ico') }}" type="image/x-icon" />
 
     <!-- CSRF Token -->
@@ -22,16 +22,14 @@
     </script>
 </head>
 <body>
-    <!-- content -->
-    @yield('content')
+    <!-- application root -->
+    <scribblr-ng></scribblr-ng>
 
     <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-    {{-- <script type="text/javascript" src="{{ asset('client-app/polyfills.bundle.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('client-app/polyfills.bundle.js') }}"></script>
     <script type="text/javascript" src="{{ asset('client-app/main.bundle.js') }}"></script>
     <script type="text/javascript" src="{{ asset('client-app/styles.bundle.js') }}"></script>
     <script type="text/javascript" src="{{ asset('client-app/vendor.bundle.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('client-app/inline.bundle.js') }}"></script> --}}
-    @yield('scripts')
+    <script type="text/javascript" src="{{ asset('client-app/inline.bundle.js') }}"></script>
 </body>
 </html>

@@ -18,31 +18,34 @@ use Illuminate\Http\Request;
 //     return $request->user();
 // });
 
-// Login-
+/**
+ * Login routes
+ */
 Route::post('login', 'Auth\LoginController@login');
+Route::post('register', 'Auth\RegisterController@register');
 
 Route::group(['middleware' => 'auth:api'], function () {
     // Authentication Routes...
     Route::get('logout', 'Auth\LoginController@logout');
 
+    // TESTING
     Route::get('test', function () {
         return 'authenticated';
     });
+
+    Route::get('/user', function (Request $request) {
+        return response()->json(array($request->user()));
+    });
 });
 
-Route::get('/user', function (Request $request) {
-    return response()->json(array($request->user()));
-})->middleware('auth:api');
-
-
 /*
-| Api endpoints consumed by the client application written in Angular 2.
-*/
+ * Api endpoints consumed by the client application written in Angular 2.
+ */
 Route::group(['prefix' => 'application'], function () {
 
     /*
-    | Api endpoints for all the child data.
-    */
+     * Api endpoints for all the child data.
+     */
     Route::group(['prefix' => 'children'], function () {
         Route::get('/', 'ChildController@index');
         Route::get('/{shortId}', 'ChildController@getChild');
@@ -54,8 +57,8 @@ Route::group(['prefix' => 'application'], function () {
     });
 
     /*
-    | Api endpoints for quote data.
-    */
+     * Api endpoints for quote data.
+     */
     Route::group(['prefix' => 'quotes'], function () {
         Route::post('/new', 'QuoteController@new');
         Route::post('/upload', 'QuoteController@uploadImage');
@@ -63,8 +66,8 @@ Route::group(['prefix' => 'application'], function () {
     });
 
     /*
-    | Api endpoints for book data.
-    */
+     * Api endpoints for book data.
+     */
     Route::group(['prefix' => 'books'], function () {
         Route::post('/new', 'BookController@new');
         // Route::put('');
