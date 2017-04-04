@@ -68,4 +68,8 @@ class User extends Model implements
              ]
         ];
     }
+
+    public function Children() {
+        $this->hasMany('App\Child', 'user_id');
+    }
 }

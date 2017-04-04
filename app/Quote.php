@@ -6,5 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Quote extends Model
 {
-    protected $fillable = [];
+    protected $fillable = [
+        'short_id',
+        'child_id',
+        'quote',
+        'font_size',
+        'font',
+    ];
+
+    public function Children() {
+        $this->belongsTo('App\Child');
+    }
 }

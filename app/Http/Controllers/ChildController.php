@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Child;
+use App\Quote;
 
 class ChildController extends Controller
 {
@@ -20,7 +22,15 @@ class ChildController extends Controller
     */
     function getChild($shortId)
     {
-        // do something...
+        $child = Child::where('short_id', $shortId)->first();
+        if (!$child) {
+            return self::RespondModelNotFound();
+        }
+
+        return response()->json([
+            'success' => true,
+            'child' => $child
+        ]);
     }
 
     /*
@@ -29,13 +39,25 @@ class ChildController extends Controller
     */
     function allQuotes($shortId)
     {
-        // do something...
+        $allChildQuotes = Quote::with(['Children' => function($query) use($shortId) {
+            $query->where('children.shortId', $shortId);
+        }])
+        ->get();
+
+        if (!$allChildQuotes) {
+            return self::RespondModelNotFound();
+        }
+
+        return response()->json([
+            'success' => true,
+            'quotes' => $allChildQuotes
+        ]);
     }
 
     /*
     | Create a new child.
     */
-    function new()
+    function new(Request $request)
     {
         // do something...
     }
