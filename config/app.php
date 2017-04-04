@@ -179,6 +179,7 @@ return [
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
         Spatie\MediaLibrary\MediaLibraryServiceProvider::class,
         Jrean\UserVerification\UserVerificationServiceProvider::class,
+        Barryvdh\Cors\ServiceProvider::class,
 
     ],
 
