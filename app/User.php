@@ -11,20 +11,22 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Tymon\JWTAuth\Contracts\JWTSubject as AuthenticatableUserContract;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Model implements
-    AuthenticatableContract,
-    AuthorizableContract,
-    CanResetPasswordContract,
-    AuthenticatableUserContract
+AuthenticatableContract,
+AuthorizableContract,
+CanResetPasswordContract,
+AuthenticatableUserContract
 {
-    use Authenticatable, Authorizable, CanResetPassword;
+    use Authenticatable, Authorizable, CanResetPassword, SoftDeletes;
 
+    protected $dates = ['deleted_at'];
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+    * The attributes that are mass assignable.
+    *
+    * @var array
+    */
     protected $fillable = [
         'first_name',
         'last_name',
@@ -39,10 +41,10 @@ class User extends Model implements
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
+    * The attributes that should be hidden for arrays.
+    *
+    * @var array
+    */
     protected $hidden = [
         'password', 'remember_token',
     ];
@@ -50,22 +52,26 @@ class User extends Model implements
 
 
     /**
-     * @return mixed
-     */
+    * @return mixed
+    */
     public function getJWTIdentifier()
     {
         return $this->getKey();  // Eloquent model method
     }
 
     /**
-     * @return array
-     */
+    * @return array
+    */
     public function getJWTCustomClaims()
     {
         return [
             'user' => [
                 'id' => $this->id,
-             ]
+            ]
         ];
+    }
+
+    public function Children() {
+        $this->hasMany('App\Child', 'user_id');
     }
 }

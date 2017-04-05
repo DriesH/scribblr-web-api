@@ -3,6 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Validator;
+use Illuminate\Validation\Rule;
+use App\Classes\ShortIdGenerator;
+
+//Models
+
+use App\Child;
+use App\Quote;
 
 class ChildController extends Controller
 {
@@ -20,7 +28,15 @@ class ChildController extends Controller
     */
     function getChild($shortId)
     {
-        // do something...
+        $child = Child::where('short_id', $shortId)->first();
+        if (!$child) {
+            return self::RespondModelNotFound();
+        }
+
+        return response()->json([
+            'success' => true,
+            'child' => $child
+        ]);
     }
 
     /*
@@ -29,23 +45,60 @@ class ChildController extends Controller
     */
     function allQuotes($shortId)
     {
-        // do something...
+        $allChildQuotes = Quote::with(['Children' => function($query) use($shortId) {
+            $query->where('children.shortId', $shortId);
+        }])
+        ->get();
+
+        if (!$allChildQuotes) {
+            return self::RespondModelNotFound();
+        }
+
+        return response()->json([
+            'success' => true,
+            'quotes' => $allChildQuotes
+        ]);
     }
 
     /*
     | Create a new child.
     */
-    function new()
+    function new(Request $request, ShortIdGenerator $shortIdGenerator)
     {
-        // do something...
+        $validator = Validator::make($request->all(), [
+            'gender' => ['required', Rule::in(Child::$genders)],
+            'first_name' => 'required|max:50',
+            'last_name' => 'required|max:50',
+            'date_of_birth' => 'required|date'
+        ]);
+
+        if ($validator->fails()) {
+            return self::RespondValidationError($request, $validator);
+        }
+
+        $newChild = new Child();
+        do {
+            $shortId = $shortIdGenerator->generateId(8);
+        } while ( count( Child::where('short_id', $shortId)->first()) >= 1 );
+        $newChild->user_id = Auth::user()->id; // FIXME: get current user, works with jwt???
+        $newChild->gender = $request->gender;
+        $newChild->first_name = $request->first_name;
+        $newChild->last_name = $request->last_name;
+        $newChild->date_of_birth = new \DateTime($request->date_of_birth);
+        $newChild->save();
+
+        return response()->json([
+            'success' => true,
+            'child' => $newChild
+        ]);
     }
 
     /*
     | Upload an image for your child avatar.
     */
-    function uploadImage()
+    function uploadImage(Request $request)
     {
-        // do something...
+        //file upload
     }
 
     /*
@@ -54,7 +107,11 @@ class ChildController extends Controller
     */
     function delete($shortId)
     {
-        // do something...
+        $childToDelete = Child::where('short_id')->first();
+        if (!$childToDelete) {
+            return self::RespondModelNotFound();
+        }
+        $childToDelete->delete();
     }
 
     /*

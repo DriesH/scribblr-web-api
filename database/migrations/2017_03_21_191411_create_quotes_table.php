@@ -21,6 +21,7 @@ class CreateQuotesTable extends Migration
             $table->integer('font_size');
             $table->string('font');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('child_id')->references('id')->on('children')->onDelete('cascade');
         });
