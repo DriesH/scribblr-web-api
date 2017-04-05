@@ -28,6 +28,7 @@ class CreateOrdersTable extends Migration
             $table->date('delivery_date');
             $table->float('price');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('book_id')->references('id')->on('books')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

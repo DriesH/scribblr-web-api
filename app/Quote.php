@@ -3,9 +3,14 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Quote extends Model
 {
+    use SoftDeletes;
+    
+    protected $dates = ['deleted_at'];
+
     protected $fillable = [
         'short_id',
         'child_id',

@@ -3,9 +3,14 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Child extends Model
 {
+    use SoftDeletes;
+
+    protected $dates = ['deleted_at'];
+    
     protected $fillable = [
         'short_id',
         'user_id',
@@ -15,11 +20,12 @@ class Child extends Model
         'date_of_birth',
     ];
 
-    protected $genders = [
+    public static $genders = [
         'Male',
         'Female',
         'Prefer not to disclose'
     ];
+
 
     public function Quotes() {
         $this->hasMany('App\Quote', 'child_id');

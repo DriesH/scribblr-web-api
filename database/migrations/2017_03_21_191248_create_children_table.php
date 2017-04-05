@@ -22,6 +22,7 @@ class CreateChildrenTable extends Migration
             $table->string('last_name');
             $table->date('date_of_birth');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

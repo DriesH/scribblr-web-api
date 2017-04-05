@@ -18,6 +18,7 @@ class CreateBookQuotesTable extends Migration
             $table->integer('book_id')->unsigned();
             $table->integer('quote_id')->unsigned();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('book_id')->references('id')->on('books')->onDelete('cascade');
             $table->foreign('quote_id')->references('id')->on('quotes')->onDelete('cascade');

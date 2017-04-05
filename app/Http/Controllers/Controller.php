@@ -12,6 +12,8 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     const SUCCESS = 'success';
+    const ERRORS = 'errors';
+    const OLD_INPUT = 'old_input';
     const ERROR_TYPE = 'error_type';
     const ERROR_MESSAGE = 'error_message';
     const ERROR_TYPE_MODEL_NOT_FOUND = 'model_not_found';
@@ -26,6 +28,16 @@ class Controller extends BaseController
             self::SUCCESS => false,
             self::ERROR_TYPE => self::ERROR_TYPE_MODEL_NOT_FOUND,
             self::ERROR_MESSAGE => self::ERROR_MESSAGES[self::ERROR_TYPE_MODEL_NOT_FOUND]
+        ]);
+    }
+
+    protected function RespondValidationError($request, $validator) {
+        return response()->json([
+            self::SUCCESS => false,
+            self::ERROR_TYPE => self::ERROR_TYPE_VALIDATION,
+            self::ERROR_MESSAGE => self::ERROR_MESSAGES[self::ERROR_TYPE_VALIDATION],
+            self::ERRORS => $validator->errors()->all(),
+            self::OLD_INPUT => $request->all()
         ]);
     }
 
