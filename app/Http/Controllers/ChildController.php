@@ -95,9 +95,28 @@ class ChildController extends Controller
     /*
     | Upload an image for your child avatar.
     */
-    function uploadImage(Request $request)
+    function uploadImage(Request $request, $shortId)
     {
-        //file upload
+        $validator = Validator::make($request->all(), [
+            'image' => 'required|file|image|size:10485760', //10 MB
+        ]);
+
+        if ($validator->fails()) {
+            return self::RespondValidationError($request, $validator);
+        }
+
+        $child = Child::where('short_id', $shortId)->first();
+        if (!$child) {
+            return self::RespondModelNotFound();
+        }
+
+        $uploadedImage = $child->addMedia($pathToFile)->toMediaLibrary();
+
+        return response()->json([
+            'success' => true,
+            'uploadedImage' => $uploadedImage
+        ]);
+
     }
 
     /*

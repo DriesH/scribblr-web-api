@@ -51,7 +51,7 @@ Route::group(['prefix' => 'application'], function () {
         Route::get('/{shortId}', 'ChildController@getChild');
         Route::get('/{shortId}/quotes', 'ChildController@allQuotes');
         Route::post('/new', 'ChildController@new');
-        Route::post('/upload', 'ChildController@uploadImage');
+        Route::post('/{shortId}/upload', 'ChildController@uploadImage');
         Route::delete('/{shortId}/delete', 'ChildController@delete');
         Route::put('/{shortId}/edit', 'ChildController@update');
     });

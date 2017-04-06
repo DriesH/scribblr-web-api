@@ -12,14 +12,17 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Tymon\JWTAuth\Contracts\JWTSubject as AuthenticatableUserContract;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
 
 class User extends Model implements
 AuthenticatableContract,
 AuthorizableContract,
 CanResetPasswordContract,
-AuthenticatableUserContract
+AuthenticatableUserContract,
+HasMedia
 {
-    use Authenticatable, Authorizable, CanResetPassword, SoftDeletes;
+    use Authenticatable, Authorizable, CanResetPassword, SoftDeletes, HasMediaTrait;
 
     protected $dates = ['deleted_at'];
     /**
