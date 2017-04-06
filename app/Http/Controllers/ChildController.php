@@ -8,7 +8,6 @@ use Illuminate\Validation\Rule;
 use App\Classes\ShortIdGenerator;
 
 //Models
-
 use App\Child;
 use App\Quote;
 
