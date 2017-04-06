@@ -106,7 +106,7 @@ class ChildController extends Controller
     */
     function delete($shortId)
     {
-        $childToDelete = Child::where('short_id')->first();
+        $childToDelete = Child::where('short_id', $shortId)->first();
         if (!$childToDelete) {
             return self::RespondModelNotFound();
         }
@@ -117,8 +117,34 @@ class ChildController extends Controller
     | Update a child by shortId.
     | @params {$shortId}
     */
-    function update($shortId)
+    function update(Request $request, $shortId)
     {
-        // do something...
+        $validator = Validator::make($request->all(), [
+            'gender' => ['required', Rule::in(Child::$genders)],
+            'first_name' => 'required|max:50',
+            'last_name' => 'required|max:50',
+            'date_of_birth' => 'required|date'
+        ]);
+
+        if ($validator->fails()) {
+            return self::RespondValidationError($request, $validator);
+        }
+
+        $childToUpdate = Child::where('short_id', $shortId)->first();
+        if (!$childToUpdate) {
+            return self::RespondModelNotFound();
+        }
+
+        $childToUpdate->gender = $request->gender;
+        $childToUpdate->first_name = $request->first_name;
+        $childToUpdate->last_name = $request->last_name;
+        $childToUpdate->date_of_birth = new \DateTime($request->date_of_birth);
+        $childToUpdate->save();
+
+        return response()->json([
+            'success' => true,
+            'child' => $childToUpdate
+        ]);
+
     }
 }
