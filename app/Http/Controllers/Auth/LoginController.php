@@ -67,6 +67,7 @@ class LoginController extends Controller
     {
         $user_resp = new stdClass();
         $user_resp->id = $user->id;
+        $user_resp->short_id = $user->short_id;
         $user_resp->first_name = $user->first_name;
         $user_resp->last_name = $user->last_name;
         $user_resp->email = $user->email;
