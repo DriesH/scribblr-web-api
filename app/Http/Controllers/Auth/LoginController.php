@@ -64,8 +64,8 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request, $user, $token)
     {
+        $user->JWTToken = $token;
         return response()->json([
-            '_token' => $token,
             'user' => $user
         ]);
     }
