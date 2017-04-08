@@ -7,6 +7,7 @@ use stdClass;
 class UserController extends Controller
 {
     public function getUser(Request $request) {
+        $user = Auth::user();
         $user_resp = new stdClass();
         $user_resp->id = $user->id;
         $user_resp->short_id = $user->short_id;
