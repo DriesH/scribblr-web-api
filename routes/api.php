@@ -22,13 +22,13 @@ use Illuminate\Http\Request;
 * Login/register routes
 */
 Route::group(['prefix' => 'auth'], function () {
-    Route::post('login', 'Auth\LoginController@login');
-    Route::post('register', 'Auth\RegisterController@register');
+    Route::post('/login', 'Auth\LoginController@login');
+    Route::post('/register', 'Auth\RegisterController@register');
 });
 
 Route::group(['middleware' => 'auth:api', 'prefix' => 'auth'], function () {
     // Authentication Routes...
-    Route::get('logout', 'Auth\LoginController@logout');
+    Route::get('/logout', 'Auth\LoginController@logout');
     Route::get('/user', 'UserController@getUser');
 });
 
