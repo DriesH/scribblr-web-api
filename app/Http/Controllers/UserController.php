@@ -21,7 +21,6 @@ class UserController extends Controller
         $user_resp->city = $user->city;
         $user_resp->postal_code = $user->postal_code;
         $user_resp->country = $user->country;
-        $user_resp->JWTToken = $token;
 
         return response()->json([
             'user' => $user_resp
