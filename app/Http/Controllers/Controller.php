@@ -13,6 +13,7 @@ class Controller extends BaseController
 
     const SUCCESS = 'success';
     const ERRORS = 'errors';
+    const REQUIRED = 'required';
     const OLD_INPUT = 'old_input';
     const ERROR_TYPE = 'error_type';
     const ERROR_MESSAGE = 'error_message';

@@ -34,9 +34,17 @@ class ChildController extends Controller
     | Get a specific child by shortId.
     | @params {$shortId}
     */
-    function getChild($shortId)
+    function getChild()
     {
-        $child = Child::where('short_id', $shortId)->first();
+        $validator = Validator::make($request->all(), [
+            'child_short_id' => self::REQUIRED
+        ]);
+
+        if ($validator->fails()) {
+            return self::RespondValidationError($request, $validator);
+        }
+
+        $child = Child::where('short_id', $request->child_short_id)->first();
         if (!$child) {
             return self::RespondModelNotFound();
         }
@@ -51,10 +59,18 @@ class ChildController extends Controller
     | Get all quotes from a specific child by shortId.
     | @params {$shortId}
     */
-    function allQuotes($shortId)
+    function allQuotes(Request $request)
     {
-        $allChildQuotes = Quote::with(['Children' => function($query) use($shortId) {
-            $query->where('children.shortId', $shortId);
+        $validator = Validator::make($request->all(), [
+            'child_short_id' => self::REQUIRED
+        ]);
+
+        if ($validator->fails()) {
+            return self::RespondValidationError($request, $validator);
+        }
+
+        $allChildQuotes = Quote::with(['Children' => function($query) use($request) {
+            $query->where('children.shortId', $request->child_short_id);
         }])
         ->get();
 
@@ -104,17 +120,18 @@ class ChildController extends Controller
     /*
     | Upload an image for your child avatar.
     */
-    function uploadImage(Request $request, $shortId)
+    function uploadImage(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'image' => 'required|file|image|size:10485760', //10 MB
+            'child_short_id' => self::REQUIRED
         ]);
 
         if ($validator->fails()) {
             return self::RespondValidationError($request, $validator);
         }
 
-        $child = Child::where('short_id', $shortId)->first();
+        $child = Child::where('short_id', $request->child_short_id)->first();
         if (!$child) {
             return self::RespondModelNotFound();
         }
@@ -132,9 +149,17 @@ class ChildController extends Controller
     | Delete a child by shortId.
     | @params {$shortId}
     */
-    function delete($shortId)
+    function delete(Request $request)
     {
-        $childToDelete = Child::where('short_id', $shortId)->first();
+        $validator = Validator::make($request->all(), [
+            'short_id' => self::REQUIRED
+        ]);
+
+        if ($validator->fails()) {
+            return self::RespondValidationError($request, $validator);
+        }
+
+        $childToDelete = Child::where('short_id', $request->child_short_id)->first();
         if (!$childToDelete) {
             return self::RespondModelNotFound();
         }
@@ -145,20 +170,21 @@ class ChildController extends Controller
     | Update a child by shortId.
     | @params {$shortId}
     */
-    function update(Request $request, $shortId)
+    function update(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'gender' => ['required', Rule::in(Child::$genders)],
             'first_name' => 'required|max:50',
             'last_name' => 'required|max:50',
-            'date_of_birth' => 'required|date'
+            'date_of_birth' => 'required|date',
+            'child_short_id' => self::REQUIRED
         ]);
 
         if ($validator->fails()) {
             return self::RespondValidationError($request, $validator);
         }
 
-        $childToUpdate = Child::where('short_id', $shortId)->first();
+        $childToUpdate = Child::where('short_id', $request->child_short_id)->first();
         if (!$childToUpdate) {
             return self::RespondModelNotFound();
         }
