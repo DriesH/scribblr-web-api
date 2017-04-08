@@ -17,7 +17,8 @@ class QuoteController extends Controller
         $validator = Validator::make($request->all(), [
             'quote' => self::REQUIRED,
             'font_size' => self::REQUIRED.'|integer',
-            'font' => self::REQUIRED
+            'font' => self::REQUIRED,
+            'image' => 'image'
         ]);
 
         if ($validator->fails()) {
@@ -36,14 +37,26 @@ class QuoteController extends Controller
         $quote->quote = $request->quote;
         $quote->font_size = $request->font_size;
         $quote->font = $request->font;
+        if($request->image) $quote->addMedia($request->image);
+        $quote->save();
+
+        $child->attach($quote);
     }
 
     /*
     | Delete a quote by shortId.
     | @params {$shortId}
     */
-    function delete($shortId)
+    function delete($childShortId, $quoteShortId)
     {
-        // do something...
+        $quoteToDelete = Quote::where('short_id', $quoteShortId)->first();
+        if (!$quoteToDelete) {
+            return self::RespondModelNotFound();
+        }
+        $quoteToDelete->delete();
+
+        return response()->json([
+            'success' => true
+        ]);
     }
 }

@@ -119,7 +119,7 @@ class ChildController extends Controller
             return self::RespondModelNotFound();
         }
 
-        $uploadedImage = $child->addMedia($pathToFile)->toMediaLibrary();
+        $uploadedImage = $child->addMedia($request->image)->toMediaLibrary();
 
         return response()->json([
             'success' => true,
