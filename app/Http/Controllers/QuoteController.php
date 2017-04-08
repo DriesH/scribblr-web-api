@@ -18,7 +18,7 @@ class QuoteController extends Controller
         $validator = Validator::make($request->all(), [
             'quote' => self::REQUIRED,
             'font_size' => self::REQUIRED.'|integer',
-            'font' => self::REQUIRED,
+            'font_type' => self::REQUIRED,
             'image' => 'image'
         ]);
 
@@ -38,7 +38,7 @@ class QuoteController extends Controller
         $quote->short_id = $quoteShortId;
         $quote->quote = $request->quote;
         $quote->font_size = $request->font_size;
-        $quote->font = $request->font;
+        $quote->font_type = $request->font_type;
         $quote->child_id = $child->id;
         if($request->image) $quote->addMedia($request->image);
         $quote->save();
