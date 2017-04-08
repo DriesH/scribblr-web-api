@@ -10,6 +10,7 @@ use App\Classes\ShortIdGenerator;
 //Models
 use App\Child;
 use App\Quote;
+use Auth;
 
 class ChildController extends Controller
 {
@@ -88,6 +89,7 @@ class ChildController extends Controller
         do {
             $shortId = $shortIdGenerator->generateId(8);
         } while ( count( Child::where('short_id', $shortId)->first()) >= 1 );
+        $newChild->short_id = $shortId;
         $newChild->user_id = Auth::user()->id; // FIXME: get current user, works with jwt???
         $newChild->gender = $request->gender;
         $newChild->first_name = $request->first_name;

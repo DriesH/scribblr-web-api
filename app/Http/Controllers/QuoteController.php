@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Quote;
 use App\Child;
 use App\Classes\ShortIdGenerator;
+use Validator;
 
 class QuoteController extends Controller
 {
@@ -27,20 +28,21 @@ class QuoteController extends Controller
 
         $child = Child::where('short_id', $childShortId)->first();
         if (!$child) {
+            dd("test");
             return self::RespondModelNotFound();
         }
 
         $quote = new Quote();
         do {
             $quoteShortId = $shortIdGenerator->generateId(8);
-        } while ( count( Quote::where('short_id', $shortId)->first()) >= 1 );
+        } while ( count( Quote::where('short_id', $quoteShortId)->first()) >= 1 );
+        $quote->short_id = $quoteShortId;
         $quote->quote = $request->quote;
         $quote->font_size = $request->font_size;
         $quote->font = $request->font;
+        $quote->child_id = $child->id;
         if($request->image) $quote->addMedia($request->image);
         $quote->save();
-
-        $child->attach($quote);
     }
 
     /*
