@@ -43,11 +43,11 @@ Route::group(['prefix' => 'application'], function () {
     Route::group(['prefix' => 'children'], function () {
         Route::get('/', 'ChildController@index');
         Route::get('/{child_short_id}', 'ChildController@getChild');
-        Route::get('/quotes', 'ChildController@allQuotes');
+        Route::get('/{child_short_id}/quotes', 'ChildController@allQuotes');
         Route::post('/new', 'ChildController@new');
-        Route::post('/upload', 'ChildController@uploadImage');
-        Route::delete('/delete', 'ChildController@delete');
-        Route::put('/edit', 'ChildController@update');
+        Route::post('/{child_short_id}/upload', 'ChildController@uploadImage');
+        Route::delete('/{child_short_id}/delete', 'ChildController@delete');
+        Route::put('/{child_short_id}/edit', 'ChildController@update');
     });
 
     /*
