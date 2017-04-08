@@ -34,17 +34,9 @@ class ChildController extends Controller
     | Get a specific child by shortId.
     | @params {$shortId}
     */
-    function getChild()
+    function getChild($child_short_id)
     {
-        $validator = Validator::make($request->all(), [
-            'child_short_id' => self::REQUIRED
-        ]);
-
-        if ($validator->fails()) {
-            return self::RespondValidationError($request, $validator);
-        }
-
-        $child = Child::where('short_id', $request->child_short_id)->first();
+        $child = Child::where('short_id', $child_short_id)->first();
         if (!$child) {
             return self::RespondModelNotFound();
         }

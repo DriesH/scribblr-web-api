@@ -42,12 +42,12 @@ Route::group(['prefix' => 'application'], function () {
     */
     Route::group(['prefix' => 'children'], function () {
         Route::get('/', 'ChildController@index');
-        Route::get('/{shortId}', 'ChildController@getChild');
-        Route::get('/{shortId}/quotes', 'ChildController@allQuotes');
+        Route::get('/{child_short_id}', 'ChildController@getChild');
+        Route::get('/quotes', 'ChildController@allQuotes');
         Route::post('/new', 'ChildController@new');
-        Route::post('/{shortId}/upload', 'ChildController@uploadImage');
-        Route::delete('/{shortId}/delete', 'ChildController@delete');
-        Route::put('/{shortId}/edit', 'ChildController@update');
+        Route::post('/upload', 'ChildController@uploadImage');
+        Route::delete('/delete', 'ChildController@delete');
+        Route::put('/edit', 'ChildController@update');
     });
 
     /*
