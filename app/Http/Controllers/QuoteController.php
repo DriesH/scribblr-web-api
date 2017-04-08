@@ -28,7 +28,6 @@ class QuoteController extends Controller
 
         $child = Child::where('short_id', $childShortId)->first();
         if (!$child) {
-            dd("test");
             return self::RespondModelNotFound();
         }
 
@@ -43,6 +42,12 @@ class QuoteController extends Controller
         $quote->child_id = $child->id;
         if($request->image) $quote->addMedia($request->image);
         $quote->save();
+
+        return response()->json([
+            'success' => true,
+            'quote' => $quote
+        ]);
+
     }
 
     /*
