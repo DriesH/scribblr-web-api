@@ -18,7 +18,16 @@ class ChildController extends Controller
     */
     function index()
     {
-        // do something...
+        $user = Auth::user();
+        $children = Child::where('user_id', $user->id)->get();
+
+        if (!$children) {
+            return self::RespondModelNotFound();
+        }
+        return response()->json([
+            'success' => true,
+            'children' => $children
+        ]);
     }
 
     /*
