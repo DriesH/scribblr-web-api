@@ -42,21 +42,19 @@ Route::group(['prefix' => 'application'], function () {
     */
     Route::group(['prefix' => 'children'], function () {
         Route::get('/', 'ChildController@index');
-        Route::get('/{child_short_id}', 'ChildController@getChild');
-        Route::get('/{child_short_id}/quotes', 'ChildController@allQuotes');
+        Route::get('/{childShortId}', 'ChildController@getChild');
+        Route::get('/{childShortId}/quotes', 'ChildController@allQuotes');
         Route::post('/new', 'ChildController@new');
-        Route::post('/{child_short_id}/upload', 'ChildController@uploadImage');
-        Route::delete('/{child_short_id}/delete', 'ChildController@delete');
-        Route::put('/{child_short_id}/edit', 'ChildController@update');
-    });
+        Route::post('/{childShortId}/upload', 'ChildController@uploadImage');
+        Route::delete('/{childShortId}/delete', 'ChildController@delete');
+        Route::put('/{childShortId}/edit', 'ChildController@update');
 
-    /*
-    * Api endpoints for quote data.
-    */
-    Route::group(['prefix' => 'quotes'], function () {
-        Route::post('/new', 'QuoteController@new');
-        Route::post('/upload', 'QuoteController@uploadImage');
-        Route::delete('/{shortId}/delete', 'QuoteController@delete');
+        /*
+        * Api endpoints for quotes
+        */
+        Route::post('/{childShortId}/quotes/new', 'QuoteController@new');
+        Route::delete('{childShortId}/quotes/{quoteShortId}/delete', 'QuoteController@delete');
+
     });
 
     /*

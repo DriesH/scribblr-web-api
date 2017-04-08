@@ -34,9 +34,9 @@ class ChildController extends Controller
     | Get a specific child by shortId.
     | @params {$shortId}
     */
-    function getChild($child_short_id)
+    function getChild($childShortId)
     {
-        $child = Child::where('short_id', $child_short_id)->first();
+        $child = Child::where('short_id', $childShortId)->first();
         if (!$child) {
             return self::RespondModelNotFound();
         }
@@ -51,10 +51,10 @@ class ChildController extends Controller
     | Get all quotes from a specific child by shortId.
     | @params {$shortId}
     */
-    function allQuotes($child_short_id)
+    function allQuotes($childShortId)
     {
-        $allChildQuotes = Quote::with(['Children' => function($query) use($child_short_id) {
-            $query->where('children.shortId', $child_short_id);
+        $allChildQuotes = Quote::with(['Children' => function($query) use($childShortId) {
+            $query->where('children.shortId', $childShortId);
         }])
         ->get();
 
@@ -74,10 +74,10 @@ class ChildController extends Controller
     function new(Request $request, ShortIdGenerator $shortIdGenerator)
     {
         $validator = Validator::make($request->all(), [
-            'gender' => ['required', Rule::in(Child::$genders)],
-            'first_name' => 'required|max:50',
-            'last_name' => 'required|max:50',
-            'date_of_birth' => 'required|date'
+            'gender' => [self::REQUIRED, Rule::in(Child::$genders)],
+            'first_name' => self::REQUIRED.'|max:50',
+            'last_name' => self::REQUIRED.'|max:50',
+            'date_of_birth' => self::REQUIRED.'|date'
         ]);
 
         if ($validator->fails()) {
@@ -104,17 +104,17 @@ class ChildController extends Controller
     /*
     | Upload an image for your child avatar.
     */
-    function uploadImage(Request $request, $child_short_id)
+    function uploadImage(Request $request, $childShortId)
     {
         $validator = Validator::make($request->all(), [
-            'image' => 'required|file|image|size:10485760', //10 MB
+            'image' => self::REQUIRED.'|file|image|size:10485760', //10 MB
         ]);
 
         if ($validator->fails()) {
             return self::RespondValidationError($request, $validator);
         }
 
-        $child = Child::where('short_id', $child_short_id)->first();
+        $child = Child::where('short_id', $childShortId)->first();
         if (!$child) {
             return self::RespondModelNotFound();
         }
@@ -132,9 +132,9 @@ class ChildController extends Controller
     | Delete a child by shortId.
     | @params {$shortId}
     */
-    function delete($child_short_id)
+    function delete($childShortId)
     {
-        $childToDelete = Child::where('short_id', $child_short_id)->first();
+        $childToDelete = Child::where('short_id', $childShortId)->first();
         if (!$childToDelete) {
             return self::RespondModelNotFound();
         }
@@ -145,20 +145,20 @@ class ChildController extends Controller
     | Update a child by shortId.
     | @params {$shortId}
     */
-    function update(Request $request, $child_short_id)
+    function update(Request $request, $childShortId)
     {
         $validator = Validator::make($request->all(), [
-            'gender' => ['required', Rule::in(Child::$genders)],
-            'first_name' => 'required|max:50',
-            'last_name' => 'required|max:50',
-            'date_of_birth' => 'required|date'
+            'gender' => [self::REQUIRED, Rule::in(Child::$genders)],
+            'first_name' => self::REQUIRED.'|max:50',
+            'last_name' => self::REQUIRED.'|max:50',
+            'date_of_birth' => self::REQUIRED.'|date'
         ]);
 
         if ($validator->fails()) {
             return self::RespondValidationError($request, $validator);
         }
 
-        $childToUpdate = Child::where('short_id', $child_short_id)->first();
+        $childToUpdate = Child::where('short_id', $childShortId)->first();
         if (!$childToUpdate) {
             return self::RespondModelNotFound();
         }

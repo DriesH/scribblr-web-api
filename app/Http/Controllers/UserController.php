@@ -23,7 +23,7 @@ class UserController extends Controller
         $user_resp->country = $user->country;
 
         return response()->json([
-            'user' => $user_resp
+            $user_resp
         ]);
     }
 }
