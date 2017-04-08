@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use stdClass;
+use Auth;
+
 class UserController extends Controller
 {
     public function getUser(Request $request) {
