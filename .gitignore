@@ -16,3 +16,5 @@ bootstrap/cache/
 
 # Ignore the client application that gets build.
 public/client-app
+
+.idea/
