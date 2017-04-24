@@ -75,6 +75,6 @@ HasMedia
     }
 
     public function Children() {
-        $this->hasMany('App\Child', 'user_id');
+        return $this->hasMany('App\Child', 'user_id');
     }
 }

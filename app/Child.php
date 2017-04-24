@@ -30,10 +30,10 @@ class Child extends Model implements HasMedia
 
 
     public function Quotes() {
-        $this->hasMany('App\Quote', 'child_id');
+        return $this->hasMany('App\Quote', 'child_id');
     }
 
     public function User() {
-        $this->belongsTo('App\User');
+        return $this->belongsTo('App\User');
     }
 }

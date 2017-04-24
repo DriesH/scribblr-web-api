@@ -27,7 +27,7 @@ class ChildController extends Controller
         }
         return response()->json([
             'success' => true,
-            'children' => $children
+            'children' => $children->toArray()
         ]);
     }
 
@@ -54,18 +54,14 @@ class ChildController extends Controller
     */
     function allQuotes($childShortId)
     {
-        $allChildQuotes = Quote::with(['Children' => function($query) use($childShortId) {
-            $query->where('children.shortId', $childShortId);
-        }])
-        ->get();
-
+        $allChildQuotes = Child::where('short_id', $childShortId)->with('Quotes')->first();
         if (!$allChildQuotes) {
             return self::RespondModelNotFound();
         }
 
         return response()->json([
             'success' => true,
-            'quotes' => $allChildQuotes
+            'quotes' => $allChildQuotes->Quotes->toArray()
         ]);
     }
 
