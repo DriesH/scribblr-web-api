@@ -7,6 +7,7 @@ use App\Quote;
 use App\Child;
 use App\Classes\ShortIdGenerator;
 use Validator;
+use ColorThief\ColorThief;
 
 class QuoteController extends Controller
 {
@@ -64,6 +65,14 @@ class QuoteController extends Controller
 
         return response()->json([
             'success' => true
+        ]);
+    }
+
+    function getMainColor() {
+        $dominantColor = ColorThief::getColor(public_path() . '/test.jpg', 100);
+
+        return view('test', [
+            'color' => $dominantColor
         ]);
     }
 }
