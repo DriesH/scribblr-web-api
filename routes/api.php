@@ -39,7 +39,7 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'auth'], function () {
 /*
 * Api endpoints consumed by the client application written in Angular 2.
 */
-Route::group(['prefix' => 'application'], function () {
+Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function () {
 
     /*
     * Api endpoints for all the child data.
