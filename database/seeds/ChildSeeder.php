@@ -28,5 +28,16 @@ class ChildSeeder extends Seeder
            'last_name' => 'Miranda',
            'date_of_birth' => '2014-07-15',
        ]);
+
+       for ($a=0; $a < 50; $a++) {
+           DB::table('children')->insert([
+              'short_id' => substr(md5(uniqid(mt_rand(), true)), 0, 8),
+              'user_id' => 1,
+              'gender' => 'Female',
+              'first_name' => 'Ons',
+              'last_name' => 'Miranda',
+              'date_of_birth' => '2014-07-15',
+          ]);
+       }
     }
 }
