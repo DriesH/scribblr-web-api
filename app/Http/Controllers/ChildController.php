@@ -17,7 +17,7 @@ class ChildController extends Controller
     /*
     | Get all children.
     */
-    function index()
+    function getAllChildren()
     {
         $user = Auth::user();
         $children = Child::where('user_id', $user->id)->get();

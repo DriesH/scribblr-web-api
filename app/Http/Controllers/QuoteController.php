@@ -8,9 +8,30 @@ use App\Child;
 use App\Classes\ShortIdGenerator;
 use Validator;
 use ColorThief\ColorThief;
+use Auth;
 
 class QuoteController extends Controller
 {
+    /*
+    | Get all quotes for user
+    */
+    function getAllQuotes(){
+        $userId = Auth::user()->id;
+        $quotes = Quote::whereHas('children', function($query) use($userId) {
+            $query->where('children.user_id', $userId);
+        })
+        ->get();
+
+        return $quotes;
+
+        if (!$quotes) {
+            return self::RespondModelNotFound();
+        }
+
+
+    }
+
+
     /*
     | Create a new quote.
     */

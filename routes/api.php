@@ -45,7 +45,7 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
     * Api endpoints for all the child data.
     */
     Route::group(['prefix' => 'children'], function () {
-        Route::get('/', 'ChildController@index');
+        Route::get('/', 'ChildController@getAllChildren');
         Route::get('/{childShortId}', 'ChildController@getChild');
         Route::get('/{childShortId}/quotes', 'ChildController@allQuotes');
         Route::post('/new', 'ChildController@new');
@@ -59,6 +59,10 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
         Route::post('/{childShortId}/quotes/new', 'QuoteController@new');
         Route::delete('{childShortId}/quotes/{quoteShortId}/delete', 'QuoteController@delete');
 
+    });
+
+    Route::group(['prefix' => 'quotes'], function () {
+        Route::get('/', 'QuoteController@getAllQuotes');
     });
 
     /*

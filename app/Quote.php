@@ -22,6 +22,6 @@ class Quote extends Model implements HasMedia
     ];
 
     public function Children() {
-        return $this->belongsTo('App\Child');
+        return $this->belongsTo('App\Child', 'child_id');
     }
 }
