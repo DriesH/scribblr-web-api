@@ -23,6 +23,7 @@ use Illuminate\Http\Request;
 */
 
 
+
 Route::get('/color', 'QuoteController@getMainColor');
 
 Route::group(['prefix' => 'auth'], function () {
@@ -32,6 +33,7 @@ Route::group(['prefix' => 'auth'], function () {
 
 Route::group(['middleware' => 'auth:api', 'prefix' => 'auth'], function () {
     // Authentication Routes...
+    Route::get('/check', 'UserContorller@checkAuth');
     Route::get('/logout', 'Auth\LoginController@logout');
     Route::get('/user', 'UserController@getUser');
 });

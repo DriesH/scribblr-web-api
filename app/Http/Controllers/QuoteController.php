@@ -22,12 +22,14 @@ class QuoteController extends Controller
         })
         ->get();
 
-        return $quotes;
-
         if (!$quotes) {
             return self::RespondModelNotFound();
         }
 
+        return response()->json([
+            'success' => true,
+            'quotes' => $quotes
+        ]);
 
     }
 

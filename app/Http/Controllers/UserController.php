@@ -26,4 +26,12 @@ class UserController extends Controller
             $user_resp
         ]);
     }
+
+    function checkAuth() {
+        $user = Auth::user();
+        return response()->json([
+            'success' => true,
+            'user' => $user
+        ]);
+    }
 }
