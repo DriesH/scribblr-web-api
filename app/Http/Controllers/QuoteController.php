@@ -120,7 +120,7 @@ class QuoteController extends Controller
         }
 
         $imageURL = $request->link;
-        try {childc
+        try {
             $child->addMediaFromUrl($imageURL)->toMediaLibrary('edited_images');
         } catch (Exception $e) {
             return response()->json([
