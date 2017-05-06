@@ -19,7 +19,7 @@ class CreateChildrenTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->string('gender');
             $table->string('first_name');
-            $table->string('last_name');
+            $table->string('last_name')->nullable();
             $table->date('date_of_birth');
             $table->timestamps();
             $table->softDeletes();

@@ -73,7 +73,7 @@ class ChildController extends Controller
         $validator = Validator::make($request->all(), [
             'gender' => [self::REQUIRED, Rule::in(Child::$genders)],
             'first_name' => self::REQUIRED.'|max:50',
-            'last_name' => self::REQUIRED.'|max:50',
+            'last_name' => 'max:50',
             'date_of_birth' => self::REQUIRED.'|date'
         ]);
 
@@ -90,8 +90,9 @@ class ChildController extends Controller
         $newChild->gender = $request->gender;
         $newChild->first_name = $request->first_name;
         $newChild->last_name = $request->last_name;
-        $newChild->date_of_birth = new \DateTime($request->date_of_birth);
+        $newChild->date_of_birth = (new \DateTime($request->date_of_birth))->format('Y-m-d');
         $newChild->save();
+
 
         return response()->json([
             'success' => true,
@@ -164,7 +165,7 @@ class ChildController extends Controller
         $childToUpdate->gender = $request->gender;
         $childToUpdate->first_name = $request->first_name;
         $childToUpdate->last_name = $request->last_name;
-        $childToUpdate->date_of_birth = new \DateTime($request->date_of_birth);
+        $childToUpdate->date_of_birth = (new \DateTime($request->date_of_birth))->format('Y-m-d');
         $childToUpdate->save();
 
         return response()->json([

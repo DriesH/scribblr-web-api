@@ -25,7 +25,7 @@ class Child extends Model implements HasMedia
     public static $genders = [
         'Male',
         'Female',
-        'Prefer not to disclose'
+        'Other'
     ];
 
 
