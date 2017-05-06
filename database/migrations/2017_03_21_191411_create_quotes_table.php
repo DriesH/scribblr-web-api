@@ -17,9 +17,6 @@ class CreateQuotesTable extends Migration
             $table->increments('id');
             $table->string('short_id', 8)->unique();
             $table->integer('child_id')->unsigned();
-            $table->string('quote', 300);
-            $table->integer('font_size');
-            $table->string('font_type');
             $table->timestamps();
             $table->softDeletes();
 
