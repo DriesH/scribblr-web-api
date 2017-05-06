@@ -18,3 +18,5 @@ bootstrap/cache/
 public/client-app
 
 .idea/
+
+storage/

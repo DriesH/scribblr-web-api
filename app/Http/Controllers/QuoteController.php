@@ -9,6 +9,7 @@ use App\Classes\ShortIdGenerator;
 use Validator;
 use ColorThief\ColorThief;
 use Auth;
+use Image;
 
 class QuoteController extends Controller
 {
@@ -50,6 +51,7 @@ class QuoteController extends Controller
             return self::RespondValidationError($request, $validator);
         }
 
+        //check if child belongs to current user
         $child = Child::where('short_id', $childShortId)->first();
         if (!$child) {
             return self::RespondModelNotFound();
@@ -96,6 +98,41 @@ class QuoteController extends Controller
 
         return view('test', [
             'color' => $dominantColor
+        ]);
+    }
+
+    function newQuote(Request $request, $childShortId) {
+        $validator = Validator::make($request->all(), [
+            'link' => 'url',
+        ]);
+
+        if ($validator->fails()) {
+            return self::RespondValidationError($request, $validator);
+        }
+
+        $user = Auth::user();
+        $child = Child::where('short_id', $childShortId)->whereHas('user', function($query) use($user) {
+            $query->where('users.id', $user->id);
+        })->first();
+
+        if (!$child) {
+            return self::RespondModelNotFound();
+        }
+
+        $imageURL = $request->link;
+        try {
+            $child->addMediaFromUrl($imageURL)->toMediaLibrary('edited_images');
+        } catch (Exception $e) {
+            return response()->json([
+                self::SUCCESS => false,
+                self::ERROR_TYPE => 'failed to download/save image'
+            ]);
+        }
+
+
+        return response()->json([
+            self::SUCCESS => true,
+            'media' => $child->getMedia('edited_images')
         ]);
     }
 }

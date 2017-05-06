@@ -22,8 +22,6 @@ use Illuminate\Http\Request;
 * Login/register routes
 */
 
-
-
 Route::get('/color', 'QuoteController@getMainColor');
 
 Route::group(['prefix' => 'auth'], function () {
@@ -58,7 +56,7 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
         /*
         * Api endpoints for quotes
         */
-        Route::post('/{childShortId}/quotes/new', 'QuoteController@new');
+        Route::post('/{childShortId}/quotes/new', 'QuoteController@newQuote');
         Route::delete('{childShortId}/quotes/{quoteShortId}/delete', 'QuoteController@delete');
 
     });
