@@ -97,6 +97,8 @@ class ChildController extends Controller
             addChildThumnail($newChild, $request);
         }
 
+        $newChild->save();
+
 
         return response()->json([
             'success' => true,
@@ -138,7 +140,8 @@ class ChildController extends Controller
             'gender' => [self::REQUIRED, Rule::in(Child::$genders)],
             'first_name' => self::REQUIRED.'|max:50',
             'last_name' => self::REQUIRED.'|max:50',
-            'date_of_birth' => self::REQUIRED.'|date'
+            'date_of_birth' => self::REQUIRED.'|date',
+            'thumbnail' => 'file|image|size:10485760'
         ]);
 
         if ($validator->fails()) {
@@ -154,6 +157,9 @@ class ChildController extends Controller
         $childToUpdate->first_name = $request->first_name;
         $childToUpdate->last_name = $request->last_name;
         $childToUpdate->date_of_birth = (new \DateTime($request->date_of_birth))->format('Y-m-d');
+        if ($request->thumbnail) {
+            addChildThumnail($newChild, $request);
+        }
         $childToUpdate->save();
 
         return response()->json([
@@ -178,6 +184,5 @@ class ChildController extends Controller
         }
 
         return Image::make($child->getMedia('thumbnail')[0]->getPath())->response();
-
     }
 }
