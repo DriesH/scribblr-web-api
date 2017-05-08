@@ -70,6 +70,8 @@ class ChildController extends Controller
     */
     function new(Request $request, ShortIdGenerator $shortIdGenerator)
     {
+        fopen($request->thumbnail->getPathName(), 'r');
+
         $validator = Validator::make($request->all(), [
             'gender' => [self::REQUIRED, Rule::in(Child::$genders)],
             'first_name' => self::REQUIRED.'|max:50',
@@ -92,12 +94,12 @@ class ChildController extends Controller
         $newChild->first_name = $request->first_name;
         $newChild->last_name = $request->last_name;
         $newChild->date_of_birth = (new \DateTime($request->date_of_birth))->format('Y-m-d');
+        $newChild->save();
 
         if ($request->thumbnail) {
             self::addChildThumnail($newChild, $request);
         }
 
-        $newChild->save();
 
 
         return response()->json([
@@ -107,7 +109,7 @@ class ChildController extends Controller
     }
 
     private function addChildThumnail($child, $request){
-        $thumnail_url_id = uniqid(true);
+        $thumnail_url_id = uniqid("", true);
 
         $child->addMedia($request->thumbnail)
         ->withCustomProperties(['url_id' => $thumnail_url_id])
@@ -177,7 +179,7 @@ class ChildController extends Controller
 
         if ($child->thumbnail_url_id != $thumbnail_url_id) {
             return response()->json([
-                self::SUCCESS => fase,
+                self::SUCCESS => false,
                 self::ERROR_TYPE => 'image not found.'
             ]);
         }
