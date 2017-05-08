@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
            'city' => 'Antwerp',
            'postal_code' => '2000',
            'country' => 'Belgium',
-           'password' => bcrypt('admin123')
+           'password' => bcrypt('testtest123')
        ]);
     }
 }

@@ -75,7 +75,7 @@ class ChildController extends Controller
             'first_name' => self::REQUIRED.'|max:50',
             'last_name' => 'max:50',
             'date_of_birth' => self::REQUIRED.'|date',
-            'thumbnail' => 'file|image|size:10485760'
+            'thumbnail' => 'file|image|max:10485760'
         ]);
 
         if ($validator->fails()) {
@@ -94,7 +94,7 @@ class ChildController extends Controller
         $newChild->date_of_birth = (new \DateTime($request->date_of_birth))->format('Y-m-d');
 
         if ($request->thumbnail) {
-            addChildThumnail($newChild, $request);
+            self::addChildThumnail($newChild, $request);
         }
 
         $newChild->save();
@@ -113,8 +113,7 @@ class ChildController extends Controller
         ->withCustomProperties(['url_id' => $thumnail_url_id])
         ->toMediaLibrary('thumbnail');
 
-        $newChild->thumbnail_url_id = $thumnail_url_id;
-        $newChild->save();
+        $child->thumbnail_url_id = $thumnail_url_id;
     }
 
     /*
@@ -158,7 +157,7 @@ class ChildController extends Controller
         $childToUpdate->last_name = $request->last_name;
         $childToUpdate->date_of_birth = (new \DateTime($request->date_of_birth))->format('Y-m-d');
         if ($request->thumbnail) {
-            addChildThumnail($newChild, $request);
+            self::addChildThumnail($newChild, $request);
         }
         $childToUpdate->save();
 
