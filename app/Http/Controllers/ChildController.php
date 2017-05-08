@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Validator;
 use Illuminate\Validation\Rule;
 use App\Classes\ShortIdGenerator;
+use Image;
 
 //Models
 use App\Child;
@@ -99,8 +100,6 @@ class ChildController extends Controller
         if ($request->thumbnail) {
             self::addChildThumnail($newChild, $request);
         }
-
-
 
         return response()->json([
             'success' => true,
