@@ -53,6 +53,9 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
         Route::delete('/{childShortId}/delete', 'ChildController@delete');
         Route::put('/{childShortId}/edit', 'ChildController@update');
 
+        //get thumbnail
+        Route::get('/{childShortId}/thumbnail/{thumbnail_url_id}', 'ChildController@thumbnail');
+
         /*
         * Api endpoints for quotes
         */

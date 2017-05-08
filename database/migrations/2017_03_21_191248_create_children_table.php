@@ -16,6 +16,7 @@ class CreateChildrenTable extends Migration
         Schema::create('children', function (Blueprint $table) {
             $table->increments('id');
             $table->string('short_id', 8)->unique();
+            $table->string('thumbnail_url_id')->nullable();
             $table->integer('user_id')->unsigned();
             $table->string('gender');
             $table->string('first_name');

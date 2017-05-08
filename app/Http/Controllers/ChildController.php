@@ -74,7 +74,8 @@ class ChildController extends Controller
             'gender' => [self::REQUIRED, Rule::in(Child::$genders)],
             'first_name' => self::REQUIRED.'|max:50',
             'last_name' => 'max:50',
-            'date_of_birth' => self::REQUIRED.'|date'
+            'date_of_birth' => self::REQUIRED.'|date',
+            'thumbnail' => 'file|image|size:10485760'
         ]);
 
         if ($validator->fails()) {
@@ -91,7 +92,10 @@ class ChildController extends Controller
         $newChild->first_name = $request->first_name;
         $newChild->last_name = $request->last_name;
         $newChild->date_of_birth = (new \DateTime($request->date_of_birth))->format('Y-m-d');
-        $newChild->save();
+
+        if ($request->thumbnail) {
+            addChildThumnail($newChild, $request);
+        }
 
 
         return response()->json([
@@ -100,31 +104,15 @@ class ChildController extends Controller
         ]);
     }
 
-    /*
-    | Upload an image for your child avatar.
-    */
-    function uploadImage(Request $request, $childShortId)
-    {
-        $validator = Validator::make($request->all(), [
-            'image' => self::REQUIRED.'|file|image|size:10485760', //10 MB
-        ]);
+    private function addChildThumnail($child, $request){
+        $thumnail_url_id = uniqid(true);
 
-        if ($validator->fails()) {
-            return self::RespondValidationError($request, $validator);
-        }
+        $child->addMedia($request->thumbnail)
+        ->withCustomProperties(['url_id' => $thumnail_url_id])
+        ->toMediaLibrary('thumbnail');
 
-        $child = Child::where('short_id', $childShortId)->first();
-        if (!$child) {
-            return self::RespondModelNotFound();
-        }
-
-        $uploadedImage = $child->addMedia($request->image)->toMediaLibrary();
-
-        return response()->json([
-            'success' => true,
-            'uploadedImage' => $uploadedImage
-        ]);
-
+        $newChild->thumbnail_url_id = $thumnail_url_id;
+        $newChild->save();
     }
 
     /*
@@ -172,6 +160,24 @@ class ChildController extends Controller
             'success' => true,
             'child' => $childToUpdate
         ]);
+
+    }
+
+    function thumbnail(Request $request, $childShortId, $thumbnail_url_id) {
+        $child = Child::where('short_id', $childShortId)->first();
+
+        if (!$child) {
+            return self::RespondModelNotFound();
+        }
+
+        if ($child->thumbnail_url_id != $thumbnail_url_id) {
+            return response()->json([
+                self::SUCCESS => fase,
+                self::ERROR_TYPE => 'image not found.'
+            ]);
+        }
+
+        return Image::make($child->getMedia('thumbnail')[0]->getPath())->response();
 
     }
 }
