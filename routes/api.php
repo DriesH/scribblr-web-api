@@ -24,6 +24,9 @@ use Illuminate\Http\Request;
 
 Route::get('/color', 'QuoteController@getMainColor');
 
+//get child thumbnail
+Route::get('application/children/{childShortId}/thumbnail/{thumbnail_url_id}', 'ChildController@thumbnail');
+
 Route::group(['prefix' => 'auth'], function () {
     Route::post('/login', 'Auth\LoginController@login');
     Route::post('/register', 'Auth\RegisterController@register');
@@ -52,9 +55,6 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
         Route::post('/{childShortId}/upload', 'ChildController@uploadImage');
         Route::delete('/{childShortId}/delete', 'ChildController@delete');
         Route::put('/{childShortId}/edit', 'ChildController@update');
-
-        //get thumbnail
-        Route::get('/{childShortId}/thumbnail/{thumbnail_url_id}', 'ChildController@thumbnail');
 
         /*
         * Api endpoints for quotes

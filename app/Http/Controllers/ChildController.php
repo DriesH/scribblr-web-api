@@ -71,8 +71,6 @@ class ChildController extends Controller
     */
     function new(Request $request, ShortIdGenerator $shortIdGenerator)
     {
-        fopen($request->thumbnail->getPathName(), 'r');
-
         $validator = Validator::make($request->all(), [
             'gender' => [self::REQUIRED, Rule::in(Child::$genders)],
             'first_name' => self::REQUIRED.'|max:50',
@@ -108,7 +106,7 @@ class ChildController extends Controller
     }
 
     private function addChildThumnail($child, $request){
-        $thumnail_url_id = uniqid("", true);
+        $thumnail_url_id = sha1($request->thumbnail->getPathName());
 
         $child->addMedia($request->thumbnail)
         ->withCustomProperties(['url_id' => $thumnail_url_id])
@@ -158,10 +156,11 @@ class ChildController extends Controller
         $childToUpdate->first_name = $request->first_name;
         $childToUpdate->last_name = $request->last_name;
         $childToUpdate->date_of_birth = (new \DateTime($request->date_of_birth))->format('Y-m-d');
+        $childToUpdate->save();
+
         if ($request->thumbnail) {
             self::addChildThumnail($newChild, $request);
         }
-        $childToUpdate->save();
 
         return response()->json([
             'success' => true,
