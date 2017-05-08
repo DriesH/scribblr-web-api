@@ -116,6 +116,7 @@ class ChildController extends Controller
         ->toMediaLibrary('thumbnail');
 
         $child->thumbnail_url_id = $thumnail_url_id;
+        $child->save();
     }
 
     /*
