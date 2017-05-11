@@ -42,9 +42,10 @@ class QuoteController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'quote' => self::REQUIRED,
-            'font_size' => self::REQUIRED.'|integer',
-            'font_type' => self::REQUIRED,
-            'image' => 'image'
+            'story' => 'max:1000',
+            'img_original' => self::REQUIRED . '|url',
+            'img_baked' => self::REQUIRED . '|image',
+
         ]);
 
         if ($validator->fails()) {
@@ -63,17 +64,43 @@ class QuoteController extends Controller
         } while ( count( Quote::where('short_id', $quoteShortId)->first()) >= 1 );
         $quote->short_id = $quoteShortId;
         $quote->quote = $request->quote;
-        $quote->font_size = $request->font_size;
-        $quote->font_type = $request->font_type;
+        if ($request->story) {
+            $quote->story = $request->story;
+        }
         $quote->child_id = $child->id;
-        if($request->image) $quote->addMedia($request->image);
         $quote->save();
+
+        //images
+        self::addQuoteOriginal($quote, $request->img_original);
+        self::addQuoteBaked($quote, $request->img_baked);
 
         return response()->json([
             'success' => true,
             'quote' => $quote
         ]);
 
+    }
+
+    private function addQuoteOriginal($quote, $img_original){
+        $img_original_url_id = sha1($img_original->getPathName());
+
+        $quote->addMedia($img_original)
+        ->withCustomProperties(['url_id' => $img_original_url_id])
+        ->toMediaLibrary('original');
+
+        $quote->img_original_url_id = $img_original_url_id;
+        $quote->save();
+    }
+
+    private function addQuoteBaked($quote, $img_baked){
+        $img_baked_url_id = sha1($img_baked->getPathName());
+
+        $quote->addMedia($img_baked)
+        ->withCustomProperties(['url_id' => $img_baked_url_id])
+        ->toMediaLibrary('baked');
+
+        $quote->img_baked_url_id = $img_baked_url_id;
+        $quote->save();
     }
 
     /*
@@ -134,5 +161,39 @@ class QuoteController extends Controller
             self::SUCCESS => true,
             'media' => $child->getMedia('edited_images')
         ]);
+    }
+
+    function getQuoteOriginalImage(Request $request, $childShortId, $quoteShortId, $img_original_url_id) {
+        $quote = Quote::where('short_id', $quoteShortId)->first();
+
+        if (!$quote) {
+            return self::RespondModelNotFound();
+        }
+
+        if ($quote->img_original_url_id != $img_original_url_id) {
+            return response()->json([
+                self::SUCCESS => false,
+                self::ERROR_TYPE => 'image not found.'
+            ]);
+        }
+
+        return Image::make($quote->getMedia('original')[0]->getPath())->response();
+    }
+
+    function getBakedOriginalImage(Request $request, $childShortId, $quoteShortId, $img_baked_url_id) {
+        $quote = Quote::where('short_id', $quoteShortId)->first();
+
+        if (!$quote) {
+            return self::RespondModelNotFound();
+        }
+
+        if ($quote->img_baked_url_id != $img_baked_url_id) {
+            return response()->json([
+                self::SUCCESS => false,
+                self::ERROR_TYPE => 'image not found.'
+            ]);
+        }
+
+        return Image::make($quote->getMedia('baked')[0]->getPath())->response();
     }
 }

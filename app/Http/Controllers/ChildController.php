@@ -75,7 +75,7 @@ class ChildController extends Controller
             'gender' => [self::REQUIRED, Rule::in(Child::$genders)],
             'full_name' => self::REQUIRED.'|max:50',
             'date_of_birth' => self::REQUIRED.'|date',
-            'avatar' => 'file|image|max:10485760'
+            'avatar' => 'image|max:10485760'
         ]);
 
         if ($validator->fails()) {
@@ -94,7 +94,7 @@ class ChildController extends Controller
         $newChild->save();
 
         if ($request->avatar) {
-            self::addChildThumnail($newChild, $request);
+            self::addChildThumnail($newChild, $request->avatar);
         }
 
         return response()->json([
@@ -103,10 +103,10 @@ class ChildController extends Controller
         ]);
     }
 
-    private function addChildThumnail($child, $request){
-        $avatar_url_id = sha1($request->avatar->getPathName());
+    private function addChildThumnail($child, $avatar){
+        $avatar_url_id = sha1($avatar->getPathName());
 
-        $child->addMedia($request->avatar)
+        $child->addMedia($avatar)
         ->withCustomProperties(['url_id' => $avatar_url_id])
         ->toMediaLibrary('avatar');
 
@@ -155,7 +155,7 @@ class ChildController extends Controller
         $childToUpdate->save();
 
         if ($request->avatar) {
-            self::addChildThumnail($newChild, $request);
+            self::addChildThumnail($newChild, $request->avatar);
         }
 
         return response()->json([
