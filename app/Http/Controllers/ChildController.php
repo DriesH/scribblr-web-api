@@ -110,7 +110,7 @@ class ChildController extends Controller
         ->withCustomProperties(['url_id' => $avatar_url_id])
         ->toMediaLibrary('avatar');
 
-        $child->$avatar_url_id = $avatar_url_id;
+        $child->avatar_url_id = $avatar_url_id;
         $child->save();
     }
 
