@@ -15,8 +15,7 @@ class ChildSeeder extends Seeder
            'short_id' => 'aaaaaaaa',
            'user_id' => 1,
            'gender' => 'Male',
-           'first_name' => 'Druis',
-           'last_name' => 'Tablet',
+           'full_name' => 'Druis',
            'date_of_birth' => '2015-02-03',
        ]);
 
@@ -24,8 +23,7 @@ class ChildSeeder extends Seeder
            'short_id' => 'bbbbbbbb',
            'user_id' => 1,
            'gender' => 'Female',
-           'first_name' => 'Ons',
-           'last_name' => 'Miranda',
+           'full_name' => 'Miranda',
            'date_of_birth' => '2014-07-15',
        ]);
 
@@ -34,8 +32,7 @@ class ChildSeeder extends Seeder
               'short_id' => substr(md5(uniqid(mt_rand(), true)), 0, 8),
               'user_id' => 1,
               'gender' => 'Female',
-              'first_name' => 'Ons',
-              'last_name' => 'Miranda',
+              'full_name' => 'Miranda',
               'date_of_birth' => '2014-07-15',
           ]);
        }
