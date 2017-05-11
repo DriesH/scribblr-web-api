@@ -73,10 +73,9 @@ class ChildController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'gender' => [self::REQUIRED, Rule::in(Child::$genders)],
-            'first_name' => self::REQUIRED.'|max:50',
-            'last_name' => 'max:50',
+            'full_name' => self::REQUIRED.'|max:50',
             'date_of_birth' => self::REQUIRED.'|date',
-            'thumbnail' => 'file|image|max:10485760'
+            'avatar' => 'file|image|max:10485760'
         ]);
 
         if ($validator->fails()) {
@@ -90,12 +89,11 @@ class ChildController extends Controller
         $newChild->short_id = $shortId;
         $newChild->user_id = Auth::user()->id; // FIXME: get current user, works with jwt???
         $newChild->gender = $request->gender;
-        $newChild->first_name = $request->first_name;
-        $newChild->last_name = $request->last_name;
+        $newChild->full_name = $request->full_name;
         $newChild->date_of_birth = (new \DateTime($request->date_of_birth))->format('Y-m-d');
         $newChild->save();
 
-        if ($request->thumbnail) {
+        if ($request->avatar) {
             self::addChildThumnail($newChild, $request);
         }
 
@@ -106,13 +104,13 @@ class ChildController extends Controller
     }
 
     private function addChildThumnail($child, $request){
-        $thumnail_url_id = sha1($request->thumbnail->getPathName());
+        $avatar_url_id = sha1($request->avatar->getPathName());
 
-        $child->addMedia($request->thumbnail)
-        ->withCustomProperties(['url_id' => $thumnail_url_id])
-        ->toMediaLibrary('thumbnail');
+        $child->addMedia($request->avatar)
+        ->withCustomProperties(['url_id' => $avatar_url_id])
+        ->toMediaLibrary('avatar');
 
-        $child->thumbnail_url_id = $thumnail_url_id;
+        $child->$avatar_url_id = $avatar_url_id;
         $child->save();
     }
 
@@ -137,10 +135,9 @@ class ChildController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'gender' => [self::REQUIRED, Rule::in(Child::$genders)],
-            'first_name' => self::REQUIRED.'|max:50',
-            'last_name' => self::REQUIRED.'|max:50',
+            'full_name' => self::REQUIRED.'|max:50',
             'date_of_birth' => self::REQUIRED.'|date',
-            'thumbnail' => 'file|image|size:10485760'
+            'avatar' => 'file|image|size:10485760'
         ]);
 
         if ($validator->fails()) {
@@ -153,12 +150,11 @@ class ChildController extends Controller
         }
 
         $childToUpdate->gender = $request->gender;
-        $childToUpdate->first_name = $request->first_name;
-        $childToUpdate->last_name = $request->last_name;
+        $childToUpdate->full_name = $request->full_name;
         $childToUpdate->date_of_birth = (new \DateTime($request->date_of_birth))->format('Y-m-d');
         $childToUpdate->save();
 
-        if ($request->thumbnail) {
+        if ($request->avatar) {
             self::addChildThumnail($newChild, $request);
         }
 
@@ -169,20 +165,20 @@ class ChildController extends Controller
 
     }
 
-    function thumbnail(Request $request, $childShortId, $thumbnail_url_id) {
+    function avatar(Request $request, $childShortId, $avatar_url_id) {
         $child = Child::where('short_id', $childShortId)->first();
 
         if (!$child) {
             return self::RespondModelNotFound();
         }
 
-        if ($child->thumbnail_url_id != $thumbnail_url_id) {
+        if ($child->avatar_url_id != $avatar_url_id) {
             return response()->json([
                 self::SUCCESS => false,
                 self::ERROR_TYPE => 'image not found.'
             ]);
         }
 
-        return Image::make($child->getMedia('thumbnail')[0]->getPath())->response();
+        return Image::make($child->getMedia('avatar')[0]->getPath())->response();
     }
 }

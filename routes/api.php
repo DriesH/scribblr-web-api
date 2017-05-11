@@ -25,7 +25,7 @@ use Illuminate\Http\Request;
 Route::get('/color', 'QuoteController@getMainColor');
 
 //get child thumbnail
-Route::get('application/children/{childShortId}/thumbnail/{thumbnail_url_id}', 'ChildController@thumbnail');
+Route::get('application/children/{childShortId}/avatar/{avatar_url_id}', 'ChildController@avatar');
 
 Route::group(['prefix' => 'auth'], function () {
     Route::post('/login', 'Auth\LoginController@login');
