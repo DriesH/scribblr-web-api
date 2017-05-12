@@ -27,7 +27,7 @@ class ChildController extends Controller
             return self::RespondModelNotFound();
         }
         return response()->json([
-            'success' => true,
+            self::SUCCESS => true,
             'children' => $children->toArray()
         ]);
     }
@@ -44,7 +44,7 @@ class ChildController extends Controller
         }
 
         return response()->json([
-            'success' => true,
+            self::SUCCESS => true,
             'child' => $child
         ]);
     }
@@ -61,7 +61,7 @@ class ChildController extends Controller
         }
 
         return response()->json([
-            'success' => true,
+            self::SUCCESS => true,
             'quotes' => $allChildQuotes->Quotes->toArray()
         ]);
     }
@@ -98,7 +98,7 @@ class ChildController extends Controller
         }
 
         return response()->json([
-            'success' => true,
+            self::SUCCESS => true,
             'child' => $newChild
         ]);
     }
@@ -159,7 +159,7 @@ class ChildController extends Controller
         }
 
         return response()->json([
-            'success' => true,
+            self::SUCCESS => true,
             'child' => $childToUpdate
         ]);
 
@@ -175,10 +175,30 @@ class ChildController extends Controller
         if ($child->avatar_url_id != $avatar_url_id) {
             return response()->json([
                 self::SUCCESS => false,
-                self::ERROR_TYPE => 'image not found.'
+                self::ERROR_TYPE => 'Image not found.'
             ]);
         }
 
         return Image::make($child->getMedia('avatar')[0]->getPath())->response();
+    }
+
+    function defaultAvatar($gender) {
+        switch ($gender) {
+            case 'boy':
+                return Image::make(storage_path('default-avatars') . '/boy.png')->response();
+                break;
+            case 'girl':
+                return Image::make(storage_path('default-avatars') . '/girl.png')->response();
+                break;
+            case 'other':
+                return Image::make(storage_path('default-avatars') . '/other.png')->response();
+                break;
+            default:
+                return response()->json([
+                    self::SUCCESS => false,
+                    self::ERROR_TYPE => 'Not a valid gender.'
+                ]);
+                break;
+        }
     }
 }
