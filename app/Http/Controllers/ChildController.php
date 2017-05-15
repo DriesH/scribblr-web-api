@@ -191,13 +191,13 @@ class ChildController extends Controller
 
     function defaultAvatar($gender) {
         switch ($gender) {
-            case 'boy':
+            case 'Male':
             return Image::make(storage_path('default-avatars') . '/boy.png')->response();
             break;
-            case 'girl':
+            case 'Female':
             return Image::make(storage_path('default-avatars') . '/girl.png')->response();
             break;
-            case 'other':
+            case 'Other':
             return Image::make(storage_path('default-avatars') . '/other.png')->response();
             break;
             default:
