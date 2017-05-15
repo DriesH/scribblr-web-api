@@ -19,6 +19,7 @@ class Controller extends BaseController
     const ERROR_MESSAGE = 'error_message';
     const ERROR_TYPE_MODEL_NOT_FOUND = 'model_not_found';
     const ERROR_TYPE_VALIDATION = 'validation';
+    const ERROR_TYPE_IMAGE_NOT_FOUND = 'image_not_found';
     const ERROR_MESSAGES = [
         'model_not_found' => 'The model was not found.',
         'validation' => 'The given input did not pass the validation rules.',

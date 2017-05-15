@@ -173,7 +173,7 @@ class QuoteController extends Controller
         if ($quote->img_original_url_id != $img_original_url_id) {
             return response()->json([
                 self::SUCCESS => false,
-                self::ERROR_TYPE => 'image not found.'
+                self::ERROR_TYPE => self::ERROR_TYPE_IMAGE_NOT_FOUND
             ]);
         }
 
@@ -190,7 +190,7 @@ class QuoteController extends Controller
         if ($quote->img_baked_url_id != $img_baked_url_id) {
             return response()->json([
                 self::SUCCESS => false,
-                self::ERROR_TYPE => 'image not found.'
+                self::ERROR_TYPE => self::RROR_TYPE_IMAGE_NOT_FOUND
             ]);
         }
 

@@ -7,6 +7,8 @@ use Validator;
 use Illuminate\Validation\Rule;
 use App\Classes\ShortIdGenerator;
 use Image;
+use Spatie\Image\Image as SpatieImage;
+
 
 //Models
 use App\Child;
@@ -106,7 +108,11 @@ class ChildController extends Controller
     private function addChildThumnail($child, $avatar){
         $avatar_url_id = sha1($avatar->getPathName());
 
-        $child->addMedia($avatar)
+        SpatieImage::load($avatar->getPathName())
+        ->width(75)
+        ->save('avatar.' . $avatar->getClientOriginalExtension());
+
+        $child->addMedia('avatar.' . $avatar->getClientOriginalExtension())
         ->withCustomProperties(['url_id' => $avatar_url_id])
         ->toMediaLibrary('avatar');
 
@@ -155,6 +161,7 @@ class ChildController extends Controller
         $childToUpdate->save();
 
         if ($request->avatar) {
+            $childToUpdate->clearMediaCollection('avatar');
             self::addChildThumnail($newChild, $request->avatar);
         }
 
@@ -185,20 +192,20 @@ class ChildController extends Controller
     function defaultAvatar($gender) {
         switch ($gender) {
             case 'boy':
-                return Image::make(storage_path('default-avatars') . '/boy.png')->response();
-                break;
+            return Image::make(storage_path('default-avatars') . '/boy.png')->response();
+            break;
             case 'girl':
-                return Image::make(storage_path('default-avatars') . '/girl.png')->response();
-                break;
+            return Image::make(storage_path('default-avatars') . '/girl.png')->response();
+            break;
             case 'other':
-                return Image::make(storage_path('default-avatars') . '/other.png')->response();
-                break;
+            return Image::make(storage_path('default-avatars') . '/other.png')->response();
+            break;
             default:
-                return response()->json([
-                    self::SUCCESS => false,
-                    self::ERROR_TYPE => 'Not a valid gender.'
-                ]);
-                break;
+            return response()->json([
+                self::SUCCESS => false,
+                self::ERROR_TYPE => 'Not a valid gender.'
+            ]);
+            break;
         }
     }
 }

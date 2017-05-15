@@ -232,7 +232,6 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'UserVerification' => Jrean\UserVerification\Facades\UserVerification::class,
         'Image' => Intervention\Image\Facades\Image::class,
-
     ],
 
 ];

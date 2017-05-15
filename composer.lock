@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a225c22e55ea1a3334ac8907eead2202",
-    "content-hash": "9ea2cb2c82519112b3afefe19f625726",
+    "hash": "e0e36f1a90aca04fd85c248d76a9e6f2",
+    "content-hash": "458e9762c776af630b1a62cdf0a510a5",
     "packages": [
         {
             "name": "barryvdh/laravel-cors",
@@ -642,16 +642,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.4.22",
+            "version": "v5.4.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "fc5c7a18644f231bcb8d02f4ec2f3a2517f5015d"
+                "reference": "ad82327705658dbf5f0ce72805caa950dfbe150d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/fc5c7a18644f231bcb8d02f4ec2f3a2517f5015d",
-                "reference": "fc5c7a18644f231bcb8d02f4ec2f3a2517f5015d",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/ad82327705658dbf5f0ce72805caa950dfbe150d",
+                "reference": "ad82327705658dbf5f0ce72805caa950dfbe150d",
                 "shasum": ""
             },
             "require": {
@@ -767,7 +767,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2017-05-08 21:45:45"
+            "time": "2017-05-11 20:10:35"
         },
         {
             "name": "laravel/tinker",
@@ -912,16 +912,16 @@
         },
         {
             "name": "league/glide",
-            "version": "1.2.1",
+            "version": "1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/glide.git",
-                "reference": "ae6351088b148ed73ebd1270e312b07fd35dd37d"
+                "reference": "8077f529a07ded3eed6c5dcf7f688249b626ddf3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/glide/zipball/ae6351088b148ed73ebd1270e312b07fd35dd37d",
-                "reference": "ae6351088b148ed73ebd1270e312b07fd35dd37d",
+                "url": "https://api.github.com/repos/thephpleague/glide/zipball/8077f529a07ded3eed6c5dcf7f688249b626ddf3",
+                "reference": "8077f529a07ded3eed6c5dcf7f688249b626ddf3",
                 "shasum": ""
             },
             "require": {
@@ -969,7 +969,7 @@
                 "manipulation",
                 "processing"
             ],
-            "time": "2017-01-19 01:26:54"
+            "time": "2017-05-09 17:41:49"
         },
         {
             "name": "monolog/monolog",
@@ -1407,16 +1407,16 @@
         },
         {
             "name": "psy/psysh",
-            "version": "v0.8.3",
+            "version": "v0.8.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bobthecow/psysh.git",
-                "reference": "1dd4bbbc64d71e7ec075ffe82b42d9e096dc8d5e"
+                "reference": "17cf432bb80d9198df239b80d00a29155bd74d82"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/1dd4bbbc64d71e7ec075ffe82b42d9e096dc8d5e",
-                "reference": "1dd4bbbc64d71e7ec075ffe82b42d9e096dc8d5e",
+                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/17cf432bb80d9198df239b80d00a29155bd74d82",
+                "reference": "17cf432bb80d9198df239b80d00a29155bd74d82",
                 "shasum": ""
             },
             "require": {
@@ -1476,7 +1476,7 @@
                 "interactive",
                 "shell"
             ],
-            "time": "2017-03-19 21:40:44"
+            "time": "2017-05-12 15:41:55"
         },
         {
             "name": "ramsey/uuid",
@@ -1611,16 +1611,16 @@
         },
         {
             "name": "spatie/laravel-medialibrary",
-            "version": "5.10.0",
+            "version": "5.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-medialibrary.git",
-                "reference": "a5512ac47ce55663127ea2d9f5bc6f95b687aec2"
+                "reference": "bf67fbd9a2fef01fae5ae50f2e4b321e9be566cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-medialibrary/zipball/a5512ac47ce55663127ea2d9f5bc6f95b687aec2",
-                "reference": "a5512ac47ce55663127ea2d9f5bc6f95b687aec2",
+                "url": "https://api.github.com/repos/spatie/laravel-medialibrary/zipball/bf67fbd9a2fef01fae5ae50f2e4b321e9be566cb",
+                "reference": "bf67fbd9a2fef01fae5ae50f2e4b321e9be566cb",
                 "shasum": ""
             },
             "require": {
@@ -1678,7 +1678,7 @@
                 "media",
                 "spatie"
             ],
-            "time": "2017-04-18 16:23:35"
+            "time": "2017-05-10 16:52:18"
         },
         {
             "name": "spatie/pdf-to-image",
@@ -4309,8 +4309,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "tymon/jwt-auth": 20,
-        "intervention/image": 20
+        "intervention/image": 20,
+        "tymon/jwt-auth": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
