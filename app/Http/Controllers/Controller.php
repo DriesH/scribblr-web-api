@@ -6,6 +6,8 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use App\Achievement;
+use App\Achievement_User;
 
 class Controller extends BaseController
 {
@@ -44,9 +46,12 @@ class Controller extends BaseController
     }
 
     protected function checkAchievementProgress($achievement_id) {
+        $achievement_resp = new stdClass();
+        $user = Auth::user();
         switch ($achievement_id) {
             case 1:
-                # code...
+                attachUserAchievement($user, 1);
+                $achievement_resp = 
                 break;
             case 2:
                 # code...
@@ -77,6 +82,13 @@ class Controller extends BaseController
             default:
                 return null;
         }
+
+        return $achievement;
+    }
+
+    function attachUserAchievement($user, $achievement_id) {
+        $achievement = Achievement::find($achievement_id);
+        $user->attach($achievement);
     }
 
 }
