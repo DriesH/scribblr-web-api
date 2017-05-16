@@ -188,24 +188,4 @@ class ChildController extends Controller
 
         return Image::make($child->getMedia('avatar')[0]->getPath())->response();
     }
-
-    function defaultAvatar($gender) {
-        switch ($gender) {
-            case 'Male':
-            return Image::make(storage_path('default-avatars') . '/boy.png')->response();
-            break;
-            case 'Female':
-            return Image::make(storage_path('default-avatars') . '/girl.png')->response();
-            break;
-            case 'Other':
-            return Image::make(storage_path('default-avatars') . '/other.png')->response();
-            break;
-            default:
-            return response()->json([
-                self::SUCCESS => false,
-                self::ERROR_TYPE => 'Not a valid gender.'
-            ]);
-            break;
-        }
-    }
 }
