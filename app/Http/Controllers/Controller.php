@@ -43,4 +43,40 @@ class Controller extends BaseController
         ], 400);
     }
 
+    protected function checkAchievementProgress($achievement_id) {
+        switch ($achievement_id) {
+            case 1:
+                # code...
+                break;
+            case 2:
+                # code...
+                break;
+            case 3:
+                # code...
+                break;
+            case 4:
+                # code...
+                break;
+            case 5:
+            case 6:
+            case 7:
+                # code...
+                break;
+            case 8:
+            case 9:
+            case 10:
+                # code...
+                break;
+            case 11:
+                # code...
+                break;
+            case 12:
+            case 13:
+                # code...
+                break;
+            default:
+                return null;
+        }
+    }
+
 }
