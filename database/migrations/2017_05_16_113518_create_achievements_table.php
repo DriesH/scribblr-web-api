@@ -19,6 +19,7 @@ class CreateAchievementsTable extends Migration
             $table->string('description');
             $table->integer('points');
             $table->string('image');
+            $table->string('category');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -80,4 +80,8 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
         Route::get('/all', 'BookController@index');
         Route::delete('/{shortId}/delete', 'BookController@delete');
     });
+
+    Route::group(['prefix' => 'achievements'], function () {
+        Route::get('/', 'AchievementController@all');
+    });
 });

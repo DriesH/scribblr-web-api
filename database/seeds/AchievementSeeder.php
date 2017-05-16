@@ -16,18 +16,21 @@ class AchievementSeeder extends Seeder
            'description' => 'We\'ll give you this one.',
            'points' => 10,
            'image' => '/assets/achievements/account.svg',
+           'category' => 'Account',
        ]);
         DB::table('achievements')->insert([
            'title' => 'Confirm your email',
            'description' => 'Just to be sure.',
            'points' => 15,
            'image' => '/assets/achievements/email.svg',
+           'category' => 'Account',
        ]);
         DB::table('achievements')->insert([
            'title' => 'Add your first child',
            'description' => 'Add your first child on Scribblr.',
            'points' => 20,
            'image' => '/assets/achievements/child.svg',
+           'category' => 'Children',
        ]);
     }
 }

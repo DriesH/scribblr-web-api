@@ -80,7 +80,7 @@ HasMedia
 
     public function achievements()
     {
-        return $this->belongsToMany('App\Achievements', 'achievements__users',
+        return $this->belongsToMany('App\Achievement', 'achievement__users',
         'user_id', 'achievement_id');
     }
 }
