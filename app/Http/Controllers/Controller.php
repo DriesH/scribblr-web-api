@@ -8,6 +8,8 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Achievement;
 use App\Achievement_User;
+use stdClass;
+use Auth;
 
 class Controller extends BaseController
 {
@@ -50,8 +52,7 @@ class Controller extends BaseController
         $user = Auth::user();
         switch ($achievement_id) {
             case 1:
-                attachUserAchievement($user, 1);
-                $achievement_resp = 
+                $achievement_resp = $this->attachAndReturnUserAchievement($user, 1);
                 break;
             case 2:
                 # code...
@@ -83,12 +84,16 @@ class Controller extends BaseController
                 return null;
         }
 
-        return $achievement;
+        return $achievement_resp;
     }
 
-    function attachUserAchievement($user, $achievement_id) {
+    function attachAndReturnUserAchievement($user, $achievement_id) {
         $achievement = Achievement::find($achievement_id);
-        $user->attach($achievement);
+        if(!$user->achievements->contains($achievement->id)) {
+            $user->achievements()->attach($achievement);
+            return $achievement;
+        }
+        return null;
     }
 
 }
