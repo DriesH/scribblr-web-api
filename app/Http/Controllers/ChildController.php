@@ -183,7 +183,7 @@ class ChildController extends Controller
             return response()->json([
                 self::SUCCESS => false,
                 self::ERROR_TYPE => 'Image not found.'
-            ]);
+            ], 400);
         }
 
         return Image::make($child->getMedia('avatar')[0]->getPath())->response();

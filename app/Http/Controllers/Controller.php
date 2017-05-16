@@ -30,7 +30,7 @@ class Controller extends BaseController
             self::SUCCESS => false,
             self::ERROR_TYPE => self::ERROR_TYPE_MODEL_NOT_FOUND,
             self::ERROR_MESSAGE => self::ERROR_MESSAGES[self::ERROR_TYPE_MODEL_NOT_FOUND]
-        ]);
+        ], 400);
     }
 
     protected function RespondValidationError($request, $validator) {
@@ -40,7 +40,7 @@ class Controller extends BaseController
             self::ERROR_MESSAGE => self::ERROR_MESSAGES[self::ERROR_TYPE_VALIDATION],
             self::ERRORS => $validator->errors()->all(),
             self::OLD_INPUT => $request->all()
-        ]);
+        ], 400);
     }
 
 }

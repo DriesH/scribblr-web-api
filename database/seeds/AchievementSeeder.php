@@ -27,7 +27,7 @@ class AchievementSeeder extends Seeder
            'title' => 'Add your first child',
            'description' => 'Add your first child on Scribblr.',
            'points' => 20,
-           'image' => '/assets/achievements/email.svg',
+           'image' => '/assets/achievements/child.svg',
        ]);
     }
 }
