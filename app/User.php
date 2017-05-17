@@ -77,4 +77,10 @@ HasMedia
     public function Children() {
         return $this->hasMany('App\Child', 'user_id');
     }
+
+    public function achievements()
+    {
+        return $this->belongsToMany('App\Achievement', 'achievement__users',
+        'user_id', 'achievement_id');
+    }
 }

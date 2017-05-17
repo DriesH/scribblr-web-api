@@ -22,10 +22,7 @@ use Illuminate\Http\Request;
 * Login/register routes
 */
 
-Route::get('/color', 'QuoteController@getMainColor');
-
 //get child thumbnail
-Route::get('application/children/avatar/{gender}', 'ChildController@defaultAvatar');
 Route::get('application/children/{childShortId}/avatar/{avatar_url_id}', 'ChildController@avatar');
 Route::get('application/children/{childShortId}/quotes/{quoteShortId}/img-original/{img_original_url_id}', 'QuoteController@getQuoteOriginalImage');
 Route::get('application/children/{childShortId}/quotes/{quoteShortId}/img-baked/{img_baked_url_id}', 'QuoteController@getQuoteBakedImage');
@@ -62,7 +59,7 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
         /*
         * Api endpoints for quotes
         */
-        Route::post('/{childShortId}/quotes/new', 'QuoteController@newQuote');
+        Route::post('/{childShortId}/quotes/new', 'QuoteController@new');
         Route::delete('{childShortId}/quotes/{quoteShortId}/delete', 'QuoteController@delete');
 
     });
@@ -80,5 +77,9 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
         Route::get('/{shortId}', 'BookController@getBook');
         Route::get('/all', 'BookController@index');
         Route::delete('/{shortId}/delete', 'BookController@delete');
+    });
+
+    Route::group(['prefix' => 'achievements'], function () {
+        Route::get('/', 'AchievementController@all');
     });
 });

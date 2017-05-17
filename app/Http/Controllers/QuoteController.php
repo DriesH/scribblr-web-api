@@ -28,7 +28,7 @@ class QuoteController extends Controller
         }
 
         return response()->json([
-            'success' => true,
+            self::SUCCESS => true,
             'quotes' => $quotes
         ]);
 
@@ -68,6 +68,7 @@ class QuoteController extends Controller
             $quote->story = $request->story;
         }
         $quote->child_id = $child->id;
+        $quote->img_main_color = self::getMainColor($request->img_original);
         $quote->save();
 
         //images
@@ -75,16 +76,16 @@ class QuoteController extends Controller
         self::addQuoteBaked($quote, $request->img_baked);
 
         return response()->json([
-            'success' => true,
-            'quote' => $quote
+            self::SUCCESS => true,
+            'quote' => $quote,
+            self::ACHIEVEMENT => self::checkAchievementProgress(self::ADD_SCRIBBLE)
         ]);
 
     }
 
     private function addQuoteOriginal($quote, $img_original){
-        $img_original_url_id = sha1($img_original->getPathName());
-
-        $quote->addMedia($img_original)
+        $img_original_url_id = sha1($img_original);
+        $quote->addMediaFromUrl($img_original)
         ->withCustomProperties(['url_id' => $img_original_url_id])
         ->toMediaLibrary('original');
 
@@ -116,52 +117,52 @@ class QuoteController extends Controller
         $quoteToDelete->delete();
 
         return response()->json([
-            'success' => true
+            self::SUCCESS => true
         ]);
     }
 
-    function getMainColor() {
-        $dominantColor = ColorThief::getColor(public_path() . '/test.jpg', 100);
+    function getMainColor($image_url) {
+        $dominantColor_rgb = ColorThief::getColor($image_url, 100);
 
-        return view('test', [
-            'color' => $dominantColor
-        ]);
+        $dominantColor_hex = sprintf("#%02x%02x%02x", $dominantColor_rgb[0], $dominantColor_rgb[1], $dominantColor_rgb[2]);
+
+        return $dominantColor_hex;
     }
 
-    function newQuote(Request $request, $childShortId) {
-        $validator = Validator::make($request->all(), [
-            'link' => 'url',
-        ]);
-
-        if ($validator->fails()) {
-            return self::RespondValidationError($request, $validator);
-        }
-
-        $user = Auth::user();
-        $child = Child::where('short_id', $childShortId)->whereHas('user', function($query) use($user) {
-            $query->where('users.id', $user->id);
-        })->first();
-
-        if (!$child) {
-            return self::RespondModelNotFound();
-        }
-
-        $imageURL = $request->link;
-        try {
-            $child->addMediaFromUrl($imageURL)->toMediaLibrary('edited_images');
-        } catch (Exception $e) {
-            return response()->json([
-                self::SUCCESS => false,
-                self::ERROR_TYPE => 'failed to download/save image'
-            ]);
-        }
-
-
-        return response()->json([
-            self::SUCCESS => true,
-            'media' => $child->getMedia('edited_images')
-        ]);
-    }
+    // function newQuote(Request $request, $childShortId) {
+    //     $validator = Validator::make($request->all(), [
+    //         'link' => 'url',
+    //     ]);
+    //
+    //     if ($validator->fails()) {
+    //         return self::RespondValidationError($request, $validator);
+    //     }
+    //
+    //     $user = Auth::user();
+    //     $child = Child::where('short_id', $childShortId)->whereHas('user', function($query) use($user) {
+    //         $query->where('users.id', $user->id);
+    //     })->first();
+    //
+    //     if (!$child) {
+    //         return self::RespondModelNotFound();
+    //     }
+    //
+    //     $imageURL = $request->link;
+    //     try {
+    //         $child->addMediaFromUrl($imageURL)->toMediaLibrary('edited_images');
+    //     } catch (Exception $e) {
+    //         return response()->json([
+    //             self::SUCCESS => false,
+    //             self::ERROR_TYPE => 'failed to download/save image'
+    //         ]);
+    //     }
+    //
+    //
+    //     return response()->json([
+    //         self::SUCCESS => true,
+    //         'media' => $child->getMedia('edited_images')
+    //     ]);
+    // }
 
     function getQuoteOriginalImage(Request $request, $childShortId, $quoteShortId, $img_original_url_id) {
         $quote = Quote::where('short_id', $quoteShortId)->first();
@@ -173,14 +174,14 @@ class QuoteController extends Controller
         if ($quote->img_original_url_id != $img_original_url_id) {
             return response()->json([
                 self::SUCCESS => false,
-                self::ERROR_TYPE => 'image not found.'
+                self::ERROR_TYPE => self::ERROR_TYPE_IMAGE_NOT_FOUND
             ]);
         }
 
         return Image::make($quote->getMedia('original')[0]->getPath())->response();
     }
 
-    function getBakedOriginalImage(Request $request, $childShortId, $quoteShortId, $img_baked_url_id) {
+    function getQuoteBakedImage(Request $request, $childShortId, $quoteShortId, $img_baked_url_id) {
         $quote = Quote::where('short_id', $quoteShortId)->first();
 
         if (!$quote) {
@@ -190,7 +191,7 @@ class QuoteController extends Controller
         if ($quote->img_baked_url_id != $img_baked_url_id) {
             return response()->json([
                 self::SUCCESS => false,
-                self::ERROR_TYPE => 'image not found.'
+                self::ERROR_TYPE => self::RROR_TYPE_IMAGE_NOT_FOUND
             ]);
         }
 

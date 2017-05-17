@@ -12,7 +12,7 @@ class ChildSeeder extends Seeder
     public function run()
     {
         DB::table('children')->insert([
-           'short_id' => 'aaaaaaaa',
+           'short_id' => 'gkhjtubh',
            'user_id' => 1,
            'gender' => 'Male',
            'full_name' => 'Druis',
@@ -20,7 +20,7 @@ class ChildSeeder extends Seeder
        ]);
 
         DB::table('children')->insert([
-           'short_id' => 'bbbbbbbb',
+           'short_id' => 'gmhledkh',
            'user_id' => 1,
            'gender' => 'Female',
            'full_name' => 'Miranda',
