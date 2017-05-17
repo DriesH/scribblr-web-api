@@ -93,9 +93,9 @@ class RegisterController extends Controller
         $validator = $this->validator($request->all());
         if ($validator->fails()) {
             return response()->json([
-                'success' => false,
-                'errors' => $validator->errors()->jsonSerialize(),
-                'old_input' => $request->except('password')
+                self::SUCCESS => false,
+                self::ERRORS => $validator->errors()->jsonSerialize(),
+                self::OLD_INPUT => $request->except('password')
             ]);
         }
         $user = $this->create($request->all());
@@ -109,8 +109,9 @@ class RegisterController extends Controller
         UserVerification::send($user, 'My Custom E-mail Subject');
 
         return response()->json([
-            'success' => true,
-            'token' => $token
+            self::SUCCESS => true,
+            'token' => $token,
+            self::ACHIEVEMENT => self::checkAchievementProgress(self::REGISTER_ACCOUNT)
         ]);
     }
 }

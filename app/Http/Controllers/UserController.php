@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use stdClass;
 use Auth;
+use Validator;
 
 class UserController extends Controller
 {
@@ -27,11 +28,56 @@ class UserController extends Controller
         ]);
     }
 
+    public function editUser(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'first_name' => self::REQUIRED.'|max:50',
+            'last_name' => 'max:50',
+            'street_name' => 'max:150',
+            'house_number' => 'max:10',
+            'city' => 'max:50',
+            'postal_code' => 'max:16',
+            // 'country' => , //FIXME: check on list of countries
+        ]);
+
+        if ($validator->fails()) {
+            return self::RespondValidationError($request, $validator);
+        }
+
+        $user = Auth::user();
+        $user->first_name = $request->first_name;
+        if ($request->last_name) {
+            $user->last_name = $request->last_name;
+        }
+        if ($request->street_name) {
+            $user->street_name = $request->street_name;
+        }
+        if ($request->house_number) {
+            $user->house_number = $request->house_number;
+        }
+        if ($request->city) {
+            $user->city = $request->city;
+        }
+        if ($request->postal_code) {
+            $user->postal_code = $request->postal_code;
+        }
+        if ($request->country) {
+            $user->country = $request->country;
+        }
+
+        $user->save();
+
+        return response()->json([
+            self::SUCCESS => true,
+            self::USER => $user,
+            self::ACHIEVEMENT => self::checkAchievementProgress(self::COMPLETE_ACCOUNT_INFO)
+        ]);
+    }
+
     function checkAuth() {
         $user = Auth::user();
         return response()->json([
-            'success' => true,
-            'user' => $user
+            self::SUCCESS => true,
+            self::USER => $user
         ]);
     }
 }

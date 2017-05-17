@@ -28,7 +28,7 @@ class QuoteController extends Controller
         }
 
         return response()->json([
-            'success' => true,
+            self::SUCCESS => true,
             'quotes' => $quotes
         ]);
 
@@ -76,9 +76,9 @@ class QuoteController extends Controller
         self::addQuoteBaked($quote, $request->img_baked);
 
         return response()->json([
-            'success' => true,
+            self::SUCCESS => true,
             'quote' => $quote,
-            'achievement' => self::checkAchievementProgress(self::ADD_SCRIBBLE)
+            self::ACHIEVEMENT => self::checkAchievementProgress(self::ADD_SCRIBBLE)
         ]);
 
     }
@@ -117,7 +117,7 @@ class QuoteController extends Controller
         $quoteToDelete->delete();
 
         return response()->json([
-            'success' => true
+            self::SUCCESS => true
         ]);
     }
 

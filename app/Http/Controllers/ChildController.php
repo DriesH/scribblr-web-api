@@ -102,7 +102,7 @@ class ChildController extends Controller
         return response()->json([
             self::SUCCESS => true,
             'child' => $newChild,
-            'achievement' => self::checkAchievementProgress(4)
+            self::ACHIEVEMENT => self::checkAchievementProgress(self::ADD_CHILD)
         ]);
     }
 

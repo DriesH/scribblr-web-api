@@ -17,6 +17,7 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     /*      achievements    */
+    const ACHIEVEMENT = 'achievement';
     const REGISTER_ACCOUNT = 'register_account';
     const CONFIRM_EMAIL = 'confirm_email';
     const COMPLETE_ACCOUNT_INFO = 'complete_account_info';
@@ -28,6 +29,7 @@ class Controller extends BaseController
 
     /*      responses       */
     const SUCCESS = 'success';
+    const USER = 'user';
     const ERRORS = 'errors';
     const REQUIRED = 'required';
     const OLD_INPUT = 'old_input';
@@ -68,7 +70,7 @@ class Controller extends BaseController
                 $achievement_resp = $achievement_checker->attachAndReturnUserAchievement($user, $achievement_scope_name);
                 break;
             case self::CONFIRM_EMAIL: //confirm email
-                $achievement_resp = $achievement_checker->attachAndReturnUserAchievement($user, $achievement_scope_name);
+                        //FIXME: check if email is confirmed
                 break;
             case self::COMPLETE_ACCOUNT_INFO: //complete acc info
                 $achievement_resp = $achievement_checker->checkAccountInfo($user, $achievement_scope_name);
