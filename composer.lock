@@ -4,12 +4,9 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-<<<<<<< HEAD
     "content-hash": "9ea2cb2c82519112b3afefe19f625726",
-=======
     "hash": "e0e36f1a90aca04fd85c248d76a9e6f2",
     "content-hash": "458e9762c776af630b1a62cdf0a510a5",
->>>>>>> origin/development
     "packages": [
         {
             "name": "barryvdh/laravel-cors",
@@ -771,11 +768,8 @@
                 "framework",
                 "laravel"
             ],
-<<<<<<< HEAD
             "time": "2017-05-11T20:10:35+00:00"
-=======
             "time": "2017-05-11 20:10:35"
->>>>>>> origin/development
         },
         {
             "name": "laravel/tinker",
@@ -977,11 +971,8 @@
                 "manipulation",
                 "processing"
             ],
-<<<<<<< HEAD
             "time": "2017-05-09T17:41:49+00:00"
-=======
             "time": "2017-05-09 17:41:49"
->>>>>>> origin/development
         },
         {
             "name": "monolog/monolog",
@@ -1488,11 +1479,8 @@
                 "interactive",
                 "shell"
             ],
-<<<<<<< HEAD
             "time": "2017-05-12T15:41:55+00:00"
-=======
             "time": "2017-05-12 15:41:55"
->>>>>>> origin/development
         },
         {
             "name": "ramsey/uuid",
@@ -1694,11 +1682,8 @@
                 "media",
                 "spatie"
             ],
-<<<<<<< HEAD
             "time": "2017-05-10T16:52:18+00:00"
-=======
             "time": "2017-05-10 16:52:18"
->>>>>>> origin/development
         },
         {
             "name": "spatie/pdf-to-image",
