@@ -17,6 +17,7 @@ class AchievementSeeder extends Seeder
             'description' => 'We\'ll give you this one.',
             'points' => 10,
             'image' => '/assets/achievements/account.svg',
+            'scope_name' => 'register_account',
             'category' => 'Account',
         ]);
         DB::table('achievements')->insert([
@@ -24,6 +25,7 @@ class AchievementSeeder extends Seeder
             'description' => 'Just to be sure.',
             'points' => 10,
             'image' => '/assets/achievements/email.svg',
+            'scope_name' => 'confirm_email',
             'category' => 'Account',
         ]);
         DB::table('achievements')->insert([
@@ -31,6 +33,7 @@ class AchievementSeeder extends Seeder
             'description' => 'We want to get to know you better.',
             'points' => 10,
             'image' => '/assets/achievements/info.svg',
+            'scope_name' => 'complete_account_info',
             'category' => 'Account',
         ]);
 
@@ -40,6 +43,7 @@ class AchievementSeeder extends Seeder
             'description' => 'Add your first child on Scribblr.',
             'points' => 20,
             'image' => '/assets/achievements/child.svg',
+            'scope_name' => 'add_child',
             'category' => 'Children',
         ]);
 
@@ -49,6 +53,8 @@ class AchievementSeeder extends Seeder
             'description' => 'add their first words.',
             'points' => 10,
             'image' => '/assets/achievements/scribble_1.svg',
+            'scope_name' => 'add_scribble',
+            'amount_to_complete' => 1,
             'category' => 'Scribbles',
         ]);
         DB::table('achievements')->insert([
@@ -56,6 +62,8 @@ class AchievementSeeder extends Seeder
             'description' => 'High five!',
             'points' => 10,
             'image' => '/assets/achievements/scribble_5.svg',
+            'scope_name' => 'add_scribble',
+            'amount_to_complete' => 5,
             'category' => 'Scribbles',
         ]);
         DB::table('achievements')->insert([
@@ -63,6 +71,8 @@ class AchievementSeeder extends Seeder
             'description' => 'You can fill a book with these!',
             'points' => 15,
             'image' => '/assets/achievements/scribble_20.svg',
+            'scope_name' => 'add_scribble',
+            'amount_to_complete' => 20,
             'category' => 'Scribbles',
         ]);
         DB::table('achievements')->insert([
@@ -70,6 +80,8 @@ class AchievementSeeder extends Seeder
             'description' => 'Your friends will love it.',
             'points' => 15,
             'image' => '/assets/achievements/share_1.svg',
+            'scope_name' => 'share_scribble',
+            'amount_to_complete' => 1,
             'category' => 'Scribbles',
         ]);
         DB::table('achievements')->insert([
@@ -77,6 +89,8 @@ class AchievementSeeder extends Seeder
             'description' => 'Sharing is caring!',
             'points' => 15,
             'image' => '/assets/achievements/share_5.svg',
+            'scope_name' => 'share_scribble',
+            'amount_to_complete' => 5,
             'category' => 'Scribbles',
         ]);
         DB::table('achievements')->insert([
@@ -84,6 +98,8 @@ class AchievementSeeder extends Seeder
             'description' => 'You show-off!',
             'points' => 20,
             'image' => '/assets/achievements/share_20.svg',
+            'scope_name' => 'share_scribble',
+            'amount_to_complete' => 20,
             'category' => 'Scribbles',
         ]);
 
@@ -93,6 +109,7 @@ class AchievementSeeder extends Seeder
             'description' => 'Never lose a single memory.',
             'points' => 15,
             'image' => '/assets/achievements/book.svg',
+            'scope_name' => 'add_book',
             'category' => 'ScribbleBooks',
         ]);
         DB::table('achievements')->insert([
@@ -100,6 +117,8 @@ class AchievementSeeder extends Seeder
             'description' => 'We\'re shipping it to you as we speak!',
             'points' => 25,
             'image' => '/assets/achievements/book_order_1.svg',
+            'scope_name' => 'order_book',
+            'amount_to_complete' => 1,
             'category' => 'ScribbleBooks',
         ]);
         DB::table('achievements')->insert([
@@ -107,6 +126,8 @@ class AchievementSeeder extends Seeder
             'description' => 'Third time\'s the charm!',
             'points' => 50,
             'image' => '/assets/achievements/book_order_3.svg',
+            'scope_name' => 'order_book',
+            'amount_to_complete' => 3,
             'category' => 'ScribbleBooks',
         ]);
 

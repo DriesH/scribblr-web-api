@@ -76,15 +76,15 @@ class QuoteController extends Controller
 
         return response()->json([
             'success' => true,
-            'quote' => $quote
+            'quote' => $quote,
+            'achievement' => self::checkAchievementProgress(self::ADD_SCRIBBLE)
         ]);
 
     }
 
     private function addQuoteOriginal($quote, $img_original){
-        $img_original_url_id = sha1($img_original->getPathName());
-
-        $quote->addMedia($img_original)
+        $img_original_url_id = sha1($img_original);
+        $quote->addMediaFromUrl($img_original)
         ->withCustomProperties(['url_id' => $img_original_url_id])
         ->toMediaLibrary('original');
 
@@ -128,40 +128,40 @@ class QuoteController extends Controller
         ]);
     }
 
-    function newQuote(Request $request, $childShortId) {
-        $validator = Validator::make($request->all(), [
-            'link' => 'url',
-        ]);
-
-        if ($validator->fails()) {
-            return self::RespondValidationError($request, $validator);
-        }
-
-        $user = Auth::user();
-        $child = Child::where('short_id', $childShortId)->whereHas('user', function($query) use($user) {
-            $query->where('users.id', $user->id);
-        })->first();
-
-        if (!$child) {
-            return self::RespondModelNotFound();
-        }
-
-        $imageURL = $request->link;
-        try {
-            $child->addMediaFromUrl($imageURL)->toMediaLibrary('edited_images');
-        } catch (Exception $e) {
-            return response()->json([
-                self::SUCCESS => false,
-                self::ERROR_TYPE => 'failed to download/save image'
-            ]);
-        }
-
-
-        return response()->json([
-            self::SUCCESS => true,
-            'media' => $child->getMedia('edited_images')
-        ]);
-    }
+    // function newQuote(Request $request, $childShortId) {
+    //     $validator = Validator::make($request->all(), [
+    //         'link' => 'url',
+    //     ]);
+    //
+    //     if ($validator->fails()) {
+    //         return self::RespondValidationError($request, $validator);
+    //     }
+    //
+    //     $user = Auth::user();
+    //     $child = Child::where('short_id', $childShortId)->whereHas('user', function($query) use($user) {
+    //         $query->where('users.id', $user->id);
+    //     })->first();
+    //
+    //     if (!$child) {
+    //         return self::RespondModelNotFound();
+    //     }
+    //
+    //     $imageURL = $request->link;
+    //     try {
+    //         $child->addMediaFromUrl($imageURL)->toMediaLibrary('edited_images');
+    //     } catch (Exception $e) {
+    //         return response()->json([
+    //             self::SUCCESS => false,
+    //             self::ERROR_TYPE => 'failed to download/save image'
+    //         ]);
+    //     }
+    //
+    //
+    //     return response()->json([
+    //         self::SUCCESS => true,
+    //         'media' => $child->getMedia('edited_images')
+    //     ]);
+    // }
 
     function getQuoteOriginalImage(Request $request, $childShortId, $quoteShortId, $img_original_url_id) {
         $quote = Quote::where('short_id', $quoteShortId)->first();

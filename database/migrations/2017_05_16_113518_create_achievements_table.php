@@ -18,6 +18,8 @@ class CreateAchievementsTable extends Migration
             $table->string('title');
             $table->string('description');
             $table->integer('points');
+            $table->integer('amount_to_complete')->nullable();
+            $table->string('scope_name');
             $table->string('image');
             $table->string('category');
             $table->timestamps();

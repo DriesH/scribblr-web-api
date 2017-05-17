@@ -47,8 +47,7 @@ class ChildController extends Controller
 
         return response()->json([
             self::SUCCESS => true,
-            'child' => $child,
-            'achievement' => self::checkAchievementProgress(4)
+            'child' => $child
         ]);
     }
 

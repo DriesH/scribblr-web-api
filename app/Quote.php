@@ -21,7 +21,7 @@ class Quote extends Model implements HasMedia
         'font',
     ];
 
-    public function Children() {
+    public function Child() {
         return $this->belongsTo('App\Child', 'child_id');
     }
 }

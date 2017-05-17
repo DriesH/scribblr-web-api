@@ -16,6 +16,17 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    /*      achievements    */
+    const REGISTER_ACCOUNT = 'register_account';
+    const CONFIRM_EMAIL = 'confirm_email';
+    const COMPLETE_ACCOUNT_INFO = 'complete_account_info';
+    const ADD_CHILD = 'add_child';
+    const ADD_SCRIBBLE = 'add_scribble';
+    const SHARE_SCRIBBLE = 'share_scribble';
+    const ADD_BOOK = 'add_book';
+    const ORDER_BOOK = 'order_book';
+
+    /*      responses       */
     const SUCCESS = 'success';
     const ERRORS = 'errors';
     const REQUIRED = 'required';
@@ -48,38 +59,33 @@ class Controller extends BaseController
         ], 400);
     }
 
-    protected function checkAchievementProgress($achievement_id) {
+    protected function checkAchievementProgress($achievement_scope_name) {
         $achievement_resp = new stdClass();
         $achievement_checker = new AchievementChecker();
         $user = Auth::user();
-        switch ($achievement_id) {
-            case 1: // make account
-                $achievement_resp = $achievement_checker->attachAndReturnUserAchievement($user, $achievement_id);
+        switch ($achievement_scope_name) {
+            case self::REGISTER_ACCOUNT: // make account
+                $achievement_resp = $achievement_checker->attachAndReturnUserAchievement($user, $achievement_scope_name);
                 break;
-            case 2: //confirm email
-                $achievement_resp = $achievement_checker->attachAndReturnUserAchievement($user, $achievement_id);
+            case self::CONFIRM_EMAIL: //confirm email
+                $achievement_resp = $achievement_checker->attachAndReturnUserAchievement($user, $achievement_scope_name);
                 break;
-            case 3: //complete acc info
-                $achievement_resp = $achievement_checker->checkAccountInfo($user, $achievement_id);
+            case self::COMPLETE_ACCOUNT_INFO: //complete acc info
+                $achievement_resp = $achievement_checker->checkAccountInfo($user, $achievement_scope_name);
                 break;
-            case 4:
-                $achievement_resp = $achievement_checker->checkFirstChild($user, $achievement_id);
+            case self::ADD_CHILD:
+                $achievement_resp = $achievement_checker->checkFirstChild($user, $achievement_scope_name);
                 break;
-            case 5:
-            case 6:
-            case 7:
+            case self::ADD_SCRIBBLE:
+                $achievement_resp = $achievement_checker->checkAmountScribbles($user, $achievement_scope_name);
+                break;
+            case self::SHARE_SCRIBBLE:
                 # code...
                 break;
-            case 8:
-            case 9:
-            case 10:
+            case self::ADD_BOOK:
                 # code...
                 break;
-            case 11:
-                # code...
-                break;
-            case 12:
-            case 13:
+            case self::ORDER_BOOK:
                 # code...
                 break;
             default:
