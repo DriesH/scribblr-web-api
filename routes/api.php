@@ -22,8 +22,6 @@ use Illuminate\Http\Request;
 * Login/register routes
 */
 
-Route::get('/color', 'QuoteController@getMainColor');
-
 //get child thumbnail
 Route::get('application/children/{childShortId}/avatar/{avatar_url_id}', 'ChildController@avatar');
 Route::get('application/children/{childShortId}/quotes/{quoteShortId}/img-original/{img_original_url_id}', 'QuoteController@getQuoteOriginalImage');

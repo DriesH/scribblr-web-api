@@ -19,6 +19,7 @@ class CreateQuotesTable extends Migration
             $table->integer('child_id')->unsigned();
             $table->string('quote');
             $table->string('story')->nullable();
+            $table->string('img_main_color')->nullable();
             $table->string('img_original_url_id')->nullable();
             $table->string('img_baked_url_id')->nullable();
             $table->timestamps();

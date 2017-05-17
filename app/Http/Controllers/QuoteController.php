@@ -68,6 +68,7 @@ class QuoteController extends Controller
             $quote->story = $request->story;
         }
         $quote->child_id = $child->id;
+        $quote->img_main_color = self::getMainColor($request->img_original);
         $quote->save();
 
         //images
@@ -120,12 +121,12 @@ class QuoteController extends Controller
         ]);
     }
 
-    function getMainColor() {
-        $dominantColor = ColorThief::getColor(public_path() . '/test.jpg', 100);
+    function getMainColor($image_url) {
+        $dominantColor_rgb = ColorThief::getColor($image_url, 100);
 
-        return view('test', [
-            'color' => $dominantColor
-        ]);
+        $dominantColor_hex = sprintf("#%02x%02x%02x", $dominantColor_rgb[0], $dominantColor_rgb[1], $dominantColor_rgb[2]);
+
+        return $dominantColor_hex;
     }
 
     // function newQuote(Request $request, $childShortId) {
@@ -180,7 +181,7 @@ class QuoteController extends Controller
         return Image::make($quote->getMedia('original')[0]->getPath())->response();
     }
 
-    function getBakedOriginalImage(Request $request, $childShortId, $quoteShortId, $img_baked_url_id) {
+    function getQuoteBakedImage(Request $request, $childShortId, $quoteShortId, $img_baked_url_id) {
         $quote = Quote::where('short_id', $quoteShortId)->first();
 
         if (!$quote) {
