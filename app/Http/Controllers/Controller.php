@@ -8,6 +8,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Achievement;
 use App\Achievement_User;
+use App\Classes\AchievementChecker;
 use stdClass;
 use Auth;
 
@@ -49,19 +50,20 @@ class Controller extends BaseController
 
     protected function checkAchievementProgress($achievement_id) {
         $achievement_resp = new stdClass();
+        $achievement_checker = new AchievementChecker();
         $user = Auth::user();
         switch ($achievement_id) {
-            case 1:
-                $achievement_resp = $this->attachAndReturnUserAchievement($user, 1);
+            case 1: // make account
+                $achievement_resp = $achievement_checker->attachAndReturnUserAchievement($user, $achievement_id);
                 break;
-            case 2:
-                # code...
+            case 2: //confirm email
+                $achievement_resp = $achievement_checker->attachAndReturnUserAchievement($user, $achievement_id);
                 break;
-            case 3:
-                # code...
+            case 3: //complete acc info
+                $achievement_resp = $achievement_checker->checkAccountInfo($user, $achievement_id);
                 break;
             case 4:
-                # code...
+                $achievement_resp = $achievement_checker->checkFirstChild($user, $achievement_id);
                 break;
             case 5:
             case 6:
@@ -86,14 +88,4 @@ class Controller extends BaseController
 
         return $achievement_resp;
     }
-
-    function attachAndReturnUserAchievement($user, $achievement_id) {
-        $achievement = Achievement::find($achievement_id);
-        if(!$user->achievements->contains($achievement->id)) {
-            $user->achievements()->attach($achievement);
-            return $achievement;
-        }
-        return null;
-    }
-
 }
