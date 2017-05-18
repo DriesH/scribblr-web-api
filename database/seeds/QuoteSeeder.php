@@ -35,9 +35,9 @@ class QuoteSeeder extends Seeder
             $new_quote->lqip = self::getSmallSizeImage(storage_path() . '/quote-seeder-img/test1.png');
             $new_quote->img_original_url_id = md5(uniqid(mt_rand(), true));
             $new_quote->img_baked_url_id = md5(uniqid(mt_rand(), true));
+            $new_quote->save();
             $new_quote->addMedia(storage_path() . '/quote-seeder-img/test1.png')->preservingOriginal()->toMediaLibrary('original');
             $new_quote->addMedia(storage_path() . '/quote-seeder-img/test1.png')->preservingOriginal()->toMediaLibrary('baked');
-            $new_quote->save();
 
             $new_quote2 = new Quote();
             $new_quote2->short_id = substr(md5(uniqid(mt_rand(), true)), 0, 8);
@@ -48,9 +48,9 @@ class QuoteSeeder extends Seeder
             $new_quote2->lqip = self::getSmallSizeImage(storage_path() . '/quote-seeder-img/test2.jpg');
             $new_quote2->img_original_url_id = md5(uniqid(mt_rand(), true));
             $new_quote2->img_baked_url_id = md5(uniqid(mt_rand(), true));
+            $new_quote2->save();
             $new_quote2->addMedia(storage_path() . '/quote-seeder-img/test2.jpg')->preservingOriginal()->toMediaLibrary('original');
             $new_quote2->addMedia(storage_path() . '/quote-seeder-img/test2.jpg')->preservingOriginal()->toMediaLibrary('baked');
-            $new_quote2->save();
 
             $new_quote3 = new Quote();
             $new_quote3->short_id = substr(md5(uniqid(mt_rand(), true)), 0, 8);
@@ -61,9 +61,9 @@ class QuoteSeeder extends Seeder
             $new_quote3->lqip = self::getSmallSizeImage(storage_path() . '/quote-seeder-img/test3.jpg');
             $new_quote3->img_original_url_id = md5(uniqid(mt_rand(), true));
             $new_quote3->img_baked_url_id = md5(uniqid(mt_rand(), true));
+            $new_quote3->save();
             $new_quote3->addMedia(storage_path() . '/quote-seeder-img/test3.jpg')->preservingOriginal()->toMediaLibrary('original');
             $new_quote3->addMedia(storage_path() . '/quote-seeder-img/test3.jpg')->preservingOriginal()->toMediaLibrary('baked');
-            $new_quote3->save();
 
         }
     }
