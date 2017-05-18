@@ -43,9 +43,9 @@ class QuoteController extends Controller
         $validator = Validator::make($request->all(), [
             'quote' => self::REQUIRED,
             'story' => 'max:1000',
-            'img_original' => 'url',
+            'img_original' => 'required_without:preset|url',
             'img_baked' => self::REQUIRED . '|image',
-            'preset' => 'integer'
+            'preset' => 'required_without:img_original|integer'
         ]);
 
         if ($validator->fails()) {
@@ -68,13 +68,17 @@ class QuoteController extends Controller
             $quote->story = $request->story;
         }
         $quote->child_id = $child->id;
-        $quote->img_main_color = self::getMainColor($request->img_original);
+        // $quote->img_main_color = self::getMainColor($request->img_original);
         $quote->save();
 
         //images
         if ($request->img_original) {
             self::addQuoteOriginal($quote, $request->img_original);
         }
+        elseif ($request->preset) {
+            self::addQuotePreset($quote, $request->preset);
+        }
+
         self::addQuoteBaked($quote, $request->img_baked);
 
         return response()->json([
@@ -86,20 +90,20 @@ class QuoteController extends Controller
     }
 
     private function addQuoteOriginal($quote, $img_original){
-
-        $quote->lqip = self::getSmallSizeImage($img_original);
-
         $img_original_url_id = sha1($img_original);
         $quote->addMediaFromUrl($img_original)
         ->withCustomProperties(['url_id' => $img_original_url_id])
         ->toMediaLibrary('original');
 
+        $quote->preset_id = null;
         $quote->img_original_url_id = $img_original_url_id;
 
         $quote->save();
     }
 
     private function addQuoteBaked($quote, $img_baked){
+        $quote->lqip = self::getSmallSizeImage($img_baked);
+
         $img_baked_url_id = sha1($img_baked->getPathName());
 
         $quote->addMedia($img_baked)
@@ -107,6 +111,12 @@ class QuoteController extends Controller
         ->toMediaLibrary('baked');
 
         $quote->img_baked_url_id = $img_baked_url_id;
+        $quote->save();
+    }
+
+    private function addQuotePreset($quote, $preset_id){
+        $quote->img_original_url_id = null;
+        $quote->preset_id = $preset_id;
         $quote->save();
     }
 
