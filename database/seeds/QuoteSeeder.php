@@ -12,18 +12,18 @@ class QuoteSeeder extends Seeder
     */
     public function run()
     {
-        DB::table('quotes')->insert([
-            'short_id' => 'kgjszzsx',
-            'child_id' => 1,
-            'quote' => 'lalalalalaaa',
-            'story' => 'vandaag was een zware dag voor kleine Timmy. Hij vulde zijn eerste belastingsbrief in.',
-        ]);
-        DB::table('quotes')->insert([
-            'short_id' => 'xxhgoldm',
-            'child_id' => 1,
-            'quote' => 'lalalalalaaa',
-            'story' => 'Timmy heeft vandaag voor de eerste keer met de auto gereden. Er vielen 10 licht- en  2 zwaargewonden.',
-        ]);
+        // DB::table('quotes')->insert([
+        //     'short_id' => 'kgjszzsx',
+        //     'child_id' => 1,
+        //     'quote' => 'lalalalalaaa',
+        //     'story' => 'vandaag was een zware dag voor kleine Timmy. Hij vulde zijn eerste belastingsbrief in.',
+        // ]);
+        // DB::table('quotes')->insert([
+        //     'short_id' => 'xxhgoldm',
+        //     'child_id' => 1,
+        //     'quote' => 'lalalalalaaa',
+        //     'story' => 'Timmy heeft vandaag voor de eerste keer met de auto gereden. Er vielen 10 licht- en  2 zwaargewonden.',
+        // ]);
 
         for ($i=0; $i < 10; $i++) {
             $new_quote = new Quote();
@@ -31,7 +31,6 @@ class QuoteSeeder extends Seeder
             $new_quote->child_id = 1;
             $new_quote->quote = 'gfjhrtyjrgerdv ve erz vrev ergerg e ghrteg';
             $new_quote->story = 'Lorem ipsum dolor sit amet, conseg re eer ger gere ctetur adipt anim id est laborum.';
-            $new_quote->img_main_color = '#e2e2e2';
             $new_quote->lqip = self::getSmallSizeImage(storage_path() . '/quote-seeder-img/test1.png');
             $new_quote->img_original_url_id = md5(uniqid(mt_rand(), true));
             $new_quote->img_baked_url_id = md5(uniqid(mt_rand(), true));
@@ -44,7 +43,6 @@ class QuoteSeeder extends Seeder
             $new_quote2->child_id = 1;
             $new_quote2->quote = 'kjhzkjejk ovjelk ozep ^ppek ze';
             $new_quote2->story = 'Lorem ipsum dolor sit fre fz fzefzeflkj clkjezlkj ivjiorzjirv hjkz ha deserunt mollit anim id est laborum.';
-            $new_quote2->img_main_color = '#ef0202';
             $new_quote2->lqip = self::getSmallSizeImage(storage_path() . '/quote-seeder-img/test2.jpg');
             $new_quote2->img_original_url_id = md5(uniqid(mt_rand(), true));
             $new_quote2->img_baked_url_id = md5(uniqid(mt_rand(), true));
@@ -57,10 +55,9 @@ class QuoteSeeder extends Seeder
             $new_quote3->child_id = 1;
             $new_quote3->quote = 'kjhzkjejk ovjelk ozep ^ppek ze';
             $new_quote3->story = 'Lorem ipsum dolor sit fre fz fzefzeflkj clkjezlkj ivjiorzjirv hjkz ha deserunt mollit anim id est laborum.';
-            $new_quote3->img_main_color = '#4f0e0e';
             $new_quote3->lqip = self::getSmallSizeImage(storage_path() . '/quote-seeder-img/test3.jpg');
-            $new_quote3->img_original_url_id = md5(uniqid(mt_rand(), true));
             $new_quote3->img_baked_url_id = md5(uniqid(mt_rand(), true));
+            $new_quote3->preset_id = random_int(1, 9);
             $new_quote3->save();
             $new_quote3->addMedia(storage_path() . '/quote-seeder-img/test3.jpg')->preservingOriginal()->toMediaLibrary('original');
             $new_quote3->addMedia(storage_path() . '/quote-seeder-img/test3.jpg')->preservingOriginal()->toMediaLibrary('baked');

@@ -43,9 +43,9 @@ class QuoteController extends Controller
         $validator = Validator::make($request->all(), [
             'quote' => self::REQUIRED,
             'story' => 'max:1000',
-            'img_original' => self::REQUIRED . '|url',
+            'img_original' => 'url',
             'img_baked' => self::REQUIRED . '|image',
-
+            'preset' => 'integer'
         ]);
 
         if ($validator->fails()) {
@@ -72,7 +72,9 @@ class QuoteController extends Controller
         $quote->save();
 
         //images
-        self::addQuoteOriginal($quote, $request->img_original);
+        if ($request->img_original) {
+            self::addQuoteOriginal($quote, $request->img_original);
+        }
         self::addQuoteBaked($quote, $request->img_baked);
 
         return response()->json([
