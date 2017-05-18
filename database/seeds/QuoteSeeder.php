@@ -25,25 +25,55 @@ class QuoteSeeder extends Seeder
             'story' => 'Timmy heeft vandaag voor de eerste keer met de auto gereden. Er vielen 10 licht- en  2 zwaargewonden.',
         ]);
 
-        for ($a=0; $a < 10; $a++) {
-            DB::table('quotes')->insert([
-                'short_id' => substr(md5(uniqid(mt_rand(), true)), 0, 8),
-                'child_id' => 1,
-                'quote' => 'sgergergerg',
-                'story' => 'Timmy heeft vandaag voor de eerste keer met de auto gerergergergregden. Er vielen 10 licht- en  2 zwaargewonden.',
-            ]);
+        for ($i=0; $i < 10; $i++) {
+            $new_quote = new Quote();
+            $new_quote->short_id = substr(md5(uniqid(mt_rand(), true)), 0, 8);
+            $new_quote->child_id = 1;
+            $new_quote->quote = 'gfjhrtyjrgerdv ve erz vrev ergerg e ghrteg';
+            $new_quote->story = 'Lorem ipsum dolor sit amet, conseg re eer ger gere ctetur adipt anim id est laborum.';
+            $new_quote->img_main_color = '#e2e2e2';
+            $new_quote->lqip = self::getSmallSizeImage(storage_path() . '/quote-seeder-img/test1.png');
+            $new_quote->img_original_url_id = md5(uniqid(mt_rand(), true));
+            $new_quote->img_baked_url_id = md5(uniqid(mt_rand(), true));
+            $new_quote->addMedia(storage_path() . '/quote-seeder-img/test1.png')->preservingOriginal()->toMediaLibrary('original');
+            $new_quote->addMedia(storage_path() . '/quote-seeder-img/test1.png')->preservingOriginal()->toMediaLibrary('baked');
+            $new_quote->save();
+
+            $new_quote2 = new Quote();
+            $new_quote2->short_id = substr(md5(uniqid(mt_rand(), true)), 0, 8);
+            $new_quote2->child_id = 1;
+            $new_quote2->quote = 'kjhzkjejk ovjelk ozep ^ppek ze';
+            $new_quote2->story = 'Lorem ipsum dolor sit fre fz fzefzeflkj clkjezlkj ivjiorzjirv hjkz ha deserunt mollit anim id est laborum.';
+            $new_quote2->img_main_color = '#ef0202';
+            $new_quote2->lqip = self::getSmallSizeImage(storage_path() . '/quote-seeder-img/test2.jpg');
+            $new_quote2->img_original_url_id = md5(uniqid(mt_rand(), true));
+            $new_quote2->img_baked_url_id = md5(uniqid(mt_rand(), true));
+            $new_quote2->addMedia(storage_path() . '/quote-seeder-img/test2.jpg')->preservingOriginal()->toMediaLibrary('original');
+            $new_quote2->addMedia(storage_path() . '/quote-seeder-img/test2.jpg')->preservingOriginal()->toMediaLibrary('baked');
+            $new_quote2->save();
+
+            $new_quote3 = new Quote();
+            $new_quote3->short_id = substr(md5(uniqid(mt_rand(), true)), 0, 8);
+            $new_quote3->child_id = 1;
+            $new_quote3->quote = 'kjhzkjejk ovjelk ozep ^ppek ze';
+            $new_quote3->story = 'Lorem ipsum dolor sit fre fz fzefzeflkj clkjezlkj ivjiorzjirv hjkz ha deserunt mollit anim id est laborum.';
+            $new_quote3->img_main_color = '#4f0e0e';
+            $new_quote3->lqip = self::getSmallSizeImage(storage_path() . '/quote-seeder-img/test3.jpg');
+            $new_quote3->img_original_url_id = md5(uniqid(mt_rand(), true));
+            $new_quote3->img_baked_url_id = md5(uniqid(mt_rand(), true));
+            $new_quote3->addMedia(storage_path() . '/quote-seeder-img/test3.jpg')->preservingOriginal()->toMediaLibrary('original');
+            $new_quote3->addMedia(storage_path() . '/quote-seeder-img/test3.jpg')->preservingOriginal()->toMediaLibrary('baked');
+            $new_quote3->save();
+
         }
+    }
 
-
-        $new_quote = new Quote();
-        $new_quote->short_id = substr(md5(uniqid(mt_rand(), true)), 0, 8);
-        $new_quote->child_id = 1;
-        $new_quote->quote = 'gfjhrtyjrgerdv ve erz vrev ergerg e ghrteg';
-        $new_quote->story = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
-        $new_quote->main_color = '#e2e2e2';
-        $new_quote->img_original_url_id = 'azertyuiop';
-        $new_quote->img_baked_url_id = 'poiuytreza';
-        $new_quote->addMedia(storage_path() . '/quote-seeder-img/test1.png')->preservingOriginal()->toMediaLibrary('original');
-        $new_quote->addMedia(storage_path() . '/quote-seeder-img/test1.png')->preservingOriginal()->toMediaLibrary('baked');
+    private function getSmallSizeImage($image) {
+        return Image::make($image)
+        ->resize(5, null, function ($constraint) {
+            $constraint->aspectRatio();
+        })
+        ->encode('data-url')
+        ->encoded;
     }
 }

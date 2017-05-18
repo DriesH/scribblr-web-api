@@ -84,12 +84,16 @@ class QuoteController extends Controller
     }
 
     private function addQuoteOriginal($quote, $img_original){
+
+        $quote->lqip = self::getSmallSizeImage($img_original);
+
         $img_original_url_id = sha1($img_original);
         $quote->addMediaFromUrl($img_original)
         ->withCustomProperties(['url_id' => $img_original_url_id])
         ->toMediaLibrary('original');
 
         $quote->img_original_url_id = $img_original_url_id;
+
         $quote->save();
     }
 
@@ -102,6 +106,15 @@ class QuoteController extends Controller
 
         $quote->img_baked_url_id = $img_baked_url_id;
         $quote->save();
+    }
+
+    private function getSmallSizeImage($image) {
+        return Image::make($image)
+        ->resize(5, null, function ($constraint) {
+            $constraint->aspectRatio();
+        })
+        ->encode('data-url')
+        ->encoded;
     }
 
     /*
