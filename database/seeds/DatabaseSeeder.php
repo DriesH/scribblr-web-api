@@ -15,5 +15,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ChildSeeder::class);
         $this->call(QuoteSeeder::class);
         $this->call(AchievementSeeder::class);
+        $this->call(PresetSeeder::class);
     }
 }

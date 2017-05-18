@@ -24,4 +24,8 @@ class Quote extends Model implements HasMedia
     public function Child() {
         return $this->belongsTo('App\Child', 'child_id');
     }
+
+    public function Preset() {
+        return $this->belongsTo('App\Preset');
+    }
 }

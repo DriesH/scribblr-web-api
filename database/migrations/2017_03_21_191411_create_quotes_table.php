@@ -23,6 +23,7 @@ class CreateQuotesTable extends Migration
             $table->longText('lqip')->nullable();
             $table->string('img_original_url_id')->nullable();
             $table->string('img_baked_url_id')->nullable();
+            $table->integer('preset_id')->unsigned()->nullable();
             $table->timestamps();
             $table->softDeletes();
 
