@@ -57,7 +57,7 @@ class Controller extends BaseController
             self::SUCCESS => false,
             self::ERROR_TYPE => self::ERROR_TYPE_VALIDATION,
             self::ERROR_MESSAGE => self::ERROR_MESSAGES[self::ERROR_TYPE_VALIDATION],
-            self::ERRORS => $validator->errors()->all(),
+            self::ERRORS => $validator->errors()->messages(),
             self::OLD_INPUT => $request->all()
         ], 400);
     }
