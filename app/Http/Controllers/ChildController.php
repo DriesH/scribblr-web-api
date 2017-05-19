@@ -40,7 +40,8 @@ class ChildController extends Controller
     */
     function getChild($childShortId)
     {
-        $child = Child::where('short_id', $childShortId)->first();
+        $userId = Auth::user()->id;
+        $child = Child::where('short_id', $childShortId)->where('user_id', $userId)->first();
         if (!$child) {
             return self::RespondModelNotFound();
         }
@@ -57,7 +58,8 @@ class ChildController extends Controller
     */
     function allQuotes($childShortId)
     {
-        $allChildQuotes = Child::where('short_id', $childShortId)->with('Quotes')->first();
+        $userId = Auth::user()->id;
+        $allChildQuotes = Child::where('short_id', $childShortId)->where('user_id', $userId)->with('Quotes')->first();
         if (!$allChildQuotes) {
             return self::RespondModelNotFound();
         }
@@ -125,9 +127,9 @@ class ChildController extends Controller
     | Delete a child by shortId.
     | @params {$shortId}
     */
-    function delete($childShortId)
-    {
-        $childToDelete = Child::where('short_id', $childShortId)->first();
+    function delete($childShortId) {
+        $userId = Auth::user()->id;
+        $childToDelete = Child::where('short_id', $childShortId)->where('user_id', $userId)->first();
         if (!$childToDelete) {
             return self::RespondModelNotFound();
         }
@@ -140,6 +142,13 @@ class ChildController extends Controller
     */
     function update(Request $request, $childShortId)
     {
+        $userId = Auth::user()->id;
+        $childToUpdate = Child::where('short_id', $childShortId)->where('user_id', $userId)->first();
+
+        if (!$childToUpdate) {
+            return self::RespondModelNotFound();
+        }
+
         $validator = Validator::make($request->all(), [
             'gender' => [self::REQUIRED, Rule::in(Child::$genders)],
             'full_name' => self::REQUIRED.'|max:50',
@@ -149,11 +158,6 @@ class ChildController extends Controller
 
         if ($validator->fails()) {
             return self::RespondValidationError($request, $validator);
-        }
-
-        $childToUpdate = Child::where('short_id', $childShortId)->first();
-        if (!$childToUpdate) {
-            return self::RespondModelNotFound();
         }
 
         $childToUpdate->gender = $request->gender;

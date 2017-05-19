@@ -60,6 +60,7 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
         * Api endpoints for quotes
         */
         Route::post('/{childShortId}/quotes/new', 'QuoteController@new');
+        Route::post('{childShortId}/quotes/{quoteShortId}', 'QuoteController@editQuote');
         Route::delete('{childShortId}/quotes/{quoteShortId}/delete', 'QuoteController@delete');
 
     });
@@ -87,5 +88,9 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
         Route::get('/', 'NewsController@getAllNews');
         Route::get('/read/{news_id}', 'NewsController@markAsRead');
         Route::get('/unread', 'NewsController@getUnreadCount');
+    });
+
+    Route::group(['prefix' => 'fonts'], function () {
+        Route::get('/', 'FontController@getAllFonts');
     });
 });
