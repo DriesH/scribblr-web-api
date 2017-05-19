@@ -35,6 +35,7 @@ class Controller extends BaseController
     const OLD_INPUT = 'old_input';
     const ERROR_TYPE = 'error_type';
     const ERROR_MESSAGE = 'error_message';
+    const ERROR_TYPE_NOT_AUTHENTICATED = 'not_authenticated';
     const ERROR_TYPE_MODEL_NOT_FOUND = 'model_not_found';
     const ERROR_TYPE_VALIDATION = 'validation';
     const ERROR_TYPE_IMAGE_NOT_FOUND = 'image_not_found';
@@ -82,7 +83,7 @@ class Controller extends BaseController
                 $achievement_resp = $achievement_checker->checkAmountScribbles($user, $achievement_scope_name);
                 break;
             case self::SHARE_SCRIBBLE:
-                # code...
+
                 break;
             case self::ADD_BOOK:
                 # code...
