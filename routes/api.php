@@ -82,4 +82,10 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
     Route::group(['prefix' => 'achievements'], function () {
         Route::get('/', 'AchievementController@all');
     });
+
+    Route::group(['prefix' => 'news'], function () {
+        Route::get('/', 'NewsController@getAllNews');
+        Route::get('/read/{news_id}', 'NewsController@markAsRead');
+        Route::get('/unread', 'NewsController@getUnreadCount');
+    });
 });

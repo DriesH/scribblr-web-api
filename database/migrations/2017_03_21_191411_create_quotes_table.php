@@ -19,6 +19,7 @@ class CreateQuotesTable extends Migration
             $table->integer('child_id')->unsigned();
             $table->string('quote');
             $table->string('story')->nullable();
+            $table->integer('font_id')->unsigned()->default(1);
             // $table->string('img_main_color')->nullable();
             $table->longText('lqip')->nullable();
             $table->string('img_original_url_id')->nullable();
@@ -28,6 +29,8 @@ class CreateQuotesTable extends Migration
             $table->softDeletes();
 
             $table->foreign('child_id')->references('id')->on('children')->onDelete('cascade');
+            $table->foreign('preset_id')->references('id')->on('presets')->onDelete('cascade');
+            $table->foreign('font_id')->references('id')->on('fonts')->onDelete('cascade');
         });
     }
 

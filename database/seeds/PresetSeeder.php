@@ -28,7 +28,6 @@ class PresetSeeder extends Seeder
             DB::table('presets')->insert([
                'name' => $img_name,
            ]);
-
         }
     }
 }

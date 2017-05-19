@@ -83,4 +83,10 @@ HasMedia
         return $this->belongsToMany('App\Achievement', 'achievement__users',
         'user_id', 'achievement_id');
     }
+
+    public function news()
+    {
+        return $this->belongsToMany('App\News', 'news__users',
+        'user_id', 'news_id');
+    }
 }

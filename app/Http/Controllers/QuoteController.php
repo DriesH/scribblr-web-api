@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Quote;
 use App\Child;
+use App\Preset;
+use App\Font;
 use App\Classes\ShortIdGenerator;
 use Validator;
 use ColorThief\ColorThief;
@@ -43,6 +45,7 @@ class QuoteController extends Controller
         $validator = Validator::make($request->all(), [
             'quote' => self::REQUIRED,
             'story' => 'max:1000',
+            'font_type' => self::REQUIRED,
             'img_original' => 'required_without:preset|url',
             'img_baked' => self::REQUIRED . '|image',
             'preset' => 'required_without:img_original|integer'
@@ -68,6 +71,7 @@ class QuoteController extends Controller
             $quote->story = $request->story;
         }
         $quote->child_id = $child->id;
+        self::addFontType($quote, $request->font_type);
         // $quote->img_main_color = self::getMainColor($request->img_original);
         $quote->save();
 
@@ -89,6 +93,17 @@ class QuoteController extends Controller
 
     }
 
+    private function addFontType($quote, $font_type) {
+        $font = Font::where('name', $font_type)->first();
+
+        if (!$font) {
+            self::RespondModelNotFound();
+        }
+
+        $quote->font_id = $font->id;
+        return;
+    }
+
     private function addQuoteOriginal($quote, $img_original){
         $img_original_url_id = sha1($img_original);
         $quote->addMediaFromUrl($img_original)
@@ -99,6 +114,7 @@ class QuoteController extends Controller
         $quote->img_original_url_id = $img_original_url_id;
 
         $quote->save();
+        return;
     }
 
     private function addQuoteBaked($quote, $img_baked){
@@ -112,12 +128,20 @@ class QuoteController extends Controller
 
         $quote->img_baked_url_id = $img_baked_url_id;
         $quote->save();
+        return;
     }
 
     private function addQuotePreset($quote, $preset_id){
+        $preset_exists = Preset::find($preset_id);
+
+        if (!$preset_exists) {
+            self::RespondModelNotFound();
+        }
+
         $quote->img_original_url_id = null;
         $quote->preset_id = $preset_id;
         $quote->save();
+        return;
     }
 
     private function getSmallSizeImage($image) {
@@ -127,6 +151,7 @@ class QuoteController extends Controller
         })
         ->encode('data-url')
         ->encoded;
+        return;
     }
 
     /*

@@ -27,7 +27,7 @@ class AchievementController extends Controller
             return $not_completed;
         });
 
-        $marked_achievements = $completed_achievements->merge($not_completed)->sortBy('id')->groupBy('category');
+        $marked_achievements = $completed_achievements->merge($not_completed)->sortBy('id')->groupBy('category')->all();
 
         return response()->json([
             self::SUCCESS => true,

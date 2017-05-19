@@ -17,8 +17,9 @@ class Quote extends Model implements HasMedia
         'short_id',
         'child_id',
         'quote',
-        'font_size',
-        'font',
+        'story',
+        'img_original_url_id',
+        'img_baked_url_id',
     ];
 
     public function Child() {
@@ -27,5 +28,9 @@ class Quote extends Model implements HasMedia
 
     public function Preset() {
         return $this->belongsTo('App\Preset');
+    }
+
+    public function Font() {
+        return $this->belongsTo('App\Font');
     }
 }
