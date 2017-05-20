@@ -111,7 +111,7 @@ class QuoteController extends Controller
             ]);
         }
 
-        $img_original_url_id = sha1($img_original);
+        $img_original_url_id = hash_hmac('sha256', Str::random(40), config('app.key'));
 
         $quote->clearMediaCollection('avatar');
 
@@ -129,7 +129,7 @@ class QuoteController extends Controller
     private function addQuoteBaked($quote, $img_baked){
         $quote->lqip = self::getSmallSizeImage($img_baked);
 
-        $img_baked_url_id = sha1($img_baked->getPathName());
+        $img_baked_url_id = hash_hmac('sha256', Str::random(40), config('app.key'));
 
         $quote->addMedia($img_baked)
         ->withCustomProperties(['url_id' => $img_baked_url_id])

@@ -109,7 +109,7 @@ class ChildController extends Controller
     }
 
     private function addChildThumnail($child, $avatar){
-        $avatar_url_id = sha1($avatar->getPathName());
+        $avatar_url_id = hash_hmac('sha256', Str::random(40), config('app.key'));
 
         SpatieImage::load($avatar->getPathName())
         ->width(75)
