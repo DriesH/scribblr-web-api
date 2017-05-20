@@ -20,11 +20,11 @@ class CreateQuotesTable extends Migration
             $table->string('quote');
             $table->string('story')->nullable();
             $table->integer('font_id')->unsigned()->default(1);
-            // $table->string('img_main_color')->nullable();
             $table->longText('lqip')->nullable();
             $table->string('img_original_url_id')->nullable();
             $table->string('img_baked_url_id')->nullable();
             $table->integer('preset_id')->unsigned()->nullable();
+            $table->boolean('is_shared')->default(false);
             $table->timestamps();
             $table->softDeletes();
 

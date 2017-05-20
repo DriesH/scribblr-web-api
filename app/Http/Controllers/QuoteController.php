@@ -243,13 +243,9 @@ class QuoteController extends Controller
     }
 
     function getQuoteOriginalImage(Request $request, $childShortId, $quoteShortId, $img_original_url_id) {
-        $quote = Quote::where('short_id', $quoteShortId)->first();
+        $quote = Quote::where('short_id', $quoteShortId)->where('img_original_url_id', $img_original_url_id)->first();
 
         if (!$quote) {
-            return self::RespondModelNotFound();
-        }
-
-        if ($quote->img_original_url_id != $img_original_url_id) {
             return response()->json([
                 self::SUCCESS => false,
                 self::ERROR_TYPE => self::ERROR_TYPE_IMAGE_NOT_FOUND
@@ -260,16 +256,12 @@ class QuoteController extends Controller
     }
 
     function getQuoteBakedImage(Request $request, $childShortId, $quoteShortId, $img_baked_url_id) {
-        $quote = Quote::where('short_id', $quoteShortId)->first();
+        $quote = Quote::where('short_id', $quoteShortId)->where('img_baked_url_id', $img_baked_url_id)->first();
 
         if (!$quote) {
-            return self::RespondModelNotFound();
-        }
-
-        if ($quote->img_baked_url_id != $img_baked_url_id) {
             return response()->json([
                 self::SUCCESS => false,
-                self::ERROR_TYPE => self::RROR_TYPE_IMAGE_NOT_FOUND
+                self::ERROR_TYPE => self::ERROR_TYPE_IMAGE_NOT_FOUND
             ]);
         }
 

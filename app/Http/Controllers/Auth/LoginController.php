@@ -33,7 +33,12 @@ class LoginController extends Controller
         if ($this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
 
-            return $this->sendLockoutResponse($request);
+            // return $this->sendLockoutResponse($request);
+            return response()->json([
+                self::SUCCESS => false,
+                self::ERROR_TYPE => self::ERROR_TYPE_TOO_MANY_ATTEMPTS,
+                self::ERROR_MESSAGE => Lang::get('auth.throttle'),
+            ], 423);
         }
 
         $credentials = $this->credentials($request);

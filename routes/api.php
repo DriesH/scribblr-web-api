@@ -27,6 +27,10 @@ Route::get('application/children/{childShortId}/avatar/{avatar_url_id}', 'ChildC
 Route::get('application/children/{childShortId}/quotes/{quoteShortId}/img-original/{img_original_url_id}', 'QuoteController@getQuoteOriginalImage');
 Route::get('application/children/{childShortId}/quotes/{quoteShortId}/img-baked/{img_baked_url_id}', 'QuoteController@getQuoteBakedImage');
 
+//get shared
+Route::get('application/children/{childShortId}/quotes/{quoteShortId}/shared/{img_baked_url_id}', 'ShareController@getSharedQuote');
+
+
 Route::group(['prefix' => 'auth'], function () {
     Route::post('/login', 'Auth\LoginController@login');
     Route::post('/register', 'Auth\RegisterController@register');
@@ -62,6 +66,9 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
         Route::post('/{childShortId}/quotes/new', 'QuoteController@new');
         Route::put('{childShortId}/quotes/{quoteShortId}', 'QuoteController@editQuote');
         Route::delete('{childShortId}/quotes/{quoteShortId}/delete', 'QuoteController@delete');
+
+        //share
+        Route::get('{childShortId}/quotes/{quoteShortId}/share', 'ShareController@shareQuote');
 
     });
 

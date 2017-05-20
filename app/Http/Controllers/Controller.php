@@ -39,6 +39,7 @@ class Controller extends BaseController
     const ERROR_TYPE_MODEL_NOT_FOUND = 'model_not_found';
     const ERROR_TYPE_VALIDATION = 'validation';
     const ERROR_TYPE_IMAGE_NOT_FOUND = 'image_not_found';
+    const ERROR_TYPE_TOO_MANY_ATTEMPTS = 'too_many_attempts';
     const ERROR_TYPE_RELATION_ALREADY_EXISTS = 'relation_already_exists';
     const ERROR_MESSAGES = [
         'model_not_found' => 'The model was not found.',
