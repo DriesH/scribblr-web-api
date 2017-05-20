@@ -93,4 +93,8 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
     Route::group(['prefix' => 'fonts'], function () {
         Route::get('/', 'FontController@getAllFonts');
     });
+
+    Route::group(['prefix' => 'presets'], function () {
+        Route::get('/', 'PresetController@getAllPresets');
+    });
 });
