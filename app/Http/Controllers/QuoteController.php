@@ -71,16 +71,15 @@ class QuoteController extends Controller
             $quote->story = $request->story;
         }
         $quote->child_id = $child->id;
-        self::addFontType($quote, $request->font_type);
-        // $quote->img_main_color = self::getMainColor($request->img_original);
+        if($resp = self::addFontType($quote, $request->font_type)) return $resp;
         $quote->save();
 
         //images
         if ($request->img_original) {
-            self::addQuoteOriginal($quote, $request->img_original);
+            if($resp = self::addQuoteOriginal($quote, $request->img_original)) return $resp;
         }
         elseif ($request->preset) {
-            self::addQuotePreset($quote, $request->preset);
+            if($resp = self::addQuotePreset($quote, $request->preset)) return $resp;
         }
 
         self::addQuoteBaked($quote, $request->img_baked);
@@ -97,7 +96,7 @@ class QuoteController extends Controller
         $font = Font::where('name', $font_type)->first();
 
         if (!$font) {
-            return;
+            return self::RespondModelNotFound();
         }
 
         $quote->font_id = $font->id;
@@ -105,6 +104,13 @@ class QuoteController extends Controller
     }
 
     private function addQuoteOriginal($quote, $img_original){
+        if (!@getimagesize($img_original)) {
+            return response()->json([
+                self::SUCCESS => false,
+                self::ERROR_TYPE => self::ERROR_TYPE_IMAGE_NOT_FOUND
+            ]);
+        }
+
         $img_original_url_id = sha1($img_original);
 
         $quote->clearMediaCollection('avatar');
@@ -187,16 +193,15 @@ class QuoteController extends Controller
         if ($request->story) {
             $quote->story = $request->story;
         }
-        self::addFontType($quote, $request->font_type);
-        // $quote->img_main_color = self::getMainColor($request->img_original);
+        if($resp = self::addFontType($quote, $request->font_type)) return $resp;
         $quote->save();
 
         //images
         if ($request->img_original) {
-            self::addQuoteOriginal($quote, $request->img_original);
+            if($resp = self::addQuoteOriginal($quote, $request->img_original)) return $resp;
         }
         elseif ($request->preset) {
-            self::addQuotePreset($quote, $request->preset);
+            if($resp = self::addQuotePreset($quote, $request->preset)) return $resp;
         }
 
         self::addQuoteBaked($quote, $request->img_baked);

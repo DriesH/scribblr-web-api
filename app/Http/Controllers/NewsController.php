@@ -27,7 +27,7 @@ class NewsController extends Controller
             return $unread_news;
         });
 
-        $marked_news = $read_news->merge($unread_news)->sortByDesc('id')->values()->all(); //FIXME ------------------------------
+        $marked_news = $read_news->merge($unread_news)->sortByDesc('id')->values()->all();
 
         return response()->json([
             self::SUCCESS => true,
