@@ -94,6 +94,7 @@ class RegisterController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 self::SUCCESS => false,
+                self::ERROR_TYPE => self::ERROR_TYPE_VALIDATION,
                 self::ERRORS => $validator->errors()->jsonSerialize(),
                 self::OLD_INPUT => $request->except('password')
             ]);
