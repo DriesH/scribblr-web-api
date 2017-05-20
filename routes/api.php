@@ -60,7 +60,7 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
         * Api endpoints for quotes
         */
         Route::post('/{childShortId}/quotes/new', 'QuoteController@new');
-        Route::post('{childShortId}/quotes/{quoteShortId}', 'QuoteController@editQuote');
+        Route::put('{childShortId}/quotes/{quoteShortId}', 'QuoteController@editQuote');
         Route::delete('{childShortId}/quotes/{quoteShortId}/delete', 'QuoteController@delete');
 
     });
