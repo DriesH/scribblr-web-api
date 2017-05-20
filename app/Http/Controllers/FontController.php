@@ -8,7 +8,7 @@ use App\Font;
 class FontController extends Controller
 {
     function getAllFonts() {
-        $fonts = Font::all();
+        $fonts = Font::pluck('name');
 
         return response()->json([
             self::SUCCESS => true,

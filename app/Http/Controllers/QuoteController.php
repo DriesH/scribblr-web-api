@@ -97,7 +97,7 @@ class QuoteController extends Controller
         $font = Font::where('name', $font_type)->first();
 
         if (!$font) {
-            self::RespondModelNotFound();
+            return;
         }
 
         $quote->font_id = $font->id;
