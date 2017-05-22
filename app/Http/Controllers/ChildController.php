@@ -8,6 +8,7 @@ use Illuminate\Validation\Rule;
 use App\Classes\ShortIdGenerator;
 use Image;
 use Spatie\Image\Image as SpatieImage;
+use Illuminate\Support\Str;
 
 
 //Models

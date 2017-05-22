@@ -12,6 +12,7 @@ use Validator;
 use ColorThief\ColorThief;
 use Auth;
 use Image;
+use Illuminate\Support\Str;
 
 class QuoteController extends Controller
 {
