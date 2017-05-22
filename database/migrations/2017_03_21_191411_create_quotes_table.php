@@ -18,7 +18,7 @@ class CreateQuotesTable extends Migration
             $table->string('short_id', 8)->unique();
             $table->integer('child_id')->unsigned();
             $table->string('quote');
-            $table->string('story')->nullable();
+            $table->string('story', 1000)->nullable();
             $table->integer('font_id')->unsigned()->default(1);
             $table->longText('lqip')->nullable();
             $table->string('img_original_url_id')->nullable();
