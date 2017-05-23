@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Quote;
+use App\Post;
 use App\Child;
 use App\Preset;
 use App\Font;
@@ -14,25 +14,25 @@ use Auth;
 use Image;
 use Illuminate\Support\Str;
 
-class QuoteController extends Controller
+class PostController extends Controller
 {
     /*
     | Get all quotes for user
     */
-    function getAllQuotes() {
+    function getAllPosts() {
         $userId = Auth::user()->id;
-        $quotes = Quote::whereHas('child', function($query) use($userId) {
+        $posts = Post::whereHas('child', function($query) use($userId) {
             $query->where('children.user_id', $userId);
         })
         ->get();
 
-        if (!$quotes) {
+        if (!$posts) {
             return self::RespondModelNotFound();
         }
 
         return response()->json([
             self::SUCCESS => true,
-            'quotes' => $quotes
+            'posts' => $posts
         ]);
 
     }
@@ -41,10 +41,9 @@ class QuoteController extends Controller
     /*
     | Create a new quote.
     */
-    function new(Request $request, ShortIdGenerator $shortIdGenerator, $childShortId) {
+    function newQuote(Request $request, ShortIdGenerator $shortIdGenerator, $childShortId) {
         $validator = Validator::make($request->all(), [
             'quote' => self::REQUIRED . '|max:300',
-            'story' => 'max:1000',
             'font_type' => self::REQUIRED,
             'img_original' => 'required_without:preset|url',
             'img_baked' => self::REQUIRED . '|image',
@@ -62,22 +61,20 @@ class QuoteController extends Controller
             return self::RespondModelNotFound();
         }
 
-        $quote = new Quote();
+        $quote = new Post();
         do {
             $quoteShortId = $shortIdGenerator->generateId(8);
-        } while ( count( Quote::where('short_id', $quoteShortId)->first()) >= 1 );
+        } while ( count( Post::where('short_id', $quoteShortId)->first()) >= 1 );
         $quote->short_id = $quoteShortId;
         $quote->quote = $request->quote;
-        if ($request->story) {
-            $quote->story = $request->story;
-        }
         $quote->child_id = $child->id;
         if($resp = self::addFontType($quote, $request->font_type)) return $resp;
+        $quote->is_memory = false;
         $quote->save();
 
         //images
         if ($request->img_original) {
-            if($resp = self::addQuoteOriginal($quote, $request->img_original)) return $resp;
+            if($resp = self::addPostOriginal($quote, $request->img_original)) return $resp;
         }
         elseif ($request->preset) {
             if($resp = self::addQuotePreset($quote, $request->preset)) return $resp;
@@ -88,6 +85,44 @@ class QuoteController extends Controller
         return response()->json([
             self::SUCCESS => true,
             'quote' => $quote,
+            self::ACHIEVEMENT => self::checkAchievementProgress(self::ADD_SCRIBBLE)
+        ]);
+
+    }
+
+    function newMemory(Request $request, ShortIdGenerator $shortIdGenerator, $childShortId) {
+        $validator = Validator::make($request->all(), [
+            'story' => self::REQUIRED . '|max:1000',
+            'img_baked' => self::REQUIRED .'|url',
+        ]);
+
+        if ($validator->fails()) {
+            return self::RespondValidationError($request, $validator);
+        }
+
+        //check if child belongs to current user
+        $userId = Auth::user()->id;
+        $child = Child::where('short_id', $childShortId)->where('user_id', $userId)->first();
+        if (!$child) {
+            return self::RespondModelNotFound();
+        }
+
+        $memory = new Post();
+        do {
+            $memoryShortId = $shortIdGenerator->generateId(8);
+        } while ( count( Post::where('short_id', $memoryShortId)->first()) >= 1 );
+        $memory->short_id = $memoryShortId;
+        $memory->child_id = $child->id;
+        $memory->story = $request->story;
+        $memory->is_memory = true;
+        $memory->save();
+
+        //image
+        if($resp = self::addMemoryBaked($memory, $request->img_original)) return $resp;
+
+        return response()->json([
+            self::SUCCESS => true,
+            'memory' => $memory,
             self::ACHIEVEMENT => self::checkAchievementProgress(self::ADD_SCRIBBLE)
         ]);
 
@@ -104,7 +139,7 @@ class QuoteController extends Controller
         return;
     }
 
-    private function addQuoteOriginal($quote, $img_original){
+    private function addPostOriginal($post, $img_original){
         if (!@getimagesize($img_original)) {
             return response()->json([
                 self::SUCCESS => false,
@@ -114,16 +149,39 @@ class QuoteController extends Controller
 
         $img_original_url_id = hash_hmac('sha256', Str::random(40), config('app.key'));
 
-        $quote->clearMediaCollection('avatar');
+        $post->clearMediaCollection('original');
 
-        $quote->addMediaFromUrl($img_original)
+        $post->addMediaFromUrl($img_original)
         ->withCustomProperties(['url_id' => $img_original_url_id])
         ->toMediaLibrary('original');
 
-        $quote->preset_id = null;
-        $quote->img_original_url_id = $img_original_url_id;
+        $post->preset_id = null;
+        $post->img_original_url_id = $img_original_url_id;
 
-        $quote->save();
+        $post->save();
+        return;
+    }
+
+    private function addMemoryBaked($post, $img_baked){
+        if (!@getimagesize($img_baked)) {
+            return response()->json([
+                self::SUCCESS => false,
+                self::ERROR_TYPE => self::ERROR_TYPE_IMAGE_NOT_FOUND
+            ]);
+        }
+
+        $quote->lqip = self::getSmallSizeImage($img_baked);
+        $img_baked_url_id = hash_hmac('sha256', Str::random(40), config('app.key'));
+
+        $post->clearMediaCollection('baked');
+
+        $post->addMediaFromUrl($img_baked)
+        ->withCustomProperties(['url_id' => $img_baked_url_id])
+        ->toMediaLibrary('baked');
+
+        $post->img_baked_url_id = $img_baked_url_id;
+
+        $post->save();
         return;
     }
 
@@ -131,6 +189,8 @@ class QuoteController extends Controller
         $quote->lqip = self::getSmallSizeImage($img_baked);
 
         $img_baked_url_id = hash_hmac('sha256', Str::random(40), config('app.key'));
+
+        $post->clearMediaCollection('baked');
 
         $quote->addMedia($img_baked)
         ->withCustomProperties(['url_id' => $img_baked_url_id])
@@ -165,9 +225,9 @@ class QuoteController extends Controller
     }
 
 
-    function editQuote(Request $request, ShortIdGenerator $shortIdGenerator, $childShortId, $quoteShortId) {
+    function editQuote(Request $request, $childShortId, $quoteShortId) {
         $userId = Auth::user()->id;
-        $quote = Quote::whereHas('child', function($query) use($userId) {
+        $quote = Post::whereHas('child', function($query) use($userId) {
             $query->where('children.user_id', $userId);
         })
         ->where('short_id', $quoteShortId)
@@ -179,7 +239,6 @@ class QuoteController extends Controller
 
         $validator = Validator::make($request->all(), [
             'quote' => self::REQUIRED . '|max:300',
-            'story' => 'max:1000',
             'font_type' => self::REQUIRED,
             'img_original' => 'required_without:preset|url',
             'img_baked' => self::REQUIRED . '|image',
@@ -191,15 +250,12 @@ class QuoteController extends Controller
         }
 
         $quote->quote = $request->quote;
-        if ($request->story) {
-            $quote->story = $request->story;
-        }
         if($resp = self::addFontType($quote, $request->font_type)) return $resp;
         $quote->save();
 
         //images
         if ($request->img_original) {
-            if($resp = self::addQuoteOriginal($quote, $request->img_original)) return $resp;
+            if($resp = self::addPostOriginal($quote, $request->img_original)) return $resp;
         }
         elseif ($request->preset) {
             if($resp = self::addQuotePreset($quote, $request->preset)) return $resp;
@@ -213,22 +269,60 @@ class QuoteController extends Controller
         ]);
     }
 
+    function editMemory(Request $request, $childShortId, $memoryShortId) {
+        $userId = Auth::user()->id;
+        $memory = Post::whereHas('child', function($query) use($userId) {
+            $query->where('children.user_id', $userId);
+        })
+        ->where('short_id', $memoryShortId)
+        ->first();
+
+        if (!$memory) {
+            return self::RespondModelNotFound();
+        }
+
+        $validator = Validator::make($request->all(), [
+            'story' => self::REQUIRED . '|max:1000',
+            'img_baked' => 'url',
+        ]);
+
+        if ($validator->fails()) {
+            return self::RespondValidationError($request, $validator);
+        }
+
+        $memory->story = $request->story;
+        $memory->save();
+
+        //image
+        if ($request->img_baked) {
+            if($resp = self::addMemoryOriginal($memory, $request->img_original)) return $resp;
+        }
+
+        return response()->json([
+            self::SUCCESS => true,
+            'memory' => $memory,
+            self::ACHIEVEMENT => self::checkAchievementProgress(self::ADD_SCRIBBLE)
+        ]);
+
+    }
+
     /*
     | Delete a quote by shortId.
     | @params {$shortId}
     */
-    function delete($childShortId, $quoteShortId) {
+    function delete($childShortId, $postShortId) {
         $userId = Auth::user()->id;
-        $quoteToDelete = Quote::whereHas('child', function($query) use($userId) {
+        $postToDelete = Post::whereHas('child', function($query) use($userId) {
             $query->where('children.user_id', $userId);
         })
-        ->where('short_id', $quoteShortId)
+        ->where('short_id', $postShortId)
         ->first();
 
-        if (!$quoteToDelete) {
+        if (!$postToDelete) {
             return self::RespondModelNotFound();
         }
-        $quoteToDelete->delete();
+
+        $postToDelete->delete();
 
         return response()->json([
             self::SUCCESS => true
@@ -243,29 +337,29 @@ class QuoteController extends Controller
         return $dominantColor_hex;
     }
 
-    function getQuoteOriginalImage(Request $request, $childShortId, $quoteShortId, $img_original_url_id) {
-        $quote = Quote::where('short_id', $quoteShortId)->where('img_original_url_id', $img_original_url_id)->first();
+    function getPostOriginalImage(Request $request, $childShortId, $postShortId, $img_original_url_id) {
+        $post = Post::where('short_id', $postShortId)->where('img_original_url_id', $img_original_url_id)->first();
 
-        if (!$quote) {
+        if (!$post || !$post->img_original_url_id) {
             return response()->json([
                 self::SUCCESS => false,
                 self::ERROR_TYPE => self::ERROR_TYPE_IMAGE_NOT_FOUND
             ]);
         }
 
-        return Image::make($quote->getMedia('original')[0]->getPath())->response();
+        return Image::make($post->getMedia('original')[0]->getPath())->response();
     }
 
     function getQuoteBakedImage(Request $request, $childShortId, $quoteShortId, $img_baked_url_id) {
-        $quote = Quote::where('short_id', $quoteShortId)->where('img_baked_url_id', $img_baked_url_id)->first();
+        $post = Post::where('short_id', $quoteShortId)->where('img_baked_url_id', $img_baked_url_id)->first();
 
-        if (!$quote) {
+        if (!$post) {
             return response()->json([
                 self::SUCCESS => false,
                 self::ERROR_TYPE => self::ERROR_TYPE_IMAGE_NOT_FOUND
             ]);
         }
 
-        return Image::make($quote->getMedia('baked')[0]->getPath())->response();
+        return Image::make($post->getMedia('baked')[0]->getPath())->response();
     }
 }

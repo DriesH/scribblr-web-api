@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
 
-class Quote extends Model implements HasMedia
+class Post extends Model implements HasMedia
 {
     use SoftDeletes, HasMediaTrait;
 

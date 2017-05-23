@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Quote;
+use App\Post;
 
 class QuoteSeeder extends Seeder
 {

@@ -4,36 +4,36 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Auth;
-use App\Quote;
+use App\Post;
 
 class ShareController extends Controller
 {
-    function shareQuote($childShortId, $quoteShortId) {
+    function sharePost($childShortId, $postShortId) {
         $userId = Auth::user()->id;
-        $quote = Quote::whereHas('child', function($query) use($userId) {
+        $post = Post::whereHas('child', function($query) use($userId) {
             $query->where('children.user_id', $userId);
         })
-        ->where('short_id', $quoteShortId)
+        ->where('short_id', $postShortId)
         ->first();
 
-        if (!$quote) {
+        if (!$post) {
             return self::RespondModelNotFound();
         }
 
-        $quote->shared = true;
-        $quote->save();
+        $post->shared = true;
+        $post->save();
 
         return response()->json([
             self::SUCCESS => true,
-            'quote' => $quote
+            'post' => $post
         ]);
     }
 
-    function getSharedQuote($childShortId, $quoteShortId, $img_baked_url_id) {
-        $quote = Quote::where('short_id', $quoteShortId)
+    function getSharedPost($childShortId, $postShortId, $img_baked_url_id) {
+        $quote = Post::where('short_id', $quoteShortId)
                 ->where('img_baked_url_id', $img_baked_url_id)
                 ->where('is_shared', true)
-                ->first(['quote', 'story', 'img_baked_url_id']);
+                ->first(['quote', 'story', 'img_baked_url_id', 'is_memory']);
 
         if (!$quote) {
             return response()->json([
@@ -44,7 +44,7 @@ class ShareController extends Controller
 
         return response()->json([
             self::SUCCESS => true,
-            'quote' => $quote
+            'post' => $post
         ]);
     }
 }

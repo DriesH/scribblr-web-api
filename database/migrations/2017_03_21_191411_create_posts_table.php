@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateQuotesTable extends Migration
+class CreatePostsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,20 @@ class CreateQuotesTable extends Migration
      */
     public function up()
     {
-        Schema::create('quotes', function (Blueprint $table) {
+        Schema::create('posts', function (Blueprint $table) {
             $table->increments('id');
             $table->string('short_id', 8)->unique();
             $table->integer('child_id')->unsigned();
-            $table->string('quote');
+            $table->string('quote')->nullable();
             $table->string('story', 1000)->nullable();
-            $table->integer('font_id')->unsigned()->default(1);
-            $table->longText('lqip')->nullable();
+            $table->integer('font_id')->unsigned()->nullable();
+            $table->longText('lqip');
             $table->string('img_original_url_id')->nullable();
             $table->string('img_baked_url_id')->nullable();
             $table->integer('preset_id')->unsigned()->nullable();
             $table->boolean('is_shared')->default(false);
+            $table->boolean('is_printed')->default(false);
+            $table->boolean('is_memory');
             $table->timestamps();
             $table->softDeletes();
 
@@ -41,6 +43,6 @@ class CreateQuotesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('quotes');
+        Schema::dropIfExists('posts');
     }
 }

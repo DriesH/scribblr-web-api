@@ -24,11 +24,11 @@ use Illuminate\Http\Request;
 
 //get child thumbnail
 Route::get('application/children/{childShortId}/avatar/{avatar_url_id}', 'ChildController@avatar');
-Route::get('application/children/{childShortId}/quotes/{quoteShortId}/img-original/{img_original_url_id}', 'QuoteController@getQuoteOriginalImage');
-Route::get('application/children/{childShortId}/quotes/{quoteShortId}/img-baked/{img_baked_url_id}', 'QuoteController@getQuoteBakedImage');
+Route::get('application/children/{childShortId}/posts/{quoteShortId}/img-original/{img_original_url_id}', 'Postcontroller@getQuoteOriginalImage');
+Route::get('application/children/{childShortId}/posts/{quoteShortId}/img-baked/{img_baked_url_id}', 'Postcontroller@getQuoteBakedImage');
 
 //get shared
-Route::get('application/children/{childShortId}/quotes/{quoteShortId}/shared/{img_baked_url_id}', 'ShareController@getSharedQuote');
+Route::get('application/children/{childShortId}/posts/{postShortId}/shared/{img_baked_url_id}', 'ShareController@getSharedPost');
 
 
 Route::group(['prefix' => 'auth'], function () {
@@ -63,17 +63,21 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
         /*
         * Api endpoints for quotes
         */
-        Route::post('/{childShortId}/quotes/new', 'QuoteController@new');
-        Route::put('{childShortId}/quotes/{quoteShortId}', 'QuoteController@editQuote');
-        Route::delete('{childShortId}/quotes/{quoteShortId}/delete', 'QuoteController@delete');
+        Route::post('/{childShortId}/quotes/new', 'Postcontroller@newQuote');
+        Route::post('/{childShortId}/memories/new', 'Postcontroller@newMemory');
+
+        Route::put('{childShortId}/quotes/{quoteShortId}', 'Postcontroller@editQuote');
+        Route::put('{childShortId}/memories/{memoryShortId}', 'Postcontroller@editMemory');
+
+        Route::delete('{childShortId}/posts/{postShortId}/delete', 'Postcontroller@delete');
 
         //share
-        Route::get('{childShortId}/quotes/{quoteShortId}/share', 'ShareController@shareQuote');
+        Route::get('{childShortId}/posts/{postShortId}/share', 'ShareController@sharePost');
 
     });
 
-    Route::group(['prefix' => 'quotes'], function () {
-        Route::get('/', 'QuoteController@getAllQuotes');
+    Route::group(['prefix' => 'posts'], function () {
+        Route::get('/', 'Postcontroller@getAllPosts');
     });
 
     /*

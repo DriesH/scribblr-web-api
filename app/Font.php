@@ -11,7 +11,7 @@ class Font extends Model
 
     protected $fillable = ['name'];
 
-    public function Quotes() {
-        return $this->hasMany('App\Quote', 'font_id');
+    public function Posts() {
+        return $this->hasMany('App\Post', 'font_id');
     }
 }

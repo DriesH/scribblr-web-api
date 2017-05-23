@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 
 //Models
 use App\Child;
-use App\Quote;
+use App\Post;
 use Auth;
 
 class ChildController extends Controller

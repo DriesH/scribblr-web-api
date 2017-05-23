@@ -12,8 +12,8 @@ class Preset extends Model
     public $timestamps = false;
     protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
 
-    public function Quotes() {
-        return $this->hasMany('App\Quote', 'preset_id');
+    public function Posts() {
+        return $this->hasMany('App\Post', 'preset_id');
     }
 
 }

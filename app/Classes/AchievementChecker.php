@@ -3,7 +3,7 @@
 namespace App\Classes;
 use App\Achievement;
 use App\User;
-use App\Quote;
+use App\Post;
 
 class AchievementChecker
 {
@@ -53,7 +53,7 @@ class AchievementChecker
     }
 
     function checkAmountScribbles($user, $achievement_scope_name) {
-        $amount_of_scribbles = Quote::whereHas('child', function($query) use($user){
+        $amount_of_scribbles = Post::whereHas('child', function($query) use($user){
             $query->where('user_id', $user->id);
         })
         ->get()

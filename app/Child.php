@@ -30,8 +30,8 @@ class Child extends Model implements HasMedia
     ];
 
 
-    public function Quotes() {
-        return $this->hasMany('App\Quote', 'child_id');
+    public function Posts() {
+        return $this->hasMany('App\Post', 'child_id');
     }
 
     public function User() {
