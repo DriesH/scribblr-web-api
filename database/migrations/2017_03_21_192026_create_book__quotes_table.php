@@ -21,7 +21,7 @@ class CreateBookQuotesTable extends Migration
             $table->softDeletes();
 
             $table->foreign('book_id')->references('id')->on('books')->onDelete('cascade');
-            $table->foreign('quote_id')->references('id')->on('quotes')->onDelete('cascade');
+            $table->foreign('quote_id')->references('id')->on('posts')->onDelete('cascade');
         });
     }
 

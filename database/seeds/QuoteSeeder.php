@@ -32,7 +32,7 @@ class QuoteSeeder extends Seeder
         foreach ($quotes as $quote => $story) {
             $counter++;
 
-            $new_quote = new Quote();
+            $new_quote = new Post();
             $new_quote->short_id = substr(md5(uniqid(mt_rand(), true)), 0, 8);
             $new_quote->child_id = 1;
             $new_quote->quote = $quote;
@@ -40,6 +40,7 @@ class QuoteSeeder extends Seeder
             $new_quote->lqip = self::getSmallSizeImage(storage_path() . '/quote-seeder-img/baked/img' . $counter . '.jpg');
             $new_quote->img_original_url_id = md5(uniqid(mt_rand(), true));
             $new_quote->img_baked_url_id = md5(uniqid(mt_rand(), true));
+            $new_quote->is_memory = false;
             $new_quote->save();
             $new_quote->addMedia(storage_path() . '/quote-seeder-img/original/img' . $counter . '.jpg')->preservingOriginal()->toMediaLibrary('original');
             $new_quote->addMedia(storage_path() . '/quote-seeder-img/baked/img' . $counter . '.jpg')->preservingOriginal()->toMediaLibrary('baked');

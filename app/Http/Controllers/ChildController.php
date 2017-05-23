@@ -57,17 +57,17 @@ class ChildController extends Controller
     | Get all quotes from a specific child by shortId.
     | @params {$shortId}
     */
-    function allQuotes($childShortId)
+    function allPosts($childShortId)
     {
         $userId = Auth::user()->id;
-        $allChildQuotes = Child::where('short_id', $childShortId)->where('user_id', $userId)->with('Quotes')->first();
-        if (!$allChildQuotes) {
+        $allChildPosts = Child::where('short_id', $childShortId)->where('user_id', $userId)->with('Posts')->first();
+        if (!$allChildPosts) {
             return self::RespondModelNotFound();
         }
 
         return response()->json([
             self::SUCCESS => true,
-            'quotes' => $allChildQuotes->Quotes->toArray()
+            'posts' => $allChildPosts->posts->toArray()
         ]);
     }
 
