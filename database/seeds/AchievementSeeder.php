@@ -49,86 +49,86 @@ class AchievementSeeder extends Seeder
 
         /*       Scribbles       */
         DB::table('achievements')->insert([
-            'title' => 'Create your first Scribble',
+            'title' => 'Create your first memory',
             'description' => 'add their first words.',
             'points' => 10,
-            'image' => '/assets/achievements/scribble_1.svg',
-            'scope_name' => 'add_scribble',
+            'image' => '/assets/achievements/memory_1.svg',
+            'scope_name' => 'add_memory',
             'amount_to_complete' => 1,
-            'category' => 'Scribbles',
+            'category' => 'Memories',
         ]);
         DB::table('achievements')->insert([
-            'title' => 'Create 5 Scribbles',
+            'title' => 'Create 5 memories',
             'description' => 'High five!',
             'points' => 10,
-            'image' => '/assets/achievements/scribble_5.svg',
-            'scope_name' => 'add_scribble',
+            'image' => '/assets/achievements/memory_5.svg',
+            'scope_name' => 'add_memory',
             'amount_to_complete' => 5,
-            'category' => 'Scribbles',
+            'category' => 'Memories',
         ]);
         DB::table('achievements')->insert([
-            'title' => 'Create 20 Scribbles',
+            'title' => 'Create 20 memories',
             'description' => 'You can fill a book with these!',
             'points' => 15,
-            'image' => '/assets/achievements/scribble_20.svg',
-            'scope_name' => 'add_scribble',
+            'image' => '/assets/achievements/memory_20.svg',
+            'scope_name' => 'add_memory',
             'amount_to_complete' => 20,
-            'category' => 'Scribbles',
+            'category' => 'Memories',
         ]);
         DB::table('achievements')->insert([
-            'title' => 'Share a Scribble on social media.',
+            'title' => 'Share a memory on social media.',
             'description' => 'Your friends will love it.',
             'points' => 15,
             'image' => '/assets/achievements/share_1.svg',
-            'scope_name' => 'share_scribble',
+            'scope_name' => 'share_memory',
             'amount_to_complete' => 1,
-            'category' => 'Scribbles',
+            'category' => 'Memories',
         ]);
         DB::table('achievements')->insert([
-            'title' => 'Share 5 Scribbles on social media.',
+            'title' => 'Share 5 memories on social media.',
             'description' => 'Sharing is caring!',
             'points' => 15,
             'image' => '/assets/achievements/share_5.svg',
-            'scope_name' => 'share_scribble',
+            'scope_name' => 'share_memory',
             'amount_to_complete' => 5,
-            'category' => 'Scribbles',
+            'category' => 'Memories',
         ]);
         DB::table('achievements')->insert([
-            'title' => 'Share 20 Scribbles on social media.',
+            'title' => 'Share 20 memories on social media.',
             'description' => 'You show-off!',
             'points' => 20,
             'image' => '/assets/achievements/share_20.svg',
-            'scope_name' => 'share_scribble',
+            'scope_name' => 'share_memory',
             'amount_to_complete' => 20,
-            'category' => 'Scribbles',
+            'category' => 'Memories',
         ]);
 
         /*      ScribbleBook        */
         DB::table('achievements')->insert([
-            'title' => 'Create your first ScribbleBook',
+            'title' => 'Create your first book',
             'description' => 'Never lose a single memory.',
             'points' => 15,
             'image' => '/assets/achievements/book.svg',
             'scope_name' => 'add_book',
-            'category' => 'ScribbleBooks',
+            'category' => 'Books',
         ]);
         DB::table('achievements')->insert([
-            'title' => 'Order your first ScribbleBook',
+            'title' => 'Order your first book',
             'description' => 'We\'re shipping it to you as we speak!',
             'points' => 25,
             'image' => '/assets/achievements/book_order_1.svg',
             'scope_name' => 'order_book',
             'amount_to_complete' => 1,
-            'category' => 'ScribbleBooks',
+            'category' => 'Books',
         ]);
         DB::table('achievements')->insert([
-            'title' => 'Order your third ScribbleBook',
+            'title' => 'Order your third book',
             'description' => 'Third time\'s the charm!',
             'points' => 50,
             'image' => '/assets/achievements/book_order_3.svg',
             'scope_name' => 'order_book',
             'amount_to_complete' => 3,
-            'category' => 'ScribbleBooks',
+            'category' => 'Books',
         ]);
 
     }

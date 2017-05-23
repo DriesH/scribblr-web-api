@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call(FontSeeder::class);
         $this->call(ChildSeeder::class);
         $this->call(QuoteSeeder::class);
+        $this->call(MemorySeeder::class);
         $this->call(AchievementSeeder::class);
         $this->call(NewsSeeder::class);
     }

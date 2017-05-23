@@ -46,6 +46,9 @@ class Controller extends BaseController
         'validation' => 'The given input did not pass the validation rules.',
     ];
 
+    /*      Books       */
+    const PAGES_PER_BOOK = 20;
+
     protected function RespondModelNotFound() {
         return response()->json([
             self::SUCCESS => false,
