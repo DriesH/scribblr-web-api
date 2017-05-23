@@ -54,7 +54,7 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
     Route::group(['prefix' => 'children'], function () {
         Route::get('/', 'ChildController@getAllChildren');
         Route::get('/{childShortId}', 'ChildController@getChild');
-        Route::get('/{childShortId}/quotes', 'ChildController@allPosts');
+        Route::get('/{childShortId}/posts', 'ChildController@allPosts');
         Route::post('/new', 'ChildController@new');
         Route::post('/{childShortId}/upload', 'ChildController@uploadImage');
         Route::delete('/{childShortId}/delete', 'ChildController@delete');
