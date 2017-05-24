@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use App\Post;
+use stdClass;
 
 class BookController extends Controller
 {
@@ -80,23 +81,60 @@ class BookController extends Controller
         $remaining_quotes = $all_posts->where('is_memory', false)->count();
         $remaining_memories = $all_posts->where('is_memory', true)->count();
 
-        //FIXME
+        $empty_fill_object = new stdClass();
 
         $page_counter = 0;
         $book = [];
 
         if ($remaining_quotes % 2 != 0) {
-            //check if amount of quotes is odd, if so => check if last element is a quote => if it's not a quote, get the first quote
-            // push it to the end of the collection 
+            $last_post = $all_posts->reverse()->first();
+            if ($last_post->is_memory) {
+                $quote_to_push = $all_posts->where('is_memory', false)->first();
+                $all_posts = $all_posts->except($quote_to_push->id);
+                $all_posts->push($quote_to_push);
+            }
         }
 
         while (count($all_posts) > 0) {
             $current_page_block = [];
 
+            $post_to_add = $all_posts->first();
 
+            if ($post_to_add->is_memory) {
+                self::addPageToCurrentBlock($current_page_block, $post_to_add, $all_posts);
+
+                $remaining_memories--;
+                $page_counter += 2;
+            }
+            else {
+                if ($remaining_quotes > 1) {
+                    //Add first quote
+                    self::addPageToCurrentBlock($current_page_block, $post_to_add, $all_posts);
+                    $quote2 = $all_posts->where('is_memory', false)->first();
+                    self::addPageToCurrentBlock($current_page_block, $quote2, $all_posts);
+
+                    $remaining_quotes -= 2;
+                    $page_counter += 2;
+                }
+                else {
+                    self::addPageToCurrentBlock($current_page_block, $post_to_add, $all_posts);
+                    array_push($current_page_block, $empty_fill_object);
+                    $remaining_quotes--;
+                    $page_counter += 2;
+                }
+            }
+            array_push($book, $current_page_block);
         }
 
+        if ($page_counter < self::PAGES_PER_BOOK) {
+            $amount_pages_to_fill_up = self::PAGES_PER_BOOK - $page_counter;
 
+            for ($i=0; $i < $amount_pages_to_fill_up/2; $i++) {
+                array_push($book, [ $empty_fill_object, $empty_fill_object ]);
+            }
+        }
+
+        return $book;
     }
 
     private function createBookWithAlreadyPrintedPosts($not_printed_quotes, $not_printed_memories, $already_printed_quotes, $already_printed_memories) {
@@ -238,7 +276,14 @@ class BookController extends Controller
     }
 
     private function addPageToCurrentBlock(&$current_page_block, $post_to_add, &$posts_random_order) {
+        $empty_fill_object = new stdClass();
+
         array_push($current_page_block, $post_to_add);
+
+        if ($post_to_add->is_memory) {
+            array_push($current_page_block, $empty_fill_object);
+        }
+
         $posts_random_order = $posts_random_order->except($post_to_add->id);
         return;
     }
