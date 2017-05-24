@@ -23,6 +23,7 @@ use Illuminate\Http\Request;
 */
 
 //get child thumbnail
+
 Route::get('application/children/{childShortId}/avatar/{avatar_url_id}', 'ChildController@avatar');
 Route::get('application/children/{childShortId}/posts/{quoteShortId}/img-original/{img_original_url_id}', 'Postcontroller@getQuoteOriginalImage');
 Route::get('application/children/{childShortId}/posts/{quoteShortId}/img-baked/{img_baked_url_id}', 'Postcontroller@getQuoteBakedImage');
@@ -84,10 +85,10 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
     * Api endpoints for book data.
     */
     Route::group(['prefix' => 'books'], function () {
-        Route::post('/new', 'BookController@new');
+        Route::get('/new', 'BookController@new');
         // Route::put('');
         Route::get('/{shortId}', 'BookController@getBook');
-        Route::get('/all', 'BookController@index');
+        Route::get('/', 'BookController@index');
         Route::delete('/{shortId}/delete', 'BookController@delete');
     });
 
