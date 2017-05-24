@@ -213,6 +213,7 @@ class BookController extends Controller
             $query->where('children.user_id', $user->id);
         })
         ->where('is_memory', true)
+        ->with('child')
         ->get();
     }
 
@@ -221,6 +222,7 @@ class BookController extends Controller
             $query->where('children.user_id', $user->id);
         })
         ->where('is_memory', false)
+        ->with('child')
         ->get();
     }
 
