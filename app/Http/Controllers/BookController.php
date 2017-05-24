@@ -28,7 +28,7 @@ class BookController extends Controller
     /*
     | Create a new book.
     */
-    function new()
+    function generateBook()
     {
         $user = Auth::user();
         $memories = self::getAllUserMemories($user);
@@ -44,10 +44,10 @@ class BookController extends Controller
         $book_is_unique = self::checkForUniqueBookPossibility($not_printed_memories, $not_printed_quotes);
 
         if ($book_is_unique) {
-            return $book = self::createUniqueBook($not_printed_quotes, $not_printed_memories);
+            $book = self::createUniqueBook($not_printed_quotes, $not_printed_memories);
         }
         elseif ($can_create_book) {
-            $book = self::createBookWithAlreadyPrintedPosts($not_printed_quotes, $not_printed_memories, $already_printed_quotes, $already_printed_memories);
+            return $book = self::createBookWithAlreadyPrintedPosts($not_printed_quotes, $not_printed_memories, $already_printed_quotes, $already_printed_memories);
         }
         else {
             return response()->json([
@@ -66,8 +66,101 @@ class BookController extends Controller
 
     private function createBookWithAlreadyPrintedPosts($not_printed_quotes, $not_printed_memories, $already_printed_quotes, $already_printed_memories) {
         $not_printed_posts = $not_printed_quotes->merge($not_printed_memories);
+        $not_printed_posts_random_order = $not_printed_posts->shuffle();
+
         $already_printed_posts = $already_printed_quotes->merge($already_printed_memories);
-        
+        $already_printed_posts_random_order = $already_printed_posts->shuffle();
+
+        $remaining_not_printed_quotes = count($not_printed_quotes);
+        $remaining_not_printed_memories = count($not_printed_memories);
+
+        $remaining_already_printed_quotes = count($already_printed_quotes);
+        $remaining_already_printed_memories = count($already_printed_memories);
+
+        $checkedSecondPartForOddEven = false;
+
+        $page_counter = 0;
+        $book = [];
+
+        //check if amount of not printed quotes is odd and if there's no already printed quotes to fill up the page_counter
+        //if so, jsut remove one not printed quote from the list
+        if ($remaining_not_printed_quotes % 2 != 0 && $remaining_already_printed_quotes == 0) {
+            $post_to_remove = $not_printed_posts_random_order->where('is_memory', false)->first();
+            $not_printed_posts_random_order = $not_printed_posts_random_order->except($post_to_remove->id);
+        }
+
+        while ($page_counter < self::PAGES_PER_BOOK) {
+            $current_page_block = [];
+
+            //use noi printed posts first
+            if (count($not_printed_posts_random_order) > 0) {
+                $post_to_add = $not_printed_posts_random_order->first();
+
+                if ($post_to_add->is_memory) {
+                    self::addPageToCurrentBlock($current_page_block, $post_to_add, $not_printed_posts_random_order);
+
+                    $remaining_not_printed_memories--;
+                    $page_counter += 2;
+                }
+                else {
+                    //Add first quote
+                    self::addPageToCurrentBlock($current_page_block, $post_to_add, $not_printed_posts_random_order);
+
+                    if ($remaining_not_printed_quotes > 1) {
+                        //meaning that there's still at least 1 other NOT printed quote to go along with this one
+                        $quote2 = $not_printed_posts_random_order->where('is_memory', false)->first();
+                        self::addPageToCurrentBlock($current_page_block, $quote2, $not_printed_posts_random_order);
+
+                        $remaining_not_printed_quotes -= 2;
+                    }
+                    else {
+                        //meaning we have to use 1 ALREADY printed quote to go with this one
+                        //this one MUST exist because of the check we've done before
+                        $quote2 = $already_printed_posts_random_order->where('is_memory', false)->first();
+                        self::addPageToCurrentBlock($current_page_block, $quote2, $not_printed_posts_random_order);
+
+                        $remaining_not_printed_quotes--;
+                        $remaining_already_printed_quotes--;
+                    }
+                    $page_counter += 2;
+                }
+            }
+            else {
+                //meaning we have to start taking ALREADY printed posts
+
+                //do the same check as before so we don't run into the same problem but now for already printed quotes
+                // this check must be done NOW because the posibility exists that we manipulate the value before we enter this else statement
+                if (!$checkedSecondPartForOddEven && $remaining_already_printed_quotes % 2 != 0) {
+                    $post_to_remove = $already_printed_posts_random_order->where('is_memory', false)->first();
+                    $already_printed_posts_random_order = $already_printed_posts_random_order->except($post_to_remove->id);
+                    $checkedSecondPartForOddEven = true;
+                }
+
+                $post_to_add = $already_printed_posts_random_order->first();
+
+                if ($post_to_add->is_memory) {
+                    self::addPageToCurrentBlock($current_page_block, $post_to_add, $already_printed_posts_random_order);
+
+                    $remaining_already_printed_memories--;
+                    $page_counter += 2;
+                }
+                else {
+                    //Add first quote
+                    self::addPageToCurrentBlock($current_page_block, $post_to_add, $already_printed_posts_random_order);
+                    //get and add second quote of page_counter (there MUST be a second quote because of the odd/even check earlier)
+                    $quote2 = $already_printed_posts_random_order->where('is_memory', false)->first();
+                    self::addPageToCurrentBlock($current_page_block, $quote2, $already_printed_posts_random_order);
+
+                    $remaining_already_printed_quotes -= 2;
+                    $page_counter += 2;
+                }
+            }
+            array_push($book, $current_page_block);
+        }
+        return $book;
+
+
+
     }
 
     private function createUniqueBook($not_printed_quotes, $not_printed_memories) {
@@ -78,39 +171,35 @@ class BookController extends Controller
         $page_counter = 0;
         $book = [];
 
+        if ($remaining_quotes % 2 != 0) {
+            $post_to_remove = $posts_random_order->where('is_memory', false)->first();
+            $posts_random_order = $posts_random_order->except($post_to_remove->id);
+        }
+
         while ($page_counter < self::PAGES_PER_BOOK) {
             $current_page_block = [];
 
-            if ($page_counter == self::PAGES_PER_BOOK - 2 && $remaining_quotes <= 1) {
-                $post_to_add = $posts_random_order->where('is_memory', true)->first();
+            $post_to_add = $posts_random_order->first();
+
+            if ($post_to_add->is_memory) {
                 self::addPageToCurrentBlock($current_page_block, $post_to_add, $posts_random_order);
 
                 $remaining_memories--;
                 $page_counter += 2;
             }
             else {
-                $post_to_add = $posts_random_order->first();
+                //Add first quote
+                self::addPageToCurrentBlock($current_page_block, $post_to_add, $posts_random_order);
+                //get and add second quote of page_counter (there MUST be a second quote because of the odd/even check earlier)
+                $quote2 = $posts_random_order->where('is_memory', false)->first();
+                self::addPageToCurrentBlock($current_page_block, $quote2, $posts_random_order);
 
-                if ($post_to_add->is_memory) {
-                    self::addPageToCurrentBlock($current_page_block, $post_to_add, $posts_random_order);
-
-                    $remaining_memories--;
-                    $page_counter += 2;
-                }
-                else {
-                    //Add first quote
-                    self::addPageToCurrentBlock($current_page_block, $post_to_add, $posts_random_order);
-                    //get and add second quote of page_counter
-                    $quote2 = $posts_random_order->where('is_memory', false)->first();
-                    self::addPageToCurrentBlock($current_page_block, $quote2, $posts_random_order);
-
-                    $remaining_quotes -= 2;
-                    $page_counter += 2;
-                }
+                $remaining_quotes -= 2;
+                $page_counter += 2;
             }
             array_push($book, $current_page_block);
         }
-        return [$remaining_memories, $remaining_quotes, $book];
+        return $book;
     }
 
     private function addPageToCurrentBlock(&$current_page_block, $post_to_add, &$posts_random_order) {

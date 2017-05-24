@@ -85,10 +85,11 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
     * Api endpoints for book data.
     */
     Route::group(['prefix' => 'books'], function () {
-        Route::get('/new', 'BookController@new');
+        Route::post('/new', 'BookController@newBook');
+        Route::get('/generate', 'BookController@generateBook');
         // Route::put('');
         Route::get('/{shortId}', 'BookController@getBook');
-        Route::get('/', 'BookController@index');
+        Route::get('/', 'BookController@getAllBooks');
         Route::delete('/{shortId}/delete', 'BookController@delete');
     });
 
