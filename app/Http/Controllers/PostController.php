@@ -347,7 +347,10 @@ class PostController extends Controller
             ]);
         }
 
-        return Image::make($post->getMedia('original')[0]->getPath())->response();
+        return Image::make($post->getMedia('original')[0]
+                ->getPath())
+                ->response()
+                ->header('Cache-Control', 'private, max-age=864000');
     }
 
     function getQuoteBakedImage(Request $request, $childShortId, $quoteShortId, $img_baked_url_id) {
