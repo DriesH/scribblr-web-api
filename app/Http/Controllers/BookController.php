@@ -47,14 +47,19 @@ class BookController extends Controller
             $book = self::createUniqueBook($not_printed_quotes, $not_printed_memories);
         }
         elseif ($can_create_book) {
-            return $book = self::createBookWithAlreadyPrintedPosts($not_printed_quotes, $not_printed_memories, $already_printed_quotes, $already_printed_memories);
+            $book = self::createBookWithAlreadyPrintedPosts($not_printed_quotes, $not_printed_memories, $already_printed_quotes, $already_printed_memories);
         }
         else {
-            return response()->json([
-                self::SUCCESS => false,
-                self::ERROR_TYPE => 'not_enough_quotes',
-                self::ERROR_MESSAGE => 'You don\'t have enough quotes to make a book yet.'
-            ]);
+            if (count($memories) > 0 && count($quotes) > 0) {
+                $book = self::createBookWithEmptyPages($not_printed_quotes, $not_printed_memories, $already_printed_quotes, $already_printed_memories);
+            }
+            else {
+                return response()->json([
+                    self::SUCCESS => false,
+                    self::ERROR_TYPE => 'no_quotes',
+                    self::ERROR_MESSAGE => 'You have no memories to make a book yet.'
+                ]);
+            }
         }
 
         return response()->json([
@@ -62,6 +67,36 @@ class BookController extends Controller
             'book' => $book,
             'is_unique' => $book_is_unique
         ]);
+    }
+
+    private function createBookWithEmptyPages($not_printed_quotes, $not_printed_memories, $already_printed_quotes, $already_printed_memories) {
+        $not_printed_posts = $not_printed_quotes->merge($not_printed_memories);
+        $already_printed_posts = $already_printed_quotes->merge($already_printed_memories);
+
+        $all_posts = $not_printed_posts->merge($already_printed_posts);
+
+        $all_posts = $all_posts->shuffle();
+
+        $remaining_quotes = $all_posts->where('is_memory', false)->count();
+        $remaining_memories = $all_posts->where('is_memory', true)->count();
+
+        //FIXME
+
+        $page_counter = 0;
+        $book = [];
+
+        if ($remaining_quotes % 2 != 0) {
+            //check if amount of quotes is odd, if so => check if last element is a quote => if it's not a quote, get the first quote
+            // push it to the end of the collection 
+        }
+
+        while (count($all_posts) > 0) {
+            $current_page_block = [];
+
+
+        }
+
+
     }
 
     private function createBookWithAlreadyPrintedPosts($not_printed_quotes, $not_printed_memories, $already_printed_quotes, $already_printed_memories) {

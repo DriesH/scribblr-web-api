@@ -17,6 +17,7 @@ class CreateBooksTable extends Migration
             $table->increments('id');
             $table->string('short_id', 8)->unique();
             $table->string('title');
+            $table->string('cover_color');
             $table->integer('user_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();
