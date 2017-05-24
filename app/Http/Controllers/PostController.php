@@ -360,6 +360,9 @@ class PostController extends Controller
             ]);
         }
 
-        return Image::make($post->getMedia('baked')[0]->getPath())->response();
+        return Image::make($post->getMedia('baked')[0]
+                ->getPath())
+                ->response()
+                ->header('Cache-Control', 'private, max-age=864000');
     }
 }
