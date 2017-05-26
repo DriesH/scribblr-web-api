@@ -24,6 +24,7 @@ class PostController extends Controller
         $posts = Post::whereHas('child', function($query) use($userId) {
             $query->where('children.user_id', $userId);
         })
+        ->with('child')
         ->get();
 
         if (!$posts) {
