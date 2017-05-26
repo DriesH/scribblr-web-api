@@ -63,9 +63,14 @@ class BookController extends Controller
             }
         }
 
+        $all_left_over = $not_printed_memories->merge($not_printed_quotes)
+                                            ->merge($already_printed_memories)
+                                            ->merge($already_printed_quotes);
+
         return response()->json([
             self::SUCCESS => true,
             'book' => $book,
+            'left_over' => $all_left_over,
             'is_unique' => $book_is_unique
         ]);
     }
