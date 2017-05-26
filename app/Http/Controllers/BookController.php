@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Auth;
 use App\Post;
 use stdClass;
+use App\Child;
 
 class BookController extends Controller
 {
@@ -29,11 +30,30 @@ class BookController extends Controller
     /*
     | Create a new book.
     */
-    function generateBook()
+    function generateBook(Request $request)
     {
         $user = Auth::user();
-        $memories = self::getAllUserMemories($user);
-        $quotes = self::getAllUserQuotes($user);
+        if ($request->c) {
+            $child = Child::where('short_id', $request->c)
+            ->whereHas('user', function($query) use($user) {
+                $query->where('users.id', $user->id);
+            })
+            ->first();
+
+            if (!$child) {
+                return self::RespondModelNotFound();
+            }
+            else {
+                $memories = self::getAllChildMemories($child);
+                $quotes = self::getAllChildQuotes($child);
+            }
+        }
+        else {
+            $memories = self::getAllUserMemories($user);
+            $quotes = self::getAllUserQuotes($user);
+        }
+
+
 
         $not_printed_memories = $memories->where('is_printed', false);
         $not_printed_quotes = $quotes->where('is_printed', false);
@@ -51,13 +71,13 @@ class BookController extends Controller
             $book = self::createBookWithAlreadyPrintedPosts($not_printed_quotes, $not_printed_memories, $already_printed_quotes, $already_printed_memories);
         }
         else {
-            if (count($memories) > 0 && count($quotes) > 0) {
+            if (count($memories) > 0 || count($quotes) > 0) {
                 $book = self::createBookWithEmptyPages($not_printed_quotes, $not_printed_memories, $already_printed_quotes, $already_printed_memories);
             }
             else {
                 return response()->json([
                     self::SUCCESS => false,
-                    self::ERROR_TYPE => 'no_quotes',
+                    self::ERROR_TYPE => 'no_posts',
                     self::ERROR_MESSAGE => 'You have no memories to make a book yet.'
                 ]);
             }
@@ -300,9 +320,27 @@ class BookController extends Controller
         return;
     }
 
+    private function getAllChildMemories($child) {
+        return Post::whereHas('child', function($query) use($child) {
+            $query->where('children.short_id', $child->id);
+        })
+        ->where('is_memory', true)
+        ->with('child')
+        ->get();
+    }
+
+    private function getAllChildQuotes($child) {
+        return Post::whereHas('child', function($query) use($child) {
+            $query->where('children.short_id', $child->short_id);
+        })
+        ->where('is_memory', false)
+        ->with('child')
+        ->get();
+    }
+
     private function getAllUserMemories($user) {
         return Post::whereHas('child', function($query) use($user) {
-            $query->where('children.user_id', $user->id);
+            $query->where('children.user_id', $user->short_id);
         })
         ->where('is_memory', true)
         ->with('child')
