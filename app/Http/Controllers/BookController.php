@@ -69,8 +69,8 @@ class BookController extends Controller
 
         return response()->json([
             self::SUCCESS => true,
-            'book' => $book,
-            'left_over' => $all_left_over,
+            'left_over' => $book[1],
+            'book' => $book[0],
             'is_unique' => $book_is_unique
         ]);
     }
@@ -139,7 +139,9 @@ class BookController extends Controller
             }
         }
 
-        return $book;
+        $left_over = $all_posts->sortBy('created_at');
+
+        return [$book, $left_over];
     }
 
     private function createBookWithAlreadyPrintedPosts($not_printed_quotes, $not_printed_memories, $already_printed_quotes, $already_printed_memories) {
@@ -235,7 +237,10 @@ class BookController extends Controller
             }
             array_push($book, $current_page_block);
         }
-        return $book;
+
+        $left_over = $not_printed_posts_random_order->merge($already_printed_posts_random_order)->sortBy('created_at');
+
+        return [$book, $left_over];
 
 
 
@@ -277,7 +282,9 @@ class BookController extends Controller
             }
             array_push($book, $current_page_block);
         }
-        return $book;
+
+        $left_over = $posts_random_order->sortBy('created_at');
+        return [$book, $left_over];
     }
 
     private function addPageToCurrentBlock(&$current_page_block, $post_to_add, &$posts_random_order) {
