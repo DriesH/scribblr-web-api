@@ -17,9 +17,15 @@ class BookController extends Controller
     /*
     | Get all books.
     */
-    function index()
+    function getAllBooks()
     {
-        // do something...
+        $user = Auth::user();
+        $books = Book::where('user_id', $user->id)->get();
+
+        return response()->json([
+            self::SUCCESS => true,
+            'books' => $books
+        ]);
     }
 
     /*
@@ -405,15 +411,26 @@ class BookController extends Controller
                 return self::RespondModelNotFound();
             }
             else {
-                return self::CreateBookForChild($request->book, $child, $user);
+                return self::CreateOrEditBookForChild($request->book, $child, $user);
             }
         }
         else {
-            return self::CreateNormalBook($request->book, $user);
+            return self::CreateOrEditNormalBook($request->book, $user);
         }
     }
 
-    private function CreateNormalBook($book, $user) {
+    private function CreateOrEditNormalBook($book, $user, $book_short_id = null) {
+
+        if ($book_short_id) {
+            $book = Book::where('short_id', $book_short_id)
+                        ->where('user_id', $user->id)
+                        ->first();
+
+            if (!$book) {
+                return self::RespondModelNotFound();
+            }
+        }
+
         $shortIdGenerator = new ShortIdGenerator();
         $post_ids_to_attach_to_new_book = [];
         $all_user_posts = Post::whereHas('child', function($query) use($user) {

@@ -21,6 +21,7 @@ class UserController extends Controller
         $user_resp->house_number = $user->house_number;
         $user_resp->city = $user->city;
         $user_resp->postal_code = $user->postal_code;
+        $user_resp->has_seen_book_tutorial = $user->has_seen_book_tutorial;
         $user_resp->country = $user->country;
 
         return response()->json([
