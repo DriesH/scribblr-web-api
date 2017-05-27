@@ -85,13 +85,14 @@ class BookController extends Controller
             }
         }
 
-        $all_left_over = $not_printed_memories->merge($not_printed_quotes)
-        ->merge($already_printed_memories)
-        ->merge($already_printed_quotes);
+        $left_over = [];
+        foreach ($book[1] as $key => $value) {
+            array_push($left_over, $value);
+        }
 
         return response()->json([
             self::SUCCESS => true,
-            'left_over' => $book[1],
+            'left_over' => $left_over,
             'book' => $book[0],
             'is_unique' => $book_is_unique
         ]);
@@ -382,7 +383,9 @@ class BookController extends Controller
         $validator = Validator::make($request->all(), [
             'book' => self::REQUIRED . '|array|size:' . self::PAGES_PER_BOOK/2,
             'book.*' => self::REQUIRED . '|array|size:2',
-            'book.*.*' => 'present'
+            'book.*.*' => 'present',
+            'title' => self::REQUIRED,
+            'cover_color' => self::REQUIRED . '|regex:/#([a-f0-9]{3}){1,2}\b/i'
         ]);
 
         if ($validator->fails()) {
@@ -448,8 +451,8 @@ class BookController extends Controller
         } while ( count( Book::where('short_id', $shortId)->first()) >= 1 );
         $new_book->short_id = $shortId;
         $new_book->user_id = $user->id;
-        $new_book->title = 'Book to test';
-        $new_book->cover_color = '#f5c92f';
+        $new_book->title = $request->title;
+        $new_book->cover_color = $request->cover_color;
         $new_book->save();
 
         for ($i=1; $i <= count($post_ids_to_attach_to_new_book); $i++) {
