@@ -33,4 +33,10 @@ class Post extends Model implements HasMedia
     public function Font() {
         return $this->belongsTo('App\Font');
     }
+
+    public function Book()
+    {
+        return $this->belongsToMany('App\Book', 'book__posts',
+        'post_id', 'book_id');
+    }
 }

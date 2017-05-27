@@ -7,6 +7,10 @@ use Auth;
 use App\Post;
 use stdClass;
 use App\Child;
+use App\Book;
+use App\Book_Post;
+use Validator;
+use App\Classes\ShortIdGenerator;
 
 class BookController extends Controller
 {
@@ -53,8 +57,6 @@ class BookController extends Controller
             $quotes = self::getAllUserQuotes($user);
         }
 
-
-
         $not_printed_memories = $memories->where('is_printed', false);
         $not_printed_quotes = $quotes->where('is_printed', false);
 
@@ -84,8 +86,8 @@ class BookController extends Controller
         }
 
         $all_left_over = $not_printed_memories->merge($not_printed_quotes)
-                                            ->merge($already_printed_memories)
-                                            ->merge($already_printed_quotes);
+        ->merge($already_printed_memories)
+        ->merge($already_printed_quotes);
 
         return response()->json([
             self::SUCCESS => true,
@@ -340,7 +342,7 @@ class BookController extends Controller
 
     private function getAllUserMemories($user) {
         return Post::whereHas('child', function($query) use($user) {
-            $query->where('children.user_id', $user->short_id);
+            $query->where('children.user_id', $user->id);
         })
         ->where('is_memory', true)
         ->with('child')
@@ -374,13 +376,126 @@ class BookController extends Controller
         return false;
     }
 
+    function newBook(Request $request) {
+        $isForChild = false;
+
+        $validator = Validator::make($request->all(), [
+            'book' => self::REQUIRED . '|array|size:' . self::PAGES_PER_BOOK/2,
+            'book.*' => self::REQUIRED . '|array|size:2',
+            'book.*.*' => 'present'
+        ]);
+
+        if ($validator->fails()) {
+            return self::RespondValidationError($request, $validator);
+        }
+
+        $user = Auth::user();
+
+        if ($request->c) {
+            $child = Child::where('short_id', $request->c)
+            ->whereHas('user', function($query) use($user) {
+                $query->where('users.id', $user->id);
+            })
+            ->first();
+
+            if (!$child) {
+                return self::RespondModelNotFound();
+            }
+            else {
+                return self::CreateBookForChild($request->book, $child, $user);
+            }
+        }
+        else {
+            return self::CreateNormalBook($request->book, $user);
+        }
+    }
+
+    private function CreateNormalBook($book, $user) {
+        $shortIdGenerator = new ShortIdGenerator();
+        $post_ids_to_attach_to_new_book = [];
+        $all_user_posts = Post::whereHas('child', function($query) use($user) {
+            $query->where('children.user_id', $user->id);
+        })
+        ->pluck('id')
+        ->toArray();
+
+        foreach ($book as $page_block) {
+            foreach ($page_block as $post) {
+                if (!$post || empty($post)) {
+                    array_push($post_ids_to_attach_to_new_book, self::EMPTY_PAGE);
+                    continue;
+                }
+
+                if (!in_array($post['id'], $all_user_posts)) {
+                    return self::RespondModelNotFound();
+                }
+
+                if (in_array($post['id'], $post_ids_to_attach_to_new_book)) {
+                    return response()->json([
+                        self::SUCCESS => false,
+                        self::ERROR_TYPE => 'book_contains_duplicates',
+                        self::ERROR_MESSAGE => 'Book contains duplicate posts'
+                    ]);
+                }
+
+                array_push($post_ids_to_attach_to_new_book, $post['id']);
+            }
+        }
+
+        $new_book = new Book();
+        do {
+            $shortId = $shortIdGenerator->generateId(8);
+        } while ( count( Book::where('short_id', $shortId)->first()) >= 1 );
+        $new_book->short_id = $shortId;
+        $new_book->user_id = $user->id;
+        $new_book->title = 'Book to test';
+        $new_book->cover_color = '#f5c92f';
+        $new_book->save();
+
+        for ($i=1; $i <= count($post_ids_to_attach_to_new_book); $i++) {
+            $new_page = new Book_Post();
+            $new_page->page_nr = $i;
+            $new_page->book_id = $new_book->id;
+
+            if ($post_ids_to_attach_to_new_book[$i-1] != self::EMPTY_PAGE) {
+                $new_page->post_id = $post_ids_to_attach_to_new_book[$i-1];
+            }
+
+            $new_page->save();
+        }
+
+        return response()->json([
+            self::SUCCESS => true,
+            'book' => $new_book
+        ]);
+    }
+
     /*
     | Get a specific book by shortId.
     | @params {$shortId}
     */
     function getBook($shortId)
     {
-        // do something...
+
+    }
+
+    function seenTutorial() {
+        $user = Auth::user();
+        if (!$user->has_seen_book_tutorial) {
+            $user->has_seen_book_tutorial = true;
+            $user->save();
+
+            return response()->json([
+                self::SUCCESS => true
+            ]);
+        }
+        else {
+            return response()->json([
+                self::SUCCESS => false,
+                self::ERROR_TYPE => 'already_seen_tutorial',
+                self::ERROR_MESSAGE => 'User has already seen this tutorial'
+            ]);
+        }
     }
 
 }

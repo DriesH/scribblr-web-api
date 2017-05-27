@@ -48,6 +48,7 @@ class Controller extends BaseController
 
     /*      Books       */
     const PAGES_PER_BOOK = 20;
+    const EMPTY_PAGE = 'empty_page';
 
     protected function RespondModelNotFound() {
         return response()->json([

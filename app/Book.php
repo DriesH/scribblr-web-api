@@ -11,4 +11,13 @@ class Book extends Model
 
     protected $fillable = [];
     protected $dates = ['deleted_at'];
+
+
+    public function posts()
+    {
+        return $this->belongsToMany('App\Post', 'book__posts',
+        'book_id', 'post_id');
+    }
+
+
 }

@@ -19,6 +19,7 @@ class CreateBooksTable extends Migration
             $table->string('title');
             $table->string('cover_color');
             $table->integer('user_id')->unsigned();
+            $table->integer('child_id')->unsigned()->nullable();
             $table->timestamps();
             $table->softDeletes();
 

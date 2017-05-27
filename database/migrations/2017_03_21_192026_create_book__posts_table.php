@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBookQuotesTable extends Migration
+class CreateBookPostsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,16 @@ class CreateBookQuotesTable extends Migration
      */
     public function up()
     {
-        Schema::create('book__quotes', function (Blueprint $table) {
+        Schema::create('book__posts', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('book_id')->unsigned();
-            $table->integer('quote_id')->unsigned();
+            $table->integer('post_id')->unsigned()->nullable();
+            $table->integer('page_nr');
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('book_id')->references('id')->on('books')->onDelete('cascade');
-            $table->foreign('quote_id')->references('id')->on('posts')->onDelete('cascade');
+            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
         });
     }
 
@@ -32,6 +33,6 @@ class CreateBookQuotesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('book__quotes');
+        Schema::dropIfExists('book__posts');
     }
 }

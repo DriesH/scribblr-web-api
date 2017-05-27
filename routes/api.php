@@ -91,6 +91,10 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
         Route::get('/{shortId}', 'BookController@getBook');
         Route::get('/', 'BookController@getAllBooks');
         Route::delete('/{shortId}/delete', 'BookController@delete');
+
+        //after seeing first book tutorial
+        Route::get('/seen-tutorial', 'BookController@seenTutorial');
+
     });
 
     Route::group(['prefix' => 'achievements'], function () {
