@@ -411,35 +411,73 @@ class BookController extends Controller
                 return self::RespondModelNotFound();
             }
             else {
-                return self::CreateOrEditBookForChild($request->book, $child, $user);
+                return self::CreateOrEditBook($request, $user, null, $child->id);
             }
         }
         else {
-            return self::CreateOrEditNormalBook($request->book, $user);
+            return self::CreateOrEditBook($request, $user);
         }
     }
 
-    private function CreateOrEditNormalBook($book, $user, $book_short_id = null) {
+    function editBook(Request $request, $shortId) {
+        $isForChild = false;
+        $user = Auth::user();
+        $book = Book::where('short_id', $shortId)
+                    ->where('user_id', $user->id)
+                    ->first();
 
-        if ($book_short_id) {
-            $book = Book::where('short_id', $book_short_id)
-                        ->where('user_id', $user->id)
-                        ->first();
+        if (!$book) {
+            return self::RespondModelNotFound();
+        }
+
+        $validator = Validator::make($request->all(), [
+            'book' => self::REQUIRED . '|array|size:' . self::PAGES_PER_BOOK/2,
+            'book.*' => self::REQUIRED . '|array|size:2',
+            'book.*.*' => 'present',
+            'title' => self::REQUIRED,
+            'cover_color' => self::REQUIRED . '|regex:/#([a-f0-9]{3}){1,2}\b/i'
+        ]);
+
+        if ($validator->fails()) {
+            return self::RespondValidationError($request, $validator);
+        }
+
+        return self::CreateOrEditBook($request, $user, $book->id);
+    }
+
+    private function CreateOrEditBook($request, $user, $book_id = null, $child_id = null) {
+        $book = null;
+        $child = null;
+        if ($book_id) {
+            $book = Book::where('user_id', $user->id)->find($book_id);
 
             if (!$book) {
                 return self::RespondModelNotFound();
             }
+
+            $child = Child::find($book->child_id);
+        }
+
+        if ($child_id) {
+            $child = Child::where('user_id', $user->id)->find($child_id);
         }
 
         $shortIdGenerator = new ShortIdGenerator();
         $post_ids_to_attach_to_new_book = [];
-        $all_user_posts = Post::whereHas('child', function($query) use($user) {
-            $query->where('children.user_id', $user->id);
-        })
-        ->pluck('id')
-        ->toArray();
+        if (!$child) {
+            $all_user_posts = Post::whereHas('child', function($query) use($user) {
+                $query->where('children.user_id', $user->id);
+            })
+            ->pluck('id')
+            ->toArray();
+        }
+        else {
+            $all_user_posts = Post::where('child_id', $child->id)
+                                    ->pluck('id')
+                                    ->toArray();
+        }
 
-        foreach ($book as $page_block) {
+        foreach ($request->book as $page_block) {
             foreach ($page_block as $post) {
                 if (!$post || empty($post)) {
                     array_push($post_ids_to_attach_to_new_book, self::EMPTY_PAGE);
@@ -462,20 +500,30 @@ class BookController extends Controller
             }
         }
 
-        $new_book = new Book();
-        do {
-            $shortId = $shortIdGenerator->generateId(8);
-        } while ( count( Book::where('short_id', $shortId)->first()) >= 1 );
-        $new_book->short_id = $shortId;
-        $new_book->user_id = $user->id;
-        $new_book->title = $request->title;
-        $new_book->cover_color = $request->cover_color;
-        $new_book->save();
+        if (!$book) {
+            $book = new Book();
+            do {
+                $shortId = $shortIdGenerator->generateId(8);
+            } while ( count( Book::where('short_id', $shortId)->first()) >= 1 );
+            $book->short_id = $shortId;
+            $book->user_id = $user->id;
+        }
+        else {
+            Book_Post::where('book_id', $book->id)->delete();
+        }
+        if ($child) {
+            $book->child_id = $child->id;
+        }
+        $book->title = $request->title;
+        $book->cover_color = $request->cover_color;
+        $book->save();
+
+
 
         for ($i=1; $i <= count($post_ids_to_attach_to_new_book); $i++) {
             $new_page = new Book_Post();
             $new_page->page_nr = $i;
-            $new_page->book_id = $new_book->id;
+            $new_page->book_id = $book->id;
 
             if ($post_ids_to_attach_to_new_book[$i-1] != self::EMPTY_PAGE) {
                 $new_page->post_id = $post_ids_to_attach_to_new_book[$i-1];
@@ -486,7 +534,7 @@ class BookController extends Controller
 
         return response()->json([
             self::SUCCESS => true,
-            'book' => $new_book
+            'book' => $book
         ]);
     }
 
