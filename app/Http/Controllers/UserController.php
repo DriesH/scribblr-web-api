@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use stdClass;
 use Auth;
 use Validator;
+use App\Country;
 
 class UserController extends Controller
 {
@@ -61,12 +62,20 @@ class UserController extends Controller
             $user->postal_code = $request->postal_code;
         }
         if ($request->country) {
-            $countries = Country::pluck('name');
+            $countries = Country::pluck('name')->toArray();
             if (in_array($request->country, $countries)) {
                 $user->country = $request->country;
             }
             else {
-                return self::RespondModelNotFound();
+                $error = new StdClass();
+                $error->country = "Please choose a valid country.";
+                return response()->json([
+                    self::SUCCESS => false,
+                    self::ERROR_TYPE => self::ERROR_TYPE_VALIDATION,
+                    self::ERROR_MESSAGE => self::ERROR_MESSAGES[self::ERROR_TYPE_VALIDATION],
+                    self::ERRORS => $error,
+                    self::OLD_INPUT => $request->all()
+                ]);
             }
         }
 

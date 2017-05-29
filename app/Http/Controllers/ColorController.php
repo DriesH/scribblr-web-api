@@ -13,6 +13,6 @@ class ColorController extends Controller
         return response()->json([
             self::SUCCESS => true,
             'colors' => $colors
-        ])
+        ]);
     }
 }
