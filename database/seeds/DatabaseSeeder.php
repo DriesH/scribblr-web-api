@@ -19,5 +19,6 @@ class DatabaseSeeder extends Seeder
         $this->call(MemorySeeder::class);
         $this->call(AchievementSeeder::class);
         $this->call(NewsSeeder::class);
+        $this->call(ColorSeeder::class);
     }
 }

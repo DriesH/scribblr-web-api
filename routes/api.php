@@ -112,6 +112,10 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
         Route::get('/', 'FontController@getAllFonts');
     });
 
+    Route::group(['prefix' => 'colors'], function () {
+        Route::get('/', 'ColorController@getAllColors');
+    });
+
     Route::group(['prefix' => 'presets'], function () {
         Route::get('/', 'PresetController@getAllPresets');
     });

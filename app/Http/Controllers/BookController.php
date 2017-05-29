@@ -34,7 +34,20 @@ class BookController extends Controller
     */
     function delete($shortId)
     {
-        // do something...
+        $user = Auth::user();
+        $book_to_delete = Book::where('user_id', $user->id)
+                                ->where('short_id', $shortId)
+                                ->first();
+
+        if (!$book_to_delete) {
+            return self::RespondModelNotFound();
+        }
+
+        $book_to_delete->delete();
+
+        return response()->json([
+            self::SUCCESS => true
+        ]);
     }
 
     /*
