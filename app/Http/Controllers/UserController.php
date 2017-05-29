@@ -75,7 +75,7 @@ class UserController extends Controller
                     self::ERROR_MESSAGE => self::ERROR_MESSAGES[self::ERROR_TYPE_VALIDATION],
                     self::ERRORS => $error,
                     self::OLD_INPUT => $request->all()
-                ]);
+                ], 400);
             }
         }
 
