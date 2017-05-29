@@ -117,9 +117,6 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
         Route::get('/', 'ColorController@getAllColors');
     });
 
-    Route::group(['prefix' => 'presets'], function () {
-        Route::get('/', 'PresetController@getAllPresets');
-    });
     Route::group(['prefix' => 'countries'], function () {
         Route::get('/', 'CountryController@getAllCountries');
     });

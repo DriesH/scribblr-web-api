@@ -12,7 +12,6 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(UserSeeder::class);
-        $this->call(PresetSeeder::class);
         $this->call(FontSeeder::class);
         $this->call(ChildSeeder::class);
         $this->call(QuoteSeeder::class);

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Post;
 use App\Child;
-use App\Preset;
 use App\Font;
 use App\Classes\ShortIdGenerator;
 use Validator;
@@ -44,11 +43,10 @@ class PostController extends Controller
     */
     function newQuote(Request $request, ShortIdGenerator $shortIdGenerator, $childShortId) {
         $validator = Validator::make($request->all(), [
-            'quote' => self::REQUIRED . '|max:300',
+            'quote' => self::REQUIRED . '|max:200',
             'font_type' => self::REQUIRED,
-            'img_original' => 'required_without:preset|url',
-            'img_baked' => self::REQUIRED . '|image',
-            'preset' => 'required_without:img_original|integer'
+            'img_original' => self::REQUIRED . '|url',
+            'img_baked' => self::REQUIRED . '|image'
         ]);
 
         if ($validator->fails()) {
@@ -73,13 +71,8 @@ class PostController extends Controller
         $quote->is_memory = false;
         $quote->save();
 
-        //images
-        if ($request->img_original) {
-            if($resp = self::addPostOriginal($quote, $request->img_original)) return $resp;
-        }
-        elseif ($request->preset) {
-            if($resp = self::addQuotePreset($quote, $request->preset)) return $resp;
-        }
+        //image
+        if($resp = self::addPostOriginal($quote, $request->img_original)) return $resp;
 
         self::addQuoteBaked($quote, $request->img_baked);
 
@@ -156,7 +149,6 @@ class PostController extends Controller
         ->withCustomProperties(['url_id' => $img_original_url_id])
         ->toMediaLibrary('original');
 
-        $post->preset_id = null;
         $post->img_original_url_id = $img_original_url_id;
 
         $post->save();
@@ -202,19 +194,6 @@ class PostController extends Controller
         return;
     }
 
-    private function addQuotePreset($quote, $preset_id){
-        $preset_exists = Preset::find($preset_id);
-
-        if (!$preset_exists) {
-            self::RespondModelNotFound();
-        }
-
-        $quote->img_original_url_id = null;
-        $quote->preset_id = $preset_id;
-        $quote->save();
-        return;
-    }
-
     private function getSmallSizeImage($image) {
         return Image::make($image)
         ->resize(5, null, function ($constraint) {
@@ -239,11 +218,10 @@ class PostController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'quote' => self::REQUIRED . '|max:300',
+            'quote' => self::REQUIRED . '|max:200',
             'font_type' => self::REQUIRED,
-            'img_original' => 'required_without:preset|url',
-            'img_baked' => self::REQUIRED . '|image',
-            'preset' => 'required_without:img_original|integer'
+            'img_original' => self::REQUIRED . '|url',
+            'img_baked' => self::REQUIRED . '|image'
         ]);
 
         if ($validator->fails()) {
@@ -254,13 +232,9 @@ class PostController extends Controller
         if($resp = self::addFontType($quote, $request->font_type)) return $resp;
         $quote->save();
 
-        //images
-        if ($request->img_original) {
-            if($resp = self::addPostOriginal($quote, $request->img_original)) return $resp;
-        }
-        elseif ($request->preset) {
-            if($resp = self::addQuotePreset($quote, $request->preset)) return $resp;
-        }
+        //image
+
+        if($resp = self::addPostOriginal($quote, $request->img_original)) return $resp;
 
         self::addQuoteBaked($quote, $request->img_baked);
 
@@ -349,9 +323,9 @@ class PostController extends Controller
         }
 
         return Image::make($post->getMedia('original')[0]
-                ->getPath())
-                ->response()
-                ->header('Cache-Control', 'private, max-age=864000');
+        ->getPath())
+        ->response()
+        ->header('Cache-Control', 'private, max-age=864000');
     }
 
     function getQuoteBakedImage(Request $request, $childShortId, $quoteShortId, $img_baked_url_id) {
@@ -365,8 +339,8 @@ class PostController extends Controller
         }
 
         return Image::make($post->getMedia('baked')[0]
-                ->getPath())
-                ->response()
-                ->header('Cache-Control', 'private, max-age=864000');
+        ->getPath())
+        ->response()
+        ->header('Cache-Control', 'private, max-age=864000');
     }
 }

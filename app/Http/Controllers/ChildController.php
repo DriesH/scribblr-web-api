@@ -65,9 +65,15 @@ class ChildController extends Controller
             return self::RespondModelNotFound();
         }
 
+        $quote_count = $allChildPosts->posts->where('is_memory', false)->count();
+        $memory_count = $allChildPosts->posts->where('is_memory', true)->count();
+
+
         return response()->json([
             self::SUCCESS => true,
-            'posts' => $allChildPosts->posts->toArray()
+            'posts' => $allChildPosts->posts->toArray(),
+            'quote_count' => $quote_count,
+            'memory_count' => $memory_count
         ]);
     }
 
