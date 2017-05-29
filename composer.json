@@ -15,7 +15,8 @@
         "laravel/tinker": "~1.0",
         "spatie/image": "^1.2",
         "spatie/laravel-medialibrary": "^5.0.0",
-        "tymon/jwt-auth": "dev-develop"
+        "tymon/jwt-auth": "dev-develop",
+        "webpatser/laravel-countries": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

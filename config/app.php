@@ -181,6 +181,7 @@ return [
         Jrean\UserVerification\UserVerificationServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        Webpatser\Countries\CountriesServiceProvider::class,
 
     ],
 
@@ -232,6 +233,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'UserVerification' => Jrean\UserVerification\Facades\UserVerification::class,
         'Image' => Intervention\Image\Facades\Image::class,
+        'Countries' => Webpatser\Countries\CountriesFacade::class,
     ],
 
 ];

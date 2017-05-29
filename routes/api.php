@@ -24,6 +24,10 @@ use Illuminate\Http\Request;
 
 //get child thumbnail
 
+Route::group(['prefix' => 'countries'], function () {
+    Route::get('/', 'CountryController@getAllCountries');
+});
+
 Route::get('application/children/{childShortId}/avatar/{avatar_url_id}', 'ChildController@avatar');
 Route::get('application/children/{childShortId}/posts/{quoteShortId}/img-original/{img_original_url_id}', 'Postcontroller@getQuoteOriginalImage');
 Route::get('application/children/{childShortId}/posts/{quoteShortId}/img-baked/{img_baked_url_id}', 'Postcontroller@getQuoteBakedImage');
@@ -37,11 +41,12 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('/register', 'Auth\RegisterController@register');
 });
 
-Route::group(['middleware' => 'auth:api', 'prefix' => 'auth'], function () {
+Route::group(['middleware' => 'jwt.auth', 'prefix' => 'auth'], function () {
     // Authentication Routes...
     Route::get('/check', 'UserContorller@checkAuth');
     Route::get('/logout', 'Auth\LoginController@logout');
     Route::get('/user', 'UserController@getUser');
+    Route::post('/user', 'UserController@editUser');
 });
 
 /*
@@ -59,7 +64,7 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
         Route::post('/new', 'ChildController@new');
         Route::post('/{childShortId}/upload', 'ChildController@uploadImage');
         Route::delete('/{childShortId}/delete', 'ChildController@delete');
-        Route::put('/{childShortId}/edit', 'ChildController@update');
+        Route::post('/{childShortId}/edit', 'ChildController@update');
 
         /*
         * Api endpoints for quotes
@@ -68,7 +73,7 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
         Route::post('/{childShortId}/memories/new', 'Postcontroller@newMemory');
 
         Route::put('{childShortId}/quotes/{quoteShortId}', 'Postcontroller@editQuote');
-        Route::put('{childShortId}/memories/{memoryShortId}', 'Postcontroller@editMemory');
+        Route::post('{childShortId}/memories/{memoryShortId}', 'Postcontroller@editMemory');
 
         Route::delete('{childShortId}/posts/{postShortId}/delete', 'Postcontroller@delete');
 
@@ -89,7 +94,7 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
         Route::get('/generate', 'BookController@generateBook');
         // Route::put('');
         Route::get('/{shortId}', 'BookController@getBook');
-        Route::put('/{shortId}', 'BookController@editBook');
+        Route::post('/{shortId}', 'BookController@editBook');
         Route::get('/', 'BookController@getAllBooks');
         Route::delete('/{shortId}/delete', 'BookController@delete');
 
@@ -119,4 +124,6 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
     Route::group(['prefix' => 'presets'], function () {
         Route::get('/', 'PresetController@getAllPresets');
     });
+
+
 });
