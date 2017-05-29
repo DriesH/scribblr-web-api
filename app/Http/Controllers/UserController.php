@@ -83,7 +83,18 @@ class UserController extends Controller
 
         return response()->json([
             self::SUCCESS => true,
-            self::USER => $user,
+            self::USER => $user->get(['id',
+                                    'short_id',
+                                    'first_name',
+                                    'last_name',
+                                    'email',
+                                    'street_name',
+                                    'house_number',
+                                    'city',
+                                    'postal_code',
+                                    'country',
+                                    'has_seen_book_tutorial',
+                                ]),
             self::ACHIEVEMENT => self::checkAchievementProgress(self::COMPLETE_ACCOUNT_INFO)
         ]);
     }

@@ -24,10 +24,6 @@ use Illuminate\Http\Request;
 
 //get child thumbnail
 
-Route::group(['prefix' => 'countries'], function () {
-    Route::get('/', 'CountryController@getAllCountries');
-});
-
 Route::get('application/children/{childShortId}/avatar/{avatar_url_id}', 'ChildController@avatar');
 Route::get('application/children/{childShortId}/posts/{quoteShortId}/img-original/{img_original_url_id}', 'Postcontroller@getQuoteOriginalImage');
 Route::get('application/children/{childShortId}/posts/{quoteShortId}/img-baked/{img_baked_url_id}', 'Postcontroller@getQuoteBakedImage');
@@ -124,6 +120,8 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
     Route::group(['prefix' => 'presets'], function () {
         Route::get('/', 'PresetController@getAllPresets');
     });
-
+    Route::group(['prefix' => 'countries'], function () {
+        Route::get('/', 'CountryController@getAllCountries');
+    });
 
 });
