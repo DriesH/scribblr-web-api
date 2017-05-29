@@ -37,7 +37,6 @@ class UserController extends Controller
             'house_number' => 'max:10',
             'city' => 'max:50',
             'postal_code' => 'max:16',
-            // 'country' => , //FIXME: check on list of countries
         ]);
 
         if ($validator->fails()) {
@@ -62,7 +61,13 @@ class UserController extends Controller
             $user->postal_code = $request->postal_code;
         }
         if ($request->country) {
-            $user->country = $request->country;
+            $countries = Country::pluck('name');
+            if (in_array($request->country, $countries)) {
+                $user->country = $request->country;
+            }
+            else {
+                return self::RespondModelNotFound();
+            }
         }
 
         $user->save();

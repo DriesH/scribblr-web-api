@@ -41,7 +41,7 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('/register', 'Auth\RegisterController@register');
 });
 
-Route::group(['middleware' => 'jwt.auth', 'prefix' => 'auth'], function () {
+Route::group(['middleware' => 'auth:api', 'prefix' => 'auth'], function () {
     // Authentication Routes...
     Route::get('/check', 'UserContorller@checkAuth');
     Route::get('/logout', 'Auth\LoginController@logout');
