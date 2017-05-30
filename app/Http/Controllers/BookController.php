@@ -106,7 +106,7 @@ class BookController extends Controller
 
         $left_over = [];
         foreach ($book[1] as $key => $value) {
-            $value->is_used_in_book = false;
+            $value->is_used_in_book = 0;
             array_push($left_over, $value);
         }
 
@@ -347,7 +347,7 @@ class BookController extends Controller
         }
 
         //add to array and mark as used right before removing it
-        $post_to_add->is_used_in_book = true;
+        $post_to_add->is_used_in_book = 1;
         array_push($all_marked_posts, $post_to_add);
 
         $posts_random_order = $posts_random_order->except($post_to_add->id);
