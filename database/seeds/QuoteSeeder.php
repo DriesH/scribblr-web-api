@@ -25,11 +25,11 @@ class QuoteSeeder extends Seeder
             "So, did you eat him first?",
             "Mom, there's no date on them!",
             "No, in our car you can not put the steering wheel on the other side"
-
         ];
 
         $counter = 0;
         foreach ($quotes as $quote) {
+            $for_child = ($counter <= count($quotes) / 2) ? 1 : 2;
             $counter++;
 
             $new_quote = new Post();
