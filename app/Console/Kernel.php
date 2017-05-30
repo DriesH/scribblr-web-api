@@ -6,6 +6,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Child;
 use Carbon\Carbon;
+use Mail;
 
 
 class Kernel extends ConsoleKernel
@@ -32,23 +33,23 @@ class Kernel extends ConsoleKernel
             $children = Child::all();
 
             foreach ($children as $child) {
-                // if ($child->date_of_birth ) {
-                //     # code...
-                // }
                 $birthday = Carbon::parse($child->date_of_birth);
 
-                $is_birthday_next_week = $today->isBirthday($birthday->subDays(7));
+                if ($today->isBirthday($birthday)) {
+                    $child_name_for_subject = (substr($child->full_name, -1) != 's') ? $child->full_name . "'s" : $child->full_name . "'";
 
-                if ($is_birthday_next_week) {
-                    Mail::send('endOfPeriodMail', ['randomWinner' => $randomWinner, 'current_period_nr' => $current_period->period_nr, 'prize' => $prize], function($message){
-                        $message->to(env('OWNER_EMAIL'), 'Spin2Win')->subject('Contest period has ended! Winner is inside!')->from("no-reply@spin2win.com");
+                    Mail::send('emails.birthday-notice', [
+                        'child' => $child,
+                        'child_name_for_subject' => $child_name_for_subject,
+                        'expiration_date' => $today->addDays(7)
+                    ], function($message) use($child_name_for_subject){
+                        $message->to('joren.vh@hotmail.com', 'Scribblr')
+                                ->subject('Celebrate ' . $child_name_for_subject . ' birthday with Scribblr!')
+                                ->from("info@scribblr.be");
+                        //FIXME email of user
                     });
                 }
             }
-
-
-
-
         })
 
         // ->dailyAt('09:00')
