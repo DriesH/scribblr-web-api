@@ -29,7 +29,7 @@ class QuoteSeeder extends Seeder
         ];
 
         $counter = 0;
-        foreach ($quotes as $quote => $story) {
+        foreach ($quotes as $quote) {
             $counter++;
 
             $new_quote = new Post();

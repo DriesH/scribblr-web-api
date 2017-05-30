@@ -88,14 +88,15 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
     Route::group(['prefix' => 'books'], function () {
         Route::post('/new', 'BookController@newBook');
         Route::get('/generate', 'BookController@generateBook');
-        // Route::put('');
+
+        Route::get('/seen-tutorial', 'BookController@seenTutorial');
+
         Route::get('/{shortId}', 'BookController@getBook');
         Route::post('/{shortId}', 'BookController@editBook');
         Route::get('/', 'BookController@getAllBooks');
         Route::delete('/{shortId}/delete', 'BookController@delete');
 
         //after seeing first book tutorial
-        Route::get('/seen-tutorial', 'BookController@seenTutorial');
 
     });
 

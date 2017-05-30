@@ -404,7 +404,7 @@ class BookController extends Controller
             'book.*' => self::REQUIRED . '|array|size:2',
             'book.*.*' => 'present',
             'title' => self::REQUIRED,
-            'cover_color' => self::REQUIRED . '|regex:/#([a-f0-9]{3}){1,2}\b/i'
+            'cover_preset' => self::REQUIRED . '|between:1,10'
         ]);
 
         if ($validator->fails()) {
@@ -448,7 +448,7 @@ class BookController extends Controller
             'book.*' => self::REQUIRED . '|array|size:2',
             'book.*.*' => 'present',
             'title' => self::REQUIRED,
-            'cover_color' => self::REQUIRED . '|regex:/#([a-f0-9]{3}){1,2}\b/i'
+            'cover_preset' => self::REQUIRED . '|between:1,10'
         ]);
 
         if ($validator->fails()) {
@@ -528,7 +528,7 @@ class BookController extends Controller
             $book->child_id = $child->id;
         }
         $book->title = $request->title;
-        $book->cover_color = $request->cover_color;
+        $book->cover_preset = $request->cover_preset;
         $book->save();
 
 
