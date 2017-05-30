@@ -34,7 +34,7 @@ class QuoteSeeder extends Seeder
 
             $new_quote = new Post();
             $new_quote->short_id = substr(md5(uniqid(mt_rand(), true)), 0, 8);
-            $new_quote->child_id = 1;
+            $new_quote->child_id = $for_child;
             $new_quote->quote = $quote;
             $new_quote->lqip = self::getSmallSizeImage(storage_path() . '/quote-seeder-img/baked/img' . $counter . '.jpg');
             $new_quote->img_original_url_id = md5(uniqid(mt_rand(), true));

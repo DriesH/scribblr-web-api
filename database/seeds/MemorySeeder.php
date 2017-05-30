@@ -31,7 +31,10 @@ class MemorySeeder extends Seeder
             'It was a very sunny day today so we decided to go to the park. Little Amy had so much fun playing around with daddy. After an hour of running around and exploring she came to sit next to me. She had something with her and handed it to me. It was a tiny clover. She said she picked it for me because she loves me so much. I could help but tear up. I will never, ever forget this beautiful moment!',
             'We went to Spain for our summer holiday this year. Because Amy had never seen the sea, we decided to tell her we were going to visit the biggest swimming pool in the world. She didn\'t believe us so when we finally arrived she was shocked. She couldn\'t believe what she was seeing. At first she was scared to enter the water, but in the end she had an amazing day at the sea.',
             'The sunset. It\'s so magical. Amy has seen her first one yesterday. For a few minutes the sky had a somewhat pink color, which she obviously liked a lot. She said she wants the sky to always look like that. She enjoyed the evening so much. I don\'t think she will ever forget her first sunset. ps. This morning she was rather disappointed when the sky was blue again. ',
-            'Tommy made a drawing at school today. When he came home he sat down and explained me what he drew. When he grows up, he wants to be a superhero. He also said he sometimes dreams about being like spiderman or superman. I think we will buy him a superhero outfit for his birthday. He\'ll love it!'
+            'Tommy made a drawing at school today. When he came home he sat down and explained me what he drew. When he grows up, he wants to be a superhero. He also said he sometimes dreams about being like spiderman or superman. I think we will buy him a superhero outfit for his birthday. He\'ll love it!',
+            'test',
+            'test222',
+            'test333'
         ];
 
         $counter = 0;
