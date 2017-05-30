@@ -23,7 +23,6 @@ class CreatePostsTable extends Migration
             $table->longText('lqip');
             $table->string('img_original_url_id')->nullable();
             $table->string('img_baked_url_id')->nullable();
-            $table->integer('preset_id')->unsigned()->nullable();
             $table->boolean('is_shared')->default(false);
             $table->boolean('is_printed')->default(false);
             $table->boolean('is_memory');
@@ -31,7 +30,6 @@ class CreatePostsTable extends Migration
             $table->softDeletes();
 
             $table->foreign('child_id')->references('id')->on('children')->onDelete('cascade');
-            $table->foreign('preset_id')->references('id')->on('presets')->onDelete('cascade');
             $table->foreign('font_id')->references('id')->on('fonts')->onDelete('cascade');
         });
     }
