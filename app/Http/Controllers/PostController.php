@@ -43,7 +43,7 @@ class PostController extends Controller
     */
     function newQuote(Request $request, ShortIdGenerator $shortIdGenerator, $childShortId) {
         $validator = Validator::make($request->all(), [
-            'quote' => self::REQUIRED . '|max:200',
+            'quote' => self::REQUIRED . '|max:100',
             'font_type' => self::REQUIRED,
             'img_original' => self::REQUIRED . '|url',
             'img_baked' => self::REQUIRED . '|image'
@@ -218,7 +218,7 @@ class PostController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'quote' => self::REQUIRED . '|max:200',
+            'quote' => self::REQUIRED . '|max:100',
             'font_type' => self::REQUIRED,
             'img_original' => self::REQUIRED . '|url',
             'img_baked' => self::REQUIRED . '|image'
@@ -297,7 +297,7 @@ class PostController extends Controller
             return self::RespondModelNotFound();
         }
 
-        $postToDelete->delete();
+        $postToDelete->deletePreservingMedia();
 
         return response()->json([
             self::SUCCESS => true
