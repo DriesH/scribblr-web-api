@@ -36,8 +36,8 @@ class BookController extends Controller
     {
         $user = Auth::user();
         $book_to_delete = Book::where('user_id', $user->id)
-                                ->where('short_id', $shortId)
-                                ->first();
+        ->where('short_id', $shortId)
+        ->first();
 
         if (!$book_to_delete) {
             return self::RespondModelNotFound();
@@ -56,6 +56,9 @@ class BookController extends Controller
     function generateBook(Request $request)
     {
         $user = Auth::user();
+        $is_flip_over = $request->is_flip_over;
+        $child = null;
+
         if ($request->c) {
             $child = Child::where('short_id', $request->c)
             ->whereHas('user', function($query) use($user) {
@@ -74,6 +77,24 @@ class BookController extends Controller
         else {
             $memories = self::getAllUserMemories($user);
             $quotes = self::getAllUserQuotes($user);
+        }
+
+        if ($is_flip_over) {
+            $book = self::createFlipOver($memories, $quotes);
+
+            if ($child) {
+                $all_marked_posts = self::createMarkedPostsWithOtherChildren($book[2], $child, $user);
+            }
+            else {
+                $all_marked_posts = $book[2];
+            }
+
+            return response()->json([
+                self::SUCCESS => true,
+                'all_marked_posts' => $book[2],
+                'book' => $book[0],
+                'is_unique' => $book[1]
+            ]);
         }
 
         $not_printed_memories = $memories->where('is_printed', false);
@@ -104,6 +125,8 @@ class BookController extends Controller
             }
         }
 
+
+
         $left_over = [];
         foreach ($book[1] as $key => $value) {
             $value->is_used_in_book = 0;
@@ -118,6 +141,41 @@ class BookController extends Controller
             'book' => $book[0],
             'is_unique' => $book_is_unique
         ]);
+    }
+
+    private function createMarkedPostsWithOtherChildren($all_current_marked_posts, $child, $user) {
+        $other_children_posts = Post::whereHas('child', function($query) use($user, $child) {
+            $query->where('user_id', $user->id)->where('id', '<>', $child->id);
+        })
+        ->with('child')
+        ->get();
+
+        $marked_not_used = $other_children_posts->map(function() {
+
+        });
+    }
+
+    private function createFlipOver($memories, $quotes) {
+        $book = $memories->merge($quotes)->shuffle()->sortBy('is_printed', false)->take(self::PAGES_PER_BOOK);
+        $is_unique = ($book->where('is_printed', true)->count() > 0) ? false : true;
+
+        $marked_as_used = $book->map(function($post) {
+            $post->is_used_in_book = 1;
+            return $post;
+        });
+
+        $all_posts = $memories->merge($quotes);
+        $not_used = $all_posts->diff($book);
+
+        $marked_as_not_used = $not_used->map(function($post) {
+            $post->is_used_in_book = 0;
+            return $post;
+        });
+
+        $all_marked_posts = $marked_as_not_used->merge($marked_as_used);
+
+        return [$book, $is_unique, $all_marked_posts];
+
     }
 
     private function createBookWithEmptyPages($not_printed_quotes, $not_printed_memories, $already_printed_quotes, $already_printed_memories) {
@@ -411,13 +469,23 @@ class BookController extends Controller
     function newBook(Request $request) {
         $isForChild = false;
 
-        $validator = Validator::make($request->all(), [
-            'book' => self::REQUIRED . '|array|size:' . self::PAGES_PER_BOOK/2,
-            'book.*' => self::REQUIRED . '|array|size:2',
-            'book.*.*' => 'present',
-            'title' => self::REQUIRED,
-            'cover_preset' => self::REQUIRED . '|between:1,10'
-        ]);
+        if (!$request->is_flip_over) {
+            $validator = Validator::make($request->all(), [
+                'book' => self::REQUIRED . '|array|size:' . self::PAGES_PER_BOOK/2,
+                'book.*' => self::REQUIRED . '|array|size:2',
+                'book.*.*' => 'present',
+                'title' => self::REQUIRED,
+                'cover_preset' => self::REQUIRED
+            ]);
+        }
+        else {
+            $validator = Validator::make($request->all(), [
+                'book' => self::REQUIRED . '|array|size:' . self::PAGES_PER_BOOK,
+                'book.*' => 'present',
+                'title' => self::REQUIRED,
+                'cover_preset' => self::REQUIRED
+            ]);
+        }
 
         if ($validator->fails()) {
             return self::RespondValidationError($request, $validator);
@@ -425,52 +493,58 @@ class BookController extends Controller
 
         $user = Auth::user();
 
-        if ($request->c) {
-            $child = Child::where('short_id', $request->c)
-            ->whereHas('user', function($query) use($user) {
-                $query->where('users.id', $user->id);
-            })
-            ->first();
-
-            if (!$child) {
-                return self::RespondModelNotFound();
-            }
-            else {
-                return self::CreateOrEditBook($request, $user, null, $child->id);
-            }
+        if ($request->is_flip_over) {
+            return self::CreateOrEditFlipOver($request, $user);
         }
         else {
             return self::CreateOrEditBook($request, $user);
         }
+
     }
 
     function editBook(Request $request, $shortId) {
         $isForChild = false;
         $user = Auth::user();
         $book = Book::where('short_id', $shortId)
-                    ->where('user_id', $user->id)
-                    ->first();
+        ->where('user_id', $user->id)
+        ->first();
 
         if (!$book) {
             return self::RespondModelNotFound();
         }
 
-        $validator = Validator::make($request->all(), [
-            'book' => self::REQUIRED . '|array|size:' . self::PAGES_PER_BOOK/2,
-            'book.*' => self::REQUIRED . '|array|size:2',
-            'book.*.*' => 'present',
-            'title' => self::REQUIRED,
-            'cover_preset' => self::REQUIRED . '|between:1,10'
-        ]);
+        if (!$request->is_flip_over) {
+            $validator = Validator::make($request->all(), [
+                'book' => self::REQUIRED . '|array|size:' . self::PAGES_PER_BOOK/2,
+                'book.*' => self::REQUIRED . '|array|size:2',
+                'book.*.*' => 'present',
+                'title' => self::REQUIRED,
+                'cover_preset' => self::REQUIRED
+            ]);
+        }
+        else {
+            $validator = Validator::make($request->all(), [
+                'book' => self::REQUIRED . '|array|size:' . self::PAGES_PER_BOOK,
+                'book.*' => 'present',
+                'title' => self::REQUIRED,
+                'cover_preset' => self::REQUIRED
+            ]);
+        }
+
 
         if ($validator->fails()) {
             return self::RespondValidationError($request, $validator);
         }
 
-        return self::CreateOrEditBook($request, $user, $book->id);
+        if (!$request->is_flip_over) {
+            return self::CreateOrEditBook($request, $user, $book->id);
+        }
+        else {
+            return self::CreateOrEditFlipOver($request, $user, $book->id);
+        }
     }
 
-    private function CreateOrEditBook($request, $user, $book_id = null, $child_id = null) {
+    private function CreateOrEditFlipOver($request, $user, $book_id = null) {
         $book = null;
         $child = null;
         if ($book_id) {
@@ -479,28 +553,92 @@ class BookController extends Controller
             if (!$book) {
                 return self::RespondModelNotFound();
             }
-
-            $child = Child::find($book->child_id);
-        }
-
-        if ($child_id) {
-            $child = Child::where('user_id', $user->id)->find($child_id);
         }
 
         $shortIdGenerator = new ShortIdGenerator();
         $post_ids_to_attach_to_new_book = [];
-        if (!$child) {
-            $all_user_posts = Post::whereHas('child', function($query) use($user) {
-                $query->where('children.user_id', $user->id);
-            })
-            ->pluck('id')
-            ->toArray();
+
+        $all_user_posts = Post::whereHas('child', function($query) use($user) {
+            $query->where('children.user_id', $user->id);
+        })
+        ->pluck('id')
+        ->toArray();
+
+
+        foreach ($request->book as $post) {
+                if (!$post || empty($post)) {
+                    array_push($post_ids_to_attach_to_new_book, self::EMPTY_PAGE);
+                    continue;
+                }
+
+                if (!in_array($post['id'], $all_user_posts)) {
+                    return self::RespondModelNotFound();
+                }
+
+                if (in_array($post['id'], $post_ids_to_attach_to_new_book)) {
+                    return response()->json([
+                        self::SUCCESS => false,
+                        self::ERROR_TYPE => 'book_contains_duplicates',
+                        self::ERROR_MESSAGE => 'Book contains duplicate posts'
+                    ]);
+                }
+                array_push($post_ids_to_attach_to_new_book, $post['id']);
+        }
+
+        if (!$book) {
+            $book = new Book();
+            do {
+                $shortId = $shortIdGenerator->generateId(8);
+            } while ( count( Book::where('short_id', $shortId)->first()) >= 1 );
+            $book->short_id = $shortId;
+            $book->user_id = $user->id;
         }
         else {
-            $all_user_posts = Post::where('child_id', $child->id)
-                                    ->pluck('id')
-                                    ->toArray();
+            Book_Post::where('book_id', $book->id)->delete();
         }
+        $book->title = $request->title;
+        $book->cover_preset = $request->cover_preset;
+        $book->is_flip_over = true;
+        $book->save();
+
+        for ($i=1; $i <= count($post_ids_to_attach_to_new_book); $i++) {
+            $new_page = new Book_Post();
+            $new_page->page_nr = $i;
+            $new_page->book_id = $book->id;
+
+            if ($post_ids_to_attach_to_new_book[$i-1] != self::EMPTY_PAGE) {
+                $new_page->post_id = $post_ids_to_attach_to_new_book[$i-1];
+            }
+
+            $new_page->save();
+        }
+
+        return response()->json([
+            self::SUCCESS => true,
+            'book' => $book
+        ]);
+    }
+
+    private function CreateOrEditBook($request, $user, $book_id = null) {
+        $book = null;
+        $child = null;
+        if ($book_id) {
+            $book = Book::where('user_id', $user->id)->find($book_id);
+
+            if (!$book) {
+                return self::RespondModelNotFound();
+            }
+        }
+
+        $shortIdGenerator = new ShortIdGenerator();
+        $post_ids_to_attach_to_new_book = [];
+
+        $all_user_posts = Post::whereHas('child', function($query) use($user) {
+            $query->where('children.user_id', $user->id);
+        })
+        ->pluck('id')
+        ->toArray();
+
 
         foreach ($request->book as $page_block) {
             foreach ($page_block as $post) {
@@ -536,14 +674,10 @@ class BookController extends Controller
         else {
             Book_Post::where('book_id', $book->id)->delete();
         }
-        if ($child) {
-            $book->child_id = $child->id;
-        }
         $book->title = $request->title;
         $book->cover_preset = $request->cover_preset;
+        $book->is_flip_over = false;
         $book->save();
-
-
 
         for ($i=1; $i <= count($post_ids_to_attach_to_new_book); $i++) {
             $new_page = new Book_Post();

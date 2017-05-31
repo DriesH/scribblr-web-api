@@ -17,9 +17,9 @@ class CreateBooksTable extends Migration
             $table->increments('id');
             $table->string('short_id', 8)->unique();
             $table->string('title');
-            $table->integer('cover_preset');
+            $table->string('cover_preset');
+            $table->boolean('is_flip_over');
             $table->integer('user_id')->unsigned();
-            $table->integer('child_id')->unsigned()->nullable();
             $table->timestamps();
             $table->softDeletes();
 
