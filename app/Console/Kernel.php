@@ -47,8 +47,8 @@ class Kernel extends ConsoleKernel
                         'expiration_date' => $expiration_date
                     ], function($message) use($child_name_for_subject){
                         $message->to('joren.vh@hotmail.com', 'Scribblr')
-                                ->subject('Celebrate ' . $child_name_for_subject . ' birthday with Scribblr!')
-                                ->from("info@scribblr.be");
+                                ->subject('🎉 Celebrate ' . $child_name_for_subject . ' birthday with Scribblr! 🎁')
+                                ->from("info@scribblr.be", "Scribblr");
                         //FIXME email of user
                     });
                 }

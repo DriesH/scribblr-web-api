@@ -113,7 +113,7 @@ class OrderController extends Controller
         ], function($message) use($user){
             $message->to('joren.vh@hotmail.com', 'Scribblr')
                     ->subject('Thanks for your purchase at Scribblr, ' . $user->first_name . '!')
-                    ->from("info@scribblr.be");
+                    ->from("info@scribblr.be", "Scribblr");
             //FIXME email of user
         });
     }
