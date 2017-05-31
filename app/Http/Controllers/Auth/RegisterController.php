@@ -97,7 +97,7 @@ class RegisterController extends Controller
                 self::ERROR_TYPE => self::ERROR_TYPE_VALIDATION,
                 self::ERRORS => $validator->errors()->jsonSerialize(),
                 self::OLD_INPUT => $request->except('password')
-            ]);
+            ], 400);
         }
         $user = $this->create($request->all());
 
