@@ -94,7 +94,7 @@ class UserController extends Controller
                                     'postal_code',
                                     'country',
                                     'has_seen_book_tutorial',
-                                ]),
+                                ])[0],
             self::ACHIEVEMENT => self::checkAchievementProgress(self::COMPLETE_ACCOUNT_INFO)
         ]);
     }
