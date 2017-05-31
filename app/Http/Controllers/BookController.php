@@ -740,4 +740,20 @@ class BookController extends Controller
         }
     }
 
+    function check() {
+        $user = Auth::user();
+
+        $posts = Post::whereHas('child', function($query) use($user) {
+            $query->where('children.user_id', $user->id);
+        })
+        ->count();
+
+        $can_create_book = ($posts > 0) ? true : false;
+
+        return response()->json([
+            self::SUCCESS => true,
+            'can_create_book' => $can_create_book
+        ]);
+    }
+
 }

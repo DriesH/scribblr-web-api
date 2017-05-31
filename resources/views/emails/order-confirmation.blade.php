@@ -143,7 +143,7 @@
 		}
 
 		#templateHeader{
-
+			/*@editable*/background-color:#ffffff;
 			/*@editable*/background-image:none;
 			/*@editable*/background-repeat:no-repeat;
 			/*@editable*/background-position:center;
@@ -180,6 +180,7 @@
 			/*@editable*/text-decoration:underline;
 		}
 
+
 		#templateBody{
 			/*@editable*/background-color:#FFFFFF;
 			/*@editable*/background-image:none;
@@ -211,8 +212,7 @@
 			/*@editable*/line-height:150%;
 			/*@editable*/text-align:left;
 		}
-
-		.bodyContainer .mcnTextContent a,.bodyContainer .mcnTextContent p a{
+.bodyContainer .mcnTextContent a,.bodyContainer .mcnTextContent p a{
 			/*@editable*/color:#00ADD8;
 			/*@editable*/font-weight:normal;
 			/*@editable*/text-decoration:underline;
@@ -419,10 +419,9 @@
                         <tbody><tr>
                             <td class="mcnImageContent" valign="top" style="padding-right: 9px; padding-left: 9px; padding-top: 0; padding-bottom: 0; text-align:center;">
 
-								<a href="https://www.scribblr.be" title="" class="" target="_blank">
-									<img align="center" alt="" src="https://gallery.mailchimp.com/cbb6ea8c92597135e99474a0e/images/cae467ce-af9e-40d8-b0a4-fe3cf049b7ac.png" width="250" style="max-width:500px; padding-bottom: 0; display: inline !important; vertical-align: bottom;" class="mcnImage">
-								</a>
-
+                                    <a href="https://www.scribblr.be" title="" class="" target="_blank">
+                                        <img align="center" alt="" src="https://gallery.mailchimp.com/cbb6ea8c92597135e99474a0e/images/cae467ce-af9e-40d8-b0a4-fe3cf049b7ac.png" width="300" style="max-width:600px; padding-bottom: 0; display: inline !important; vertical-align: bottom;" class="mcnImage">
+                                    </a>
 
                             </td>
                         </tr>
@@ -445,9 +444,9 @@
                 <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width:100%; min-width:100%;" width="100%" class="mcnTextContentContainer">
                     <tbody><tr>
 
-                        <td valign="top" class="mcnTextContent" style="padding-top:0; padding-right:18px; padding-bottom:9px; padding-left:18px;">
+                        <td valign="top" class="mcnTextContent" style="padding: 0px 18px 9px;color: #FF3030;">
 
-                            <h1><span style="font-family:roboto,helvetica neue,helvetica,arial,sans-serif;color:#2d3338;">Celebrate {{$child_name_for_subject}} birthday!</span></h1>
+                            <h1 style='color:#2d3338;'><font face="roboto, helvetica neue, helvetica, arial, sans-serif" >Your order is on the way!</font></h1>
 
                         </td>
                     </tr>
@@ -490,10 +489,9 @@
                         <tbody><tr>
                             <td class="mcnImageContent" valign="top" style="padding-right: 9px; padding-left: 9px; padding-top: 0; padding-bottom: 0; text-align:center;">
 
-								<a href="https://www.scribblr.be" title="" class="" target="_blank">
-									<img align="center" alt="" src="https://gallery.mailchimp.com/cbb6ea8c92597135e99474a0e/images/f7436263-ef9e-4768-8f46-e553bba52dce.jpg" width="564" style="max-width:1024px; padding-bottom: 0; display: inline !important; vertical-align: bottom;" class="mcnImage">
-								</a>
-
+                                    <a href="https://www.scribblr.be" title="" class="" target="_blank">
+                                        <img align="center" alt="" src="https://gallery.mailchimp.com/cbb6ea8c92597135e99474a0e/images/1b24b0ba-2953-410d-ae6e-be8771ce8b68.jpg" width="564" style="max-width:1024px; padding-bottom: 0; display: inline !important; vertical-align: bottom;" class="mcnImage">
+                                    </a>
 
                             </td>
                         </tr>
@@ -518,18 +516,26 @@
 
                         <td valign="top" class="mcnTextContent" style="padding-top:0; padding-right:18px; padding-bottom:9px; padding-left:18px;">
 
-                            <h3 style="color:#2d3338;">We want to celebrate {{$child_name_for_subject}} birthday with you!</h3>
+                            <h3 style="color:#2d3338;">Thank you, {{$user->first_name}}.</h3>
 
-<p>A birthday is a special day. A <em>very </em>special day!<br>
-That's why we have a <strong>gift </strong>for you!<br>
+<p>We send you this email to confirm we have successfully received your payment.&nbsp;<br>
+Here is a summary of your order with nr: <strong>{{$order->short_id}}</strong></p>
+
+<ul>
+
+    @foreach ($book_order as $book)
+        <li>{{$book->pivot->amount}} x {{($book->is_flip_over) ? "Scribbl' Flip-over" : "Scribbl' Book"}}</li>
+    @endforeach
+</ul>
+Total payment: €{{$order->price}}
+
+<p>The estimated date of arrival of your package is the <strong>{{$estimated_arrival}}.</strong><br>
 <br>
-If you purchase a ScribbleBook before the {{$expiration_date}},<br>
-you will receive a 10% <strong>discount </strong>on all orders!<br>
+Thanks again and have a great day!<br>
 <br>
-We hope you, {{$child->full_name}} and all family and friends have an amazing day!<br>
-<br>
-<span style="font-size:12px">ps: Sorry about the cake... our boss&nbsp;ate all of it during the last meeting.</span><br>
-&nbsp;</p>
+<span style="font-size:12px">If you have any further questions about your order, contact us at <strong>info@scribblr.be </strong>and include your order nr.</span></p>
+
+<p>&nbsp;</p>
 
                         </td>
                     </tr>
@@ -542,22 +548,6 @@ We hope you, {{$child->full_name}} and all family and friends have an amazing da
 				</tr>
 				</table>
 				<![endif]-->
-            </td>
-        </tr>
-    </tbody>
-</table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnButtonBlock" style="min-width:100%;">
-    <tbody class="mcnButtonBlockOuter">
-        <tr>
-            <td style="padding-top:0; padding-right:18px; padding-bottom:18px; padding-left:18px;" valign="top" align="center" class="mcnButtonBlockInner">
-                <table border="0" cellpadding="0" cellspacing="0" class="mcnButtonContentContainer" style="border-collapse: separate !important;border-radius: 3px;background-color: #5E94E5;">
-                    <tbody>
-                        <tr>
-                            <td align="center" valign="middle" class="mcnButtonContent" style="font-family: Helvetica; font-size: 18px; padding: 18px;">
-                                <a class="mcnButton " title="Create ScribbleBook" href="https://test-app-nodejs-scribblr.herokuapp.com/application/books" target="_blank" data-saveredirecturl="https://test-app-nodejs-scribblr.herokuapp.com/application/books" style="font-weight: bold;letter-spacing: -0.5px;line-height: 100%;text-align: center;text-decoration: none;color: #FFFFFF;">Create ScribbleBook</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
             </td>
         </tr>
     </tbody>

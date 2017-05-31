@@ -11,4 +11,10 @@ class Order extends Model
 
     protected $fillable = [];
     protected $dates = ['deleted_at'];
+
+    public function books()
+    {
+        return $this->belongsToMany('App\Book', 'book__orders',
+        'order_id', 'book_id');
+    }
 }

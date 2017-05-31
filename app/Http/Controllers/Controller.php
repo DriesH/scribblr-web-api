@@ -49,6 +49,9 @@ class Controller extends BaseController
     /*      Books       */
     const PAGES_PER_BOOK = 20;
     const EMPTY_PAGE = 'empty_page';
+    const BOOK_PRICE = 14.99;
+    const FLIPOVER_PRICE = 24.99;
+    const SHIPPING_PRICE = 4.99;
 
     protected function RespondModelNotFound() {
         return response()->json([

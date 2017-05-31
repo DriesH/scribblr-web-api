@@ -86,6 +86,9 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
     * Api endpoints for book data.
     */
     Route::group(['prefix' => 'books'], function () {
+        //check for 0 memories
+        Route::get('/check', 'BookController@check');
+
         Route::post('/new', 'BookController@newBook');
         Route::post('/new/flip', 'BookController@newFlipBook');
         Route::get('/generate', 'BookController@generateBook');
@@ -101,6 +104,11 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
 
     });
 
+    Route::group(['prefix' => 'orders'], function () {
+        Route::post('/checkout', 'OrderController@checkout');
+        Route::post('/{short_id}/pay', 'OrderController@pay');
+    });
+
     Route::group(['prefix' => 'achievements'], function () {
         Route::get('/', 'AchievementController@all');
     });
@@ -113,10 +121,6 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
 
     Route::group(['prefix' => 'fonts'], function () {
         Route::get('/', 'FontController@getAllFonts');
-    });
-
-    Route::group(['prefix' => 'colors'], function () {
-        Route::get('/', 'ColorController@getAllColors');
     });
 
     Route::group(['prefix' => 'countries'], function () {

@@ -16,21 +16,20 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
             $table->string('short_id', 8)->unique();
-            $table->integer('book_id')->unsigned();
             $table->integer('user_id')->unsigned();
-            $table->string('street_name');
-            $table->string('house_number');
-            $table->string('city');
-            $table->string('postal_code');
-            $table->string('country');
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->date('delivery_date');
+            // $table->string('street_name');
+            // $table->string('house_number');
+            // $table->string('city');
+            // $table->string('postal_code');
+            // $table->string('country');
+            // $table->string('first_name');
+            // $table->string('last_name');
+            // $table->date('delivery_date');
             $table->float('price');
+            $table->boolean('is_paid')->default(false);
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('book_id')->references('id')->on('books')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }

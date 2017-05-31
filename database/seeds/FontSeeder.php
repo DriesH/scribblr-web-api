@@ -12,14 +12,20 @@ class FontSeeder extends Seeder
     public function run()
     {
         $fonts = [
-            'Calibri',
-            'Impact',
+            'Boogaloo' => 'https://fonts.googleapis.com/css?family=Boogaloo',
+            'Special Elite' => 'https://fonts.googleapis.com/css?family=Special+Elite',
+            'Montserrat' => 'https://fonts.googleapis.com/css?family=Montserrat',
+            'Dosis' => 'https://fonts.googleapis.com/css?family=Dosis',
+            'Architects Daughter' => 'https://fonts.googleapis.com/css?family=Architects+Daughter',
+            'Barrio' => 'https://fonts.googleapis.com/css?family=Barrio',
+            'Satisfy' => 'https://fonts.googleapis.com/css?family=Satisfy',
         ];
 
 
-        foreach ($fonts as $font_name) {
+        foreach ($fonts as $font_name => $url) {
             DB::table('fonts')->insert([
                'name' => $font_name,
+               'url' => $url
            ]);
         }
     }

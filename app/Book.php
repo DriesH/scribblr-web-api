@@ -19,5 +19,13 @@ class Book extends Model
         'book_id', 'post_id');
     }
 
+    public function order()
+    {
+        return $this->belongsToMany('App\Order', 'book__orders',
+        'book_id', 'order_id');
+    }
+
+
+
 
 }
