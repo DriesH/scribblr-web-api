@@ -174,7 +174,22 @@ class BookController extends Controller
 
         $all_marked_posts = $marked_as_not_used->merge($marked_as_used);
 
-        return [$book, $is_unique, $all_marked_posts];
+        $book_array = [];
+        foreach ($book as $post) {
+            array_push($book_array, $post);
+        }
+
+        $amount_pages_to_fill_up = self::PAGES_PER_BOOK - count($book_array);
+
+        if ($amount_pages_to_fill_up > 0) {
+            $empty_fill_object = new StdClass();
+            for ($i=0; $i < $amount_pages_to_fill_up; $i++) {
+                array_push($book_array, $empty_fill_object);
+            }
+        }
+
+
+        return [$book_array, $is_unique, $all_marked_posts];
 
     }
 
