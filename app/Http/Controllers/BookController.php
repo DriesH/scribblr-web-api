@@ -581,23 +581,23 @@ class BookController extends Controller
 
 
         foreach ($request->book as $post) {
-                if (!$post || empty($post)) {
-                    array_push($post_ids_to_attach_to_new_book, self::EMPTY_PAGE);
-                    continue;
-                }
+            if (!$post || empty($post)) {
+                array_push($post_ids_to_attach_to_new_book, self::EMPTY_PAGE);
+                continue;
+            }
 
-                if (!in_array($post['id'], $all_user_posts)) {
-                    return self::RespondModelNotFound();
-                }
+            if (!in_array($post['id'], $all_user_posts)) {
+                return self::RespondModelNotFound();
+            }
 
-                if (in_array($post['id'], $post_ids_to_attach_to_new_book)) {
-                    return response()->json([
-                        self::SUCCESS => false,
-                        self::ERROR_TYPE => 'book_contains_duplicates',
-                        self::ERROR_MESSAGE => 'Book contains duplicate posts'
-                    ]);
-                }
-                array_push($post_ids_to_attach_to_new_book, $post['id']);
+            if (in_array($post['id'], $post_ids_to_attach_to_new_book)) {
+                return response()->json([
+                    self::SUCCESS => false,
+                    self::ERROR_TYPE => 'book_contains_duplicates',
+                    self::ERROR_MESSAGE => 'Book contains duplicate posts'
+                ]);
+            }
+            array_push($post_ids_to_attach_to_new_book, $post['id']);
         }
 
         if (!$book) {
@@ -720,28 +720,12 @@ class BookController extends Controller
     {
         $user = Auth::user();
         $book = Book::where('user_id', $user->id)
-                    ->where('short_id', $shortId)
-                    ->first();
+        ->where('short_id', $shortId)
+        ->first();
 
         if (!$book) {
             return self::RespondModelNotFound();
         }
-
-        $pages = Book_Post::where('book_id', $book->id)->orderBy('page_nr')->with('post')->with('post.child')->get();
-
-        $formatted_pages = [];
-        $empty_fill_object = new StdClass();
-        foreach ($pages as $page) {
-            if ($page->post) {
-                array_push($formatted_pages, $page->post);
-            }
-            else {
-                array_push($formatted_pages, $empty_fill_object);
-            }
-        }
-
-        $chunked_book = array_chunk($formatted_pages, 2);
-
 
         $all_user_posts = Post::whereHas('child', function($query) use($user) {
             $query->where('user_id', $user->id);
@@ -749,16 +733,51 @@ class BookController extends Controller
         ->with('child')
         ->get();
 
-        $all_marked_posts = $all_user_posts->map(function($post) use($formatted_pages){
-            if (in_array($post, $formatted_pages)) {
-                $post->is_used_in_book = 1;
-                return $post;
+        if ($book->is_flip_over) {
+            $book_posts = Book_Post::where('book_id', $book->id)->orderBy('page_nr')->with('post')->with('post.child')->get();
+            $chunked_book = [];
+
+            foreach ($book_posts as $page) {
+                array_push($chunked_book, $page->post);
             }
-            else {
-                $post->is_used_in_book = 0;
-                return $post;
+
+            $all_marked_posts = $all_user_posts->map(function($post) use($chunked_book){
+                if (in_array($post, $chunked_book)) {
+                    $post->is_used_in_book = 1;
+                    return $post;
+                }
+                else {
+                    $post->is_used_in_book = 0;
+                    return $post;
+                }
+            });
+        }
+        else {
+            $pages = Book_Post::where('book_id', $book->id)->orderBy('page_nr')->with('post')->with('post.child')->get();
+            $formatted_pages = [];
+            $empty_fill_object = new StdClass();
+            foreach ($pages as $page) {
+                if ($page->post) {
+                    array_push($formatted_pages, $page->post);
+                }
+                else {
+                    array_push($formatted_pages, $empty_fill_object);
+                }
             }
-        });
+
+            $chunked_book = array_chunk($formatted_pages, 2);
+
+            $all_marked_posts = $all_user_posts->map(function($post) use($formatted_pages){
+                if (in_array($post, $formatted_pages)) {
+                    $post->is_used_in_book = 1;
+                    return $post;
+                }
+                else {
+                    $post->is_used_in_book = 0;
+                    return $post;
+                }
+            });
+        }
 
         return response()->json([
             self::SUCCESS => true,

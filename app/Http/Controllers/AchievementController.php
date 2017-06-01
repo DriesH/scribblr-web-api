@@ -15,7 +15,11 @@ class AchievementController extends Controller
 
         $all_achievements = Achievement::all();
         $completed_achievements = Auth::user()->with('achievements')->first()->achievements;
-        $total_points = $completed_achievements->sum('points');
+        $total_points = $completed_achievements->sum('points') - $user->achievement_points_used;
+
+        if ($total_points < 0) {
+            $total_points = 0;
+        }
 
         $completed_achievements->map(function ($completed_achievements) {
             $completed_achievements->completed = true;

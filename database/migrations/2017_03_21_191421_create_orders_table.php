@@ -27,6 +27,7 @@ class CreateOrdersTable extends Migration
             // $table->date('delivery_date');
             $table->float('price');
             $table->boolean('is_paid')->default(false);
+            $table->boolean('free_shipping')->default(false);
             $table->timestamps();
             $table->softDeletes();
 

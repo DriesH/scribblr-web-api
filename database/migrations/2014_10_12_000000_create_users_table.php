@@ -26,6 +26,7 @@ class CreateUsersTable extends Migration
             $table->string('postal_code')->nullable();
             $table->string('country')->nullable();
             $table->string('password');
+            $table->integer('achievement_points_used')->default(0);
             $table->boolean('has_seen_book_tutorial')->default(false);
             $table->rememberToken();
             $table->timestamps();

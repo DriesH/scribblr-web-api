@@ -40,10 +40,14 @@ class OrderController extends Controller
         }
 
         $achievements_points = $user->achievements()->sum('points');
-        $can_get_free_shipping = ($achievements_points >= 100) ? true : false;
+        $can_get_free_shipping = ($achievements_points - $user->achievement_points_used >= 100) ? true : false;
 
         if (!$can_get_free_shipping) {
             $price += self::SHIPPING_PRICE;
+        }
+        else {
+            $user->achievement_points_used += 100;
+            $user->save();
         }
 
         $order = new Order();
@@ -53,6 +57,9 @@ class OrderController extends Controller
         $order->short_id = $shortId;
         $order->user_id = $user->id;
         $order->price = $price;
+        if ($can_get_free_shipping) {
+            $order->free_shipping = true;
+        }
         $order->save();
 
         foreach ($request->books as $book) {
@@ -61,8 +68,6 @@ class OrderController extends Controller
             $new_book_order->order_id = $order->id;
             $new_book_order->save();
         }
-
-
 
         return response()->json([
             self::SUCCESS => true,
