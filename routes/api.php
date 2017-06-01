@@ -39,7 +39,7 @@ Route::group(['prefix' => 'auth'], function () {
 
 Route::group(['middleware' => 'auth:api', 'prefix' => 'auth'], function () {
     // Authentication Routes...
-    Route::get('/check', 'UserContorller@checkAuth');
+    Route::get('/check', 'UserController@checkAuth');
     Route::get('/logout', 'Auth\LoginController@logout');
     Route::get('/user', 'UserController@getUser');
     Route::post('/user', 'UserController@editUser');
@@ -104,8 +104,9 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
     });
 
     Route::group(['prefix' => 'orders'], function () {
+        Route::get('/prices', 'OrderController@getPrices');
         Route::post('/checkout', 'OrderController@checkout');
-        Route::post('/{short_id}/pay', 'OrderController@pay');
+        // Route::post('/pay', 'OrderController@pay');
     });
 
     Route::group(['prefix' => 'achievements'], function () {

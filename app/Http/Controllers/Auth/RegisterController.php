@@ -107,7 +107,7 @@ class RegisterController extends Controller
 
         UserVerification::generate($user);
 
-        UserVerification::send($user, 'My Custom E-mail Subject');
+        UserVerification::send($user, 'Confirm your Scribblr account');
 
         return response()->json([
             self::SUCCESS => true,

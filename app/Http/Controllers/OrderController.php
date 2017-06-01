@@ -57,9 +57,7 @@ class OrderController extends Controller
         $order->short_id = $shortId;
         $order->user_id = $user->id;
         $order->price = $price;
-        if ($can_get_free_shipping) {
-            $order->free_shipping = true;
-        }
+        $order->free_shipping = $can_get_free_shipping;
         $order->save();
 
         foreach ($request->books as $book) {
@@ -69,36 +67,13 @@ class OrderController extends Controller
             $new_book_order->save();
         }
 
-        return response()->json([
-            self::SUCCESS => true,
-            'price' => $price,
-            'free_shipping' => $can_get_free_shipping,
-            'order_short_id' => $order->short_id
-        ]);
-    }
-
-    function pay(Request $request, $short_id) {
-        $user = Auth::user();
-
-        $order = Order::where('is_paid', false)
-                        ->where('user_id', $user->id)
-                        ->where('short_id', $short_id)
-                        ->first();
-
-        if (!$order) {
-            return self::RespondModelNotFound();
-        }
-
-        $order->is_paid = true;
-        $order->save();
-
         self::sendOrderConfirmationEmail($order, $user);
 
         return response()->json([
             self::SUCCESS => true,
-            'order' => $order,
+            'price' => $price,
+            'order' => $order
         ]);
-
     }
 
     private function sendOrderConfirmationEmail($order, $user) {
@@ -121,5 +96,21 @@ class OrderController extends Controller
                     ->from("info@scribblr.be", "Scribblr");
             //FIXME email of user
         });
+    }
+
+    function getPrices() {
+        $user = Auth::user();
+
+        $achievements_points = $user->achievements()->sum('points');
+        $can_get_free_shipping = ($achievements_points - $user->achievement_points_used >= 100) ? true : false;
+        $remaining_points = ($achievements_points - $user->achievement_points_used < 0) ? 0 : $achievements_points - $user->achievement_points_used;
+
+        return response()->json([
+            'book' => self::BOOK_PRICE,
+            'flip-over' => self::FLIPOVER_PRICE,
+            'shipping' => self::SHIPPING_PRICE,
+            'can_get_free_shipping' => $can_get_free_shipping,
+            'remaining_points' => $remaining_points
+        ]);
     }
 }
