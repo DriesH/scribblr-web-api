@@ -53,8 +53,14 @@ class Kernel extends ConsoleKernel
                     });
                 }
             }
-        })
 
+            // Mail::send('emails.weekly-overview-admin', [], function($message){
+            //     $message->to('joren.vh@hotmail.com', 'Scribblr')
+            //             ->subject('Weekly Scribblr order statistics')
+            //             ->from("info@scribblr.be", "Scribblr");
+            // });
+
+        })
         // ->dailyAt('09:00')
         ->timezone('Europe/Brussels');
     }

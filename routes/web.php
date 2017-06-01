@@ -11,6 +11,6 @@
 |
 */
 
-Route::get('/', function () {
-    return view('application');
-});
+// Route::post('/login', 'AdminController@Login');
+
+
