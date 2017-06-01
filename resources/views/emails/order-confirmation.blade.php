@@ -526,6 +526,11 @@ Here is a summary of your order with nr: <strong>{{$order->short_id}}</strong></
     @foreach ($book_order as $book)
         <li>{{$book->pivot->amount}} x {{($book->is_flip_over) ? "Scribbl' Flip-over" : "Scribbl' Book"}}</li>
     @endforeach
+	@if ($order->free_shipping)
+		<li>Shipping: <strong>free</strong></li>
+	@else
+		<li>Shipping</li>
+	@endif
 </ul>
 Total payment: €{{$order->price}}
 

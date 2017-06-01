@@ -90,7 +90,6 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
         Route::get('/check', 'BookController@check');
 
         Route::post('/new', 'BookController@newBook');
-        Route::post('/new/flip', 'BookController@newFlipBook');
         Route::get('/generate', 'BookController@generateBook');
 
         Route::get('/seen-tutorial', 'BookController@seenTutorial');
