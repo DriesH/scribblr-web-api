@@ -718,7 +718,35 @@ class BookController extends Controller
     */
     function getBook($shortId)
     {
+        $user = Auth::user();
+        $book = Book::where('user_id', $user->id)
+                    ->where('short_id', $shortId)
+                    ->first();
 
+        if (!$book) {
+            return self::RespondModelNotFound();
+        }
+
+        $pages = Book_Post::where('book_id', $book->id)->orderBy('page_nr')->with('post')->with('post.child')->get();
+
+        $formatted_pages = [];
+        $empty_fill_object = new StdClass();
+        foreach ($pages as $page) {
+            if ($page->post) {
+                array_push($formatted_pages, $page->post);
+            }
+            else {
+                array_push($formatted_pages, $empty_fill_object);
+            }
+        }
+
+        $chunked_book = array_chunk($formatted_pages, 2);
+
+        return response()->json([
+            self::SUCCESS => true,
+            'book' => $book,
+            'pages' => $chunked_book
+        ]);
     }
 
     function seenTutorial() {

@@ -16,7 +16,7 @@ class BookAndOrderSeeder extends Seeder
            'user_id' => 1,
            'title' => 'Test title lalala',
            'is_flip_over' => false,
-           'cover_preset' => 'covers-01.jpg',
+           'cover_preset' => 'covers-01.png',
        ]);
 
         DB::table('orders')->insert([

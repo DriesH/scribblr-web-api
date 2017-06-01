@@ -11,4 +11,9 @@ class Book_Post extends Model
 
     protected $fillable = [];
     protected $dates = ['deleted_at'];
+
+    public function post()
+    {
+        return $this->belongsTo('App\Post');
+    }
 }

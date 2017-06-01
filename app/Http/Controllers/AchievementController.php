@@ -15,6 +15,7 @@ class AchievementController extends Controller
 
         $all_achievements = Achievement::all();
         $completed_achievements = Auth::user()->with('achievements')->first()->achievements;
+        $total_points = $completed_achievements->sum('points');
 
         $completed_achievements->map(function ($completed_achievements) {
             $completed_achievements->completed = true;
@@ -31,7 +32,8 @@ class AchievementController extends Controller
 
         return response()->json([
             self::SUCCESS => true,
-            'achievements' => $marked_achievements
+            'achievements' => $marked_achievements,
+            'total_points' => $total_points
         ]);
     }
 }
