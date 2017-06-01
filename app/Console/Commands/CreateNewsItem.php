@@ -42,8 +42,8 @@ class CreateNewsItem extends Command
         $message = $this->argument('message');
 
         $news_item = new News();
-        $newsitem->title = $title;
-        $newsitem->message = $message;
+        $news_item->title = $title;
+        $news_item->message = $message;
         $news_item->save();
 
 
