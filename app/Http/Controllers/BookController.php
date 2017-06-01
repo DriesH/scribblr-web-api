@@ -742,8 +742,27 @@ class BookController extends Controller
 
         $chunked_book = array_chunk($formatted_pages, 2);
 
+
+        $all_user_posts = Post::whereHas('child', function($query) use($user) {
+            $query->where('user_id', $user->id);
+        })
+        ->with('child')
+        ->get();
+
+        $all_marked_posts = $all_user_posts->map(function($post) use($formatted_pages){
+            if (in_array($post, $formatted_pages)) {
+                $post->is_used_in_book = 1;
+                return $post;
+            }
+            else {
+                $post->is_used_in_book = 0;
+                return $post;
+            }
+        });
+
         return response()->json([
             self::SUCCESS => true,
+            'all_marked_posts' => $all_marked_posts,
             'book' => $book,
             'pages' => $chunked_book
         ]);
