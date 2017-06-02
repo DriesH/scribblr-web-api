@@ -94,9 +94,9 @@ class BookController extends Controller
                     self::SUCCESS => false,
                     self::ERROR_TYPE => 'no_posts',
                     self::ERROR_MESSAGE => 'You have no memories to make a book yet.'
-                ]);
+                ], 400);
             }
-            
+
             $book = self::createFlipOver($memories, $quotes);
 
             if ($child) {
@@ -129,7 +129,7 @@ class BookController extends Controller
                         self::SUCCESS => false,
                         self::ERROR_TYPE => 'no_posts',
                         self::ERROR_MESSAGE => 'You have no memories to make a book yet.'
-                    ]);
+                    ], 400);
                 }
             }
         }
