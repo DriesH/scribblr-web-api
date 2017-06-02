@@ -79,7 +79,24 @@ class BookController extends Controller
             $quotes = self::getAllUserQuotes($user);
         }
 
+        $not_printed_memories = $memories->where('is_printed', false);
+        $not_printed_quotes = $quotes->where('is_printed', false);
+
+        $already_printed_memories = $memories->where('is_printed', true);
+        $already_printed_quotes = $quotes->where('is_printed', true);
+
+        $can_create_book = self::checkIfUserCanCreateBook($memories, $quotes);
+        $book_is_unique = self::checkForUniqueBookPossibility($not_printed_memories, $not_printed_quotes);
+
         if ($is_flip_over) {
+            if (!$can_create_book) {
+                return response()->json([
+                    self::SUCCESS => false,
+                    self::ERROR_TYPE => 'no_posts',
+                    self::ERROR_MESSAGE => 'You have no memories to make a book yet.'
+                ]);
+            }
+            
             $book = self::createFlipOver($memories, $quotes);
 
             if ($child) {
@@ -96,34 +113,27 @@ class BookController extends Controller
                 'is_unique' => $book[1]
             ]);
         }
-
-        $not_printed_memories = $memories->where('is_printed', false);
-        $not_printed_quotes = $quotes->where('is_printed', false);
-
-        $already_printed_memories = $memories->where('is_printed', true);
-        $already_printed_quotes = $quotes->where('is_printed', true);
-
-        $can_create_book = self::checkIfUserCanCreateBook($memories, $quotes);
-        $book_is_unique = self::checkForUniqueBookPossibility($not_printed_memories, $not_printed_quotes);
-
-        if ($book_is_unique) {
-            $book = self::createUniqueBook($not_printed_quotes, $not_printed_memories);
-        }
-        elseif ($can_create_book) {
-            $book = self::createBookWithAlreadyPrintedPosts($not_printed_quotes, $not_printed_memories, $already_printed_quotes, $already_printed_memories);
-        }
         else {
-            if (count($memories) > 0 || count($quotes) > 0) {
-                $book = self::createBookWithEmptyPages($not_printed_quotes, $not_printed_memories, $already_printed_quotes, $already_printed_memories);
+            if ($book_is_unique) {
+                $book = self::createUniqueBook($not_printed_quotes, $not_printed_memories);
+            }
+            elseif ($can_create_book) {
+                $book = self::createBookWithAlreadyPrintedPosts($not_printed_quotes, $not_printed_memories, $already_printed_quotes, $already_printed_memories);
             }
             else {
-                return response()->json([
-                    self::SUCCESS => false,
-                    self::ERROR_TYPE => 'no_posts',
-                    self::ERROR_MESSAGE => 'You have no memories to make a book yet.'
-                ]);
+                if (count($memories) > 0 || count($quotes) > 0) {
+                    $book = self::createBookWithEmptyPages($not_printed_quotes, $not_printed_memories, $already_printed_quotes, $already_printed_memories);
+                }
+                else {
+                    return response()->json([
+                        self::SUCCESS => false,
+                        self::ERROR_TYPE => 'no_posts',
+                        self::ERROR_MESSAGE => 'You have no memories to make a book yet.'
+                    ]);
+                }
             }
         }
+
 
 
 
