@@ -4,6 +4,8 @@ namespace App\Classes;
 use App\Achievement;
 use App\User;
 use App\Post;
+use App\Book;
+use App\Order;
 
 class AchievementChecker
 {
@@ -47,7 +49,7 @@ class AchievementChecker
 
     function checkFirstChild($user, $achievement_scope_name) {
         if (!self::checkIfUserHasAchievement($user, $achievement_scope_name)) {
-            if (count($user->with('children')->first()->children) == 1) {
+            if (count($user->children()->get()) == 1) {
                 return self::attachAndReturnUserAchievement($user, $achievement_scope_name);
             }
         }
@@ -83,7 +85,7 @@ class AchievementChecker
 
         $share_achievements = Achievement::where('scope_name', $achievement_scope_name)->orderBy('amount_to_complete')->get();
 
-        foreach ($scribble_achievements as $achievement) {
+        foreach ($share_achievements as $achievement) {
             if ($achievement->amount_to_complete == $amount_of_shared_scribbles) {
                 if (!self::checkIfUserHasAchievement($user, $achievement_scope_name, $amount_of_shared_scribbles)) {
                     return self::attachAndReturnUserAchievement($user, $achievement_scope_name, $amount_of_shared_scribbles);
@@ -93,4 +95,54 @@ class AchievementChecker
         }
         return null;
     }
+
+    function checkAmountBooks($user, $achievement_scope_name) {
+        if (!self::checkIfUserHasAchievement($user, $achievement_scope_name)) {
+            if (Book::where('user_id', $user->id)->get()->count()) == 1) {
+                return self::attachAndReturnUserAchievement($user, $achievement_scope_name);
+            }
+        }
+        return null;
+    }
+
+    function checkAmountBooksOrdered($user, $achievement_scope_name) {
+        $amount_of_orders = Order::where('user_id', $user->id)
+        ->get()
+        ->count();
+
+        $order_achievements = Achievement::where('scope_name', $achievement_scope_name)->orderBy('amount_to_complete')->get();
+
+        foreach ($order_achievements as $achievement) {
+            if ($achievement->amount_to_complete == $amount_of_orders) {
+                if (!self::checkIfUserHasAchievement($user, $achievement_scope_name, $amount_of_orders)) {
+                    return self::attachAndReturnUserAchievement($user, $achievement_scope_name, $amount_of_orders);
+                }
+                break;
+            }
+        }
+        return null;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

@@ -630,7 +630,8 @@ class BookController extends Controller
 
         return response()->json([
             self::SUCCESS => true,
-            'book' => $book
+            'book' => $book,
+            self::ACHIEVEMENT => self::checkAchievementProgress(self::ADD_BOOK)
         ]);
     }
 
@@ -708,7 +709,8 @@ class BookController extends Controller
 
         return response()->json([
             self::SUCCESS => true,
-            'book' => $book
+            'book' => $book,
+            self::ACHIEVEMENT => self::checkAchievementProgress(self::ADD_BOOK)
         ]);
     }
 

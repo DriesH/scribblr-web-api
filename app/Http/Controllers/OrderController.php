@@ -72,7 +72,8 @@ class OrderController extends Controller
         return response()->json([
             self::SUCCESS => true,
             'price' => $price,
-            'order' => $order
+            'order' => $order,
+            self::ACHIEVEMENT => self::checkAchievementProgress(self::ORDER_BOOK)
         ]);
     }
 

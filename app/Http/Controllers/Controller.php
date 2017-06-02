@@ -95,10 +95,10 @@ class Controller extends BaseController
                 $achievement_resp = $achievement_checker->checkAmountScribblesShared($user, $achievement_scope_name);
                 break;
             case self::ADD_BOOK:
-                # code...
+                $achievement_resp = $achievement_checker->checkAmountBooks($user, $achievement_scope_name);
                 break;
             case self::ORDER_BOOK:
-                # code...
+                $achievement_resp = $achievement_checker->checkAmountBooksOrdered($user, $achievement_scope_name);
                 break;
             default:
                 return null;
