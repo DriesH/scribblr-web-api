@@ -65,6 +65,11 @@ class OrderController extends Controller
             $new_book_order->book_id = $book['id'];
             $new_book_order->order_id = $order->id;
             $new_book_order->save();
+
+            foreach ($book->posts()->get() as $post) {
+                $post->is_printed = true;
+                $post->save();
+            }
         }
 
         self::sendOrderConfirmationEmail($order, $user);

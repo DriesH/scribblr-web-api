@@ -519,7 +519,7 @@
                             <h3 style="color:#2d3338;">Thank you, {{$user->first_name}}.</h3>
 
 <p>We send you this email to confirm we have successfully received your payment.&nbsp;<br>
-Here is a summary of your order with nr: <strong>{{$order->short_id}}</strong></p>
+Here is a summary of your order with id: <strong>{{$order->short_id}}</strong></p>
 
 <ul>
 
@@ -538,7 +538,7 @@ Total payment: €{{$order->price}}
 <br>
 Thanks again and have a great day!<br>
 <br>
-<span style="font-size:12px">If you have any further questions about your order, contact us at <strong>info@scribblr.be </strong>and include your order nr.</span></p>
+<span style="font-size:12px">If you have any further questions about your order, contact us at <strong>info@scribblr.be </strong>and include your order id ({{$order->short_id}}).</span></p>
 
 <p>&nbsp;</p>
 
