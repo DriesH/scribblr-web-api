@@ -17,7 +17,7 @@ class AchievementChecker
 
     function checkIfUserHasAchievement($user, $achievement_scope_name, &$amount_to_complete = null) {
         $achievement = Achievement::where('scope_name', $achievement_scope_name)
-                                    where('amount_to_complete', $amount_to_complete)
+                                    ->where('amount_to_complete', $amount_to_complete)
                                     ->first();
         if($user->achievements->contains($achievement->id)) {
             return true;
