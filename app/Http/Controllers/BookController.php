@@ -528,7 +528,7 @@ class BookController extends Controller
             return self::RespondModelNotFound();
         }
 
-        if (!$request->is_flip_over) {
+        if (!$book->is_flip_over) {
             $validator = Validator::make($request->all(), [
                 'book' => self::REQUIRED . '|array|size:' . self::PAGES_PER_BOOK/2,
                 'book.*' => self::REQUIRED . '|array|size:2',
@@ -551,7 +551,7 @@ class BookController extends Controller
             return self::RespondValidationError($request, $validator);
         }
 
-        if (!$request->is_flip_over) {
+        if (!$book->is_flip_over) {
             return self::CreateOrEditBook($request, $user, $book->id);
         }
         else {
