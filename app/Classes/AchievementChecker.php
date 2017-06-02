@@ -98,7 +98,7 @@ class AchievementChecker
 
     function checkAmountBooks($user, $achievement_scope_name) {
         if (!self::checkIfUserHasAchievement($user, $achievement_scope_name)) {
-            if (Book::where('user_id', $user->id)->get()->count()) == 1) {
+            if (Book::where('user_id', $user->id)->get()->count() == 1) {
                 return self::attachAndReturnUserAchievement($user, $achievement_scope_name);
             }
         }
