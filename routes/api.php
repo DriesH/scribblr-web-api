@@ -25,8 +25,8 @@ use Illuminate\Http\Request;
 //get child thumbnail
 
 Route::get('application/children/{childShortId}/avatar/{avatar_url_id}', 'ChildController@avatar');
-Route::get('application/children/{childShortId}/posts/{quoteShortId}/img-original/{img_original_url_id}', 'Postcontroller@getQuoteOriginalImage');
-Route::get('application/children/{childShortId}/posts/{quoteShortId}/img-baked/{img_baked_url_id}', 'Postcontroller@getQuoteBakedImage');
+Route::get('application/children/{childShortId}/posts/{quoteShortId}/img-original/{img_original_url_id}', 'PostController@getQuoteOriginalImage');
+Route::get('application/children/{childShortId}/posts/{quoteShortId}/img-baked/{img_baked_url_id}', 'PostController@getQuoteBakedImage');
 
 //get shared
 Route::get('application/children/{childShortId}/posts/{postShortId}/shared/{img_baked_url_id}', 'ShareController@getSharedPost');
@@ -65,13 +65,11 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
         /*
         * Api endpoints for quotes
         */
-        Route::post('/{childShortId}/quotes/new', 'Postcontroller@newQuote');
-        Route::post('/{childShortId}/memories/new', 'Postcontroller@newMemory');
+        Route::post('/{childShortId}/quotes/new', 'PostController@newQuote');
 
-        Route::put('{childShortId}/quotes/{quoteShortId}', 'Postcontroller@editQuote');
-        Route::post('{childShortId}/memories/{memoryShortId}', 'Postcontroller@editMemory');
+        Route::post('{childShortId}/quotes/{quoteShortId}', 'PostController@editQuote');
 
-        Route::delete('{childShortId}/posts/{postShortId}/delete', 'Postcontroller@delete');
+        Route::delete('{childShortId}/posts/{postShortId}/delete', 'PostController@delete');
 
         //share
         Route::get('{childShortId}/posts/{postShortId}/share', 'ShareController@sharePost');
@@ -79,7 +77,7 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
     });
 
     Route::group(['prefix' => 'posts'], function () {
-        Route::get('/', 'Postcontroller@getAllPosts');
+        Route::get('/', 'PostController@getAllPosts');
     });
 
     /*

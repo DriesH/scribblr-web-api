@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6f3bd30819d8d40633cc408007416856",
-    "content-hash": "a714afff2721a58d4641b442e6860ce2",
+    "hash": "dc47bc8ee9bf8bb514a1c0baba161acc",
+    "content-hash": "ac59f0ebcc1e2ced010262e854d8bf5f",
     "packages": [
         {
             "name": "barryvdh/laravel-cors",
@@ -384,6 +384,48 @@
                 "url"
             ],
             "time": "2017-03-20 17:10:46"
+        },
+        {
+            "name": "iatstuti/laravel-cascade-soft-deletes",
+            "version": "1.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/michaeldyrynda/laravel-cascade-soft-deletes.git",
+                "reference": "d69d0b1bc0cfac36fb57ca22fd319fe40cc1a723"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/michaeldyrynda/laravel-cascade-soft-deletes/zipball/d69d0b1bc0cfac36fb57ca22fd319fe40cc1a723",
+                "reference": "d69d0b1bc0cfac36fb57ca22fd319fe40cc1a723",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "~5.0",
+                "illuminate/events": "~5.0",
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8"
+            },
+            "type": "utility",
+            "autoload": {
+                "psr-4": {
+                    "Iatstuti\\Database\\Support\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dyrynda",
+                    "email": "michael@dyrynda.com.au",
+                    "homepage": "https://dyrynda.com.au"
+                }
+            ],
+            "description": "Cascading deletes for Eloquent models that implement soft deletes",
+            "time": "2016-08-07 12:20:10"
         },
         {
             "name": "intervention/image",

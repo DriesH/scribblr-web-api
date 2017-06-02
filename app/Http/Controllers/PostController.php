@@ -84,7 +84,7 @@ class PostController extends Controller
 
     }
 
-    function newMemory(Request $request, ShortIdGenerator $shortIdGenerator, $childShortId) {
+    function newStory(Request $request, ShortIdGenerator $shortIdGenerator, $childShortId) {
         $validator = Validator::make($request->all(), [
             'story' => self::REQUIRED . '|max:1000',
             'img_baked' => self::REQUIRED .'|url',
@@ -244,7 +244,7 @@ class PostController extends Controller
         ]);
     }
 
-    function editMemory(Request $request, $childShortId, $memoryShortId) {
+    function editStory(Request $request, $childShortId, $memoryShortId) {
         $userId = Auth::user()->id;
         $memory = Post::whereHas('child', function($query) use($userId) {
             $query->where('children.user_id', $userId);
