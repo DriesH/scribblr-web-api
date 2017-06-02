@@ -29,14 +29,14 @@ class OrderController extends Controller
 
 
         foreach ($request->books as $book) {
-            $book_model = Book::where('user_id', $user->id)->find($book->short_id);
+            $book_model = Book::where('user_id', $user->id)->find($book['id']);
 
             if (!$book_model) {
                 return self::RespondModelNotFound();
             }
 
             $price_per_book = ($book_model->is_flip_over) ? self::FLIPOVER_PRICE : self::BOOK_PRICE;
-            $price += $price_per_book * $book->amount;
+            $price += $price_per_book * $book['amount'];
         }
 
         $achievements_points = $user->achievements()->sum('points');
@@ -62,7 +62,7 @@ class OrderController extends Controller
 
         foreach ($request->books as $book) {
             $new_book_order = new Book_Order();
-            $new_book_order->book_id = $book->short_id;
+            $new_book_order->book_id = $book['id'];
             $new_book_order->order_id = $order->id;
             $new_book_order->save();
         }
