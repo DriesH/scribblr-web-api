@@ -107,7 +107,7 @@ class OrderController extends Controller
 
         return response()->json([
             'book' => self::BOOK_PRICE,
-            'flip-over' => self::FLIPOVER_PRICE,
+            'flip_over' => self::FLIPOVER_PRICE,
             'shipping' => self::SHIPPING_PRICE,
             'can_get_free_shipping' => $can_get_free_shipping,
             'remaining_points' => $remaining_points

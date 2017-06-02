@@ -25,7 +25,8 @@ class ShareController extends Controller
 
         return response()->json([
             self::SUCCESS => true,
-            'post' => $post
+            'post' => $post,
+            self::ACHIEVEMENT => self::checkAchievementProgress(self::SHARE_SCRIBBLE)
         ]);
     }
 

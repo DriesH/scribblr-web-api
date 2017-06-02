@@ -13,8 +13,10 @@ class AchievementChecker
         return $achievement;
     }
 
-    function checkIfUserHasAchievement($user, $achievement_scope_name) {
-        $achievement = Achievement::where('scope_name', $achievement_scope_name)->first();
+    function checkIfUserHasAchievement($user, $achievement_scope_name, &$amount_to_complete = null) {
+        $achievement = Achievement::where('scope_name', $achievement_scope_name)
+                                    where('amount_to_complete', $amount_to_complete)
+                                    ->first();
         if($user->achievements->contains($achievement->id)) {
             return true;
         }
@@ -63,7 +65,30 @@ class AchievementChecker
 
         foreach ($scribble_achievements as $achievement) {
             if ($achievement->amount_to_complete == $amount_of_scribbles) {
+                if (!self::checkIfUserHasAchievement($user, $achievement_scope_name, $amount_of_scribbles)) {
                 return self::attachAndReturnUserAchievement($user, $achievement_scope_name, $amount_of_scribbles);
+            }
+            break;
+        }
+        return null;
+    }
+
+    function checkAmountScribblesShared($user, $achievement_scope_name) {
+        $amount_of_shared_scribbles = Post::whereHas('child', function($query) use($user){
+            $query->where('user_id', $user->id);
+        })
+        ->where('is_shared', true)
+        ->get()
+        ->count();
+
+        $share_achievements = Achievement::where('scope_name', $achievement_scope_name)->orderBy('amount_to_complete')->get();
+
+        foreach ($scribble_achievements as $achievement) {
+            if ($achievement->amount_to_complete == $amount_of_shared_scribbles) {
+                if (!self::checkIfUserHasAchievement($user, $achievement_scope_name, $amount_of_shared_scribbles)) {
+                    return self::attachAndReturnUserAchievement($user, $achievement_scope_name, $amount_of_shared_scribbles);
+                }
+                break;
             }
         }
         return null;

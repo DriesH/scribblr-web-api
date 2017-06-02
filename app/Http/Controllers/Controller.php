@@ -80,7 +80,7 @@ class Controller extends BaseController
                 $achievement_resp = $achievement_checker->attachAndReturnUserAchievement($user, $achievement_scope_name);
                 break;
             case self::CONFIRM_EMAIL: //confirm email
-                        //FIXME: check if email is confirmed
+                        //done in jrean package
                 break;
             case self::COMPLETE_ACCOUNT_INFO: //complete acc info
                 $achievement_resp = $achievement_checker->checkAccountInfo($user, $achievement_scope_name);
@@ -92,7 +92,7 @@ class Controller extends BaseController
                 $achievement_resp = $achievement_checker->checkAmountScribbles($user, $achievement_scope_name);
                 break;
             case self::SHARE_SCRIBBLE:
-
+                $achievement_resp = $achievement_checker->checkAmountScribblesShared($user, $achievement_scope_name);
                 break;
             case self::ADD_BOOK:
                 # code...
