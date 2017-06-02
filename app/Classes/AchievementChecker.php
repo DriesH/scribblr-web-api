@@ -17,8 +17,8 @@ class AchievementChecker
 
     function checkIfUserHasAchievement($user, $achievement_scope_name, &$amount_to_complete = null) {
         $achievement = Achievement::where('scope_name', $achievement_scope_name)
-                                    ->where('amount_to_complete', $amount_to_complete)
-                                    ->first();
+        ->where('amount_to_complete', $amount_to_complete)
+        ->first();
         if($user->achievements->contains($achievement->id)) {
             return true;
         }
@@ -68,11 +68,12 @@ class AchievementChecker
         foreach ($scribble_achievements as $achievement) {
             if ($achievement->amount_to_complete == $amount_of_scribbles) {
                 if (!self::checkIfUserHasAchievement($user, $achievement_scope_name, $amount_of_scribbles)) {
-                return self::attachAndReturnUserAchievement($user, $achievement_scope_name, $amount_of_scribbles);
+                    return self::attachAndReturnUserAchievement($user, $achievement_scope_name, $amount_of_scribbles);
+                }
+                break;
             }
-            break;
+            return null;
         }
-        return null;
     }
 
     function checkAmountScribblesShared($user, $achievement_scope_name) {
@@ -122,27 +123,4 @@ class AchievementChecker
         }
         return null;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
