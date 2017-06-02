@@ -141,6 +141,10 @@ class ChildController extends Controller
             return self::RespondModelNotFound();
         }
         $childToDelete->delete();
+
+        return response()->json([
+            self::SUCCESS => true
+        ]);
     }
 
     /*
