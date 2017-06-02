@@ -83,7 +83,7 @@ class UserController extends Controller
 
         return response()->json([
             self::SUCCESS => true,
-            self::USER => $user->get(['id',
+            self::USER => $user->where('id', $user->id)->get(['id',
                                     'short_id',
                                     'first_name',
                                     'last_name',
