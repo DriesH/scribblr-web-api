@@ -14,7 +14,6 @@ use Tymon\JWTAuth\Contracts\JWTSubject as AuthenticatableUserContract;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
-use Iatstuti\Database\Support\CascadeSoftDeletes;
 
 class User extends Model implements
 AuthenticatableContract,
@@ -23,7 +22,7 @@ CanResetPasswordContract,
 AuthenticatableUserContract,
 HasMedia
 {
-    use Authenticatable, Authorizable, CanResetPassword, SoftDeletes, HasMediaTrait, CascadeSoftDeletes;
+    use Authenticatable, Authorizable, CanResetPassword, SoftDeletes, HasMediaTrait;
 
     protected $cascadeDeletes = ['children', 'achievement', 'news'];
     protected $dates = ['deleted_at'];

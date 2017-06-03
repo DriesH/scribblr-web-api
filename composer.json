@@ -8,7 +8,6 @@
         "php": ">=5.6.4",
         "barryvdh/laravel-cors": "^0.9.2",
         "guzzlehttp/guzzle": "^6.2",
-        "iatstuti/laravel-cascade-soft-deletes": "1.0.*",
         "intervention/image": "dev-master",
         "jrean/laravel-user-verification": "^4.1",
         "ksubileau/color-thief-php": "^1.3",
