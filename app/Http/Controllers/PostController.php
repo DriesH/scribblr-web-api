@@ -335,7 +335,7 @@ class PostController extends Controller
         ->header('Cache-Control', 'private, max-age=864000');
     }
 
-    function getQuoteBakedImage(Request $request, $childShortId, $quoteShortId, $img_baked_url_id) {
+    function getPostBakedImage(Request $request, $childShortId, $quoteShortId, $img_baked_url_id) {
         $post = Post::where('short_id', $quoteShortId)->where('img_baked_url_id', $img_baked_url_id)->first();
 
         if (!$post) {

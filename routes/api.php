@@ -25,8 +25,8 @@ use Illuminate\Http\Request;
 //get child thumbnail
 
 Route::get('application/children/{childShortId}/avatar/{avatar_url_id}', 'ChildController@avatar');
-Route::get('application/children/{childShortId}/posts/{quoteShortId}/img-original/{img_original_url_id}', 'PostController@getQuoteOriginalImage');
-Route::get('application/children/{childShortId}/posts/{quoteShortId}/img-baked/{img_baked_url_id}', 'PostController@getQuoteBakedImage');
+Route::get('application/children/{childShortId}/posts/{quoteShortId}/img-original/{img_original_url_id}', 'PostController@getPostOriginalImage');
+Route::get('application/children/{childShortId}/posts/{quoteShortId}/img-baked/{img_baked_url_id}', 'PostController@getPostBakedImage');
 
 //get shared
 Route::get('application/children/{childShortId}/posts/{postShortId}/shared/{img_baked_url_id}', 'ShareController@getSharedPost');
