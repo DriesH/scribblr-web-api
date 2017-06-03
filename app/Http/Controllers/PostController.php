@@ -12,6 +12,7 @@ use ColorThief\ColorThief;
 use Auth;
 use Image;
 use Illuminate\Support\Str;
+use App\Book_Post;
 
 class PostController extends Controller
 {
@@ -295,6 +296,12 @@ class PostController extends Controller
 
         if (!$postToDelete) {
             return self::RespondModelNotFound();
+        }
+
+        $book_posts_to_turn_null = Book_Post::where('post_id', $postToDelete->id)->get();
+
+        foreach ($book_posts_to_turn_null as $post) {
+            $post->post_id = null;
         }
 
         $postToDelete->deletePreservingMedia();
