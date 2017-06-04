@@ -117,7 +117,7 @@ class PostController extends Controller
 
         return response()->json([
             self::SUCCESS => true,
-            'memory' => $memory,
+            'story' => $memory,
             self::ACHIEVEMENT => self::checkAchievementProgress(self::ADD_SCRIBBLE)
         ]);
 
