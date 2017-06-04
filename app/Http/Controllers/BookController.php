@@ -89,7 +89,12 @@ class BookController extends Controller
         $book_is_unique = self::checkForUniqueBookPossibility($not_printed_memories, $not_printed_quotes);
 
         if ($is_flip_over) {
-            if (!$can_create_book) {
+          $user_posts = Post::whereHas('child', function($query) use($user) {
+            $query->where('children.user_id', $user->id);
+          })
+          ->count();
+
+            if ($user_posts <= 0) {
                 return response()->json([
                     self::SUCCESS => false,
                     self::ERROR_TYPE => 'no_posts',
