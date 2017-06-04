@@ -20,7 +20,7 @@ class CreatePostsTable extends Migration
             $table->string('quote')->nullable();
             $table->string('story', 1000)->nullable();
             $table->integer('font_id')->unsigned()->nullable();
-            $table->longText('lqip');
+            $table->longText('lqip')->nullable();
             $table->string('img_original_url_id')->nullable();
             $table->string('img_baked_url_id')->nullable();
             $table->boolean('is_shared')->default(false);

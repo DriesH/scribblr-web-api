@@ -106,7 +106,6 @@ class PostController extends Controller
         do {
             $memoryShortId = $shortIdGenerator->generateId(8);
         } while ( count( Post::where('short_id', $memoryShortId)->first()) >= 1 );
-        $memory->lqip = self::getSmallSizeImage($request->img_baked);
         $memory->short_id = $memoryShortId;
         $memory->child_id = $child->id;
         $memory->story = $request->story;
@@ -114,7 +113,7 @@ class PostController extends Controller
         $memory->save();
 
         //image
-        if($resp = self::addMemoryBaked($memory, $request->img_original)) return $resp;
+        if($resp = self::addMemoryBaked($memory, $request->img_baked)) return $resp;
 
         return response()->json([
             self::SUCCESS => true,
@@ -162,10 +161,10 @@ class PostController extends Controller
             return response()->json([
                 self::SUCCESS => false,
                 self::ERROR_TYPE => self::ERROR_TYPE_IMAGE_NOT_FOUND
-            ]);
+            ], 400);
         }
 
-        $quote->lqip = self::getSmallSizeImage($img_baked);
+        $post->lqip = self::getSmallSizeImage($img_baked);
         $img_baked_url_id = hash_hmac('sha256', Str::random(40), config('app.key'));
 
         $post->clearMediaCollection('baked');
