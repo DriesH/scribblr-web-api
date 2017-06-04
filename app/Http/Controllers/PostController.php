@@ -106,7 +106,7 @@ class PostController extends Controller
         do {
             $memoryShortId = $shortIdGenerator->generateId(8);
         } while ( count( Post::where('short_id', $memoryShortId)->first()) >= 1 );
-        $memory->lqip = self::getSmallSizeImage($img_baked);
+        $memory->lqip = self::getSmallSizeImage($request->img_baked);
         $memory->short_id = $memoryShortId;
         $memory->child_id = $child->id;
         $memory->story = $request->story;
