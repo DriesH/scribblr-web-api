@@ -184,7 +184,7 @@ class PostController extends Controller
 
         $img_baked_url_id = hash_hmac('sha256', Str::random(40), config('app.key'));
 
-        $post->clearMediaCollection('baked');
+        $quote->clearMediaCollection('baked');
 
         $quote->addMedia($img_baked)
         ->withCustomProperties(['url_id' => $img_baked_url_id])
