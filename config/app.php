@@ -179,6 +179,9 @@ return [
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
         Spatie\MediaLibrary\MediaLibraryServiceProvider::class,
         Jrean\UserVerification\UserVerificationServiceProvider::class,
+        Barryvdh\Cors\ServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
+        Webpatser\Countries\CountriesServiceProvider::class,
 
     ],
 
@@ -229,7 +232,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'UserVerification' => Jrean\UserVerification\Facades\UserVerification::class,
-
+        'Image' => Intervention\Image\Facades\Image::class,
+        'Countries' => Webpatser\Countries\CountriesFacade::class,
     ],
 
 ];

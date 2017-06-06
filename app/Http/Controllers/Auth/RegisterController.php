@@ -4,14 +4,15 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\Http\Controllers\Controller;
+use App\Classes\ShortIdGenerator;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use App\Classes\ShortIdGenerator;
 
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Registered;
 use Jrean\UserVerification\Traits\VerifiesUsers;
 use Jrean\UserVerification\Facades\UserVerification;
+use Auth;
 
 class RegisterController extends Controller
 {
@@ -57,7 +58,7 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'fullname' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
-            // 'password' => 'required|min:6|confirmed',
+            'password' => 'required|min:8',
         ]);
     }
 
@@ -73,36 +74,45 @@ class RegisterController extends Controller
         $fullnameExploded = explode(' ', $data['fullname'], 2);
         $firstName = $fullnameExploded[0];
         $lastName = (!empty($fullnameExploded[1]))?$fullnameExploded[1]:'';
+
         do {
             $shortId = $this->shortId->generateId(8);
-        } while (count(User::where('short_id', $shortId)->first()) >= 1);
+        } while ( count( User::where('short_id', $shortId)->first()) >= 1 );
 
         return User::create([
             'short_id' => $shortId,
             'first_name' => $firstName,
             'last_name' => $lastName,
             'email' => $data['email'],
-            // 'password' => bcrypt($data['password']),
+            'password' => bcrypt($data['password']),
         ]);
     }
 
     public function register(Request $request)
     {
-        $this->validator($request->all())->validate();
-
+        $validator = $this->validator($request->all());
+        if ($validator->fails()) {
+            return response()->json([
+                self::SUCCESS => false,
+                self::ERROR_TYPE => self::ERROR_TYPE_VALIDATION,
+                self::ERRORS => $validator->errors()->jsonSerialize(),
+                self::OLD_INPUT => $request->except('password')
+            ], 400);
+        }
         $user = $this->create($request->all());
 
         event(new Registered($user));
 
-        $this->guard()->login($user);
+        $token = $this->guard('web')->login($user);
 
         UserVerification::generate($user);
 
-        UserVerification::send($user, 'My Custom E-mail Subject');
+        UserVerification::send($user, 'Confirm your Scribblr account');
 
-        return $this->registered($request, $user)
-        ?: redirect($this->redirectPath());
+        return response()->json([
+            self::SUCCESS => true,
+            'token' => $token,
+            self::ACHIEVEMENT => self::checkAchievementProgress(self::REGISTER_ACCOUNT)
+        ]);
     }
-
-
 }

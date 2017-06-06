@@ -13,9 +13,7 @@ before_script:
   - php artisan migrate
   - php artisan key:generate
   - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
-  - npm install -g @angular/cli
-  - npm install
-  - npm run prod
+   - npm run install-all
 
 script:
   - phpdbg -qrr vendor/bin/phpunit --coverage-clover=coverage.xml

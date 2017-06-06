@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Lang;
+use stdClass;
+use Auth;
+use App\User;
 
 class LoginController extends Controller
 {
@@ -31,7 +35,12 @@ class LoginController extends Controller
         if ($this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
 
-            return $this->sendLockoutResponse($request);
+            // return $this->sendLockoutResponse($request);
+            return response()->json([
+                self::SUCCESS => false,
+                self::ERROR_TYPE => self::ERROR_TYPE_TOO_MANY_ATTEMPTS,
+                self::ERROR_MESSAGE => Lang::get('auth.throttle'),
+            ], 423);
         }
 
         $credentials = $this->credentials($request);
@@ -63,15 +72,30 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request, $user, $token)
     {
+        $user_resp = new stdClass();
+        $user_resp->id = $user->id;
+        $user_resp->short_id = $user->short_id;
+        $user_resp->first_name = $user->first_name;
+        $user_resp->last_name = $user->last_name;
+        $user_resp->email = $user->email;
+        $user_resp->street_name = $user->street_name;
+        $user_resp->house_number = $user->house_number;
+        $user_resp->city = $user->city;
+        $user_resp->postal_code = $user->postal_code;
+        $user_resp->country = $user->country;
+        $user_resp->JWTToken = $token;
+
         return response()->json([
-            'token' => $token,
+            'user' => $user_resp
         ]);
     }
 
     protected function sendFailedLoginResponse(Request $request)
     {
         return response()->json([
-            'message' => Lang::get('auth.failed'),
+            self::SUCCESS => false,
+            self::ERROR_TYPE => self::ERROR_TYPE_NOT_AUTHENTICATED,
+            self::ERROR_MESSAGE => Lang::get('auth.failed'),
         ], 401);
     }
 

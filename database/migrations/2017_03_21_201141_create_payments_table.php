@@ -20,6 +20,7 @@ class CreatePaymentsTable extends Migration
             $table->boolean('is_paid');
             $table->float('payment_amount');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

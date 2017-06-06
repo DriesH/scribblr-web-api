@@ -11,20 +11,26 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Tymon\JWTAuth\Contracts\JWTSubject as AuthenticatableUserContract;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
 
 class User extends Model implements
-    AuthenticatableContract,
-    AuthorizableContract,
-    CanResetPasswordContract,
-    AuthenticatableUserContract
+AuthenticatableContract,
+AuthorizableContract,
+CanResetPasswordContract,
+AuthenticatableUserContract,
+HasMedia
 {
-    use Authenticatable, Authorizable, CanResetPassword;
+    use Authenticatable, Authorizable, CanResetPassword, SoftDeletes, HasMediaTrait;
 
+    protected $cascadeDeletes = ['children', 'achievement', 'news'];
+    protected $dates = ['deleted_at'];
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+    * The attributes that are mass assignable.
+    *
+    * @var array
+    */
     protected $fillable = [
         'first_name',
         'last_name',
@@ -39,10 +45,10 @@ class User extends Model implements
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
+    * The attributes that should be hidden for arrays.
+    *
+    * @var array
+    */
     protected $hidden = [
         'password', 'remember_token',
     ];
@@ -50,22 +56,38 @@ class User extends Model implements
 
 
     /**
-     * @return mixed
-     */
+    * @return mixed
+    */
     public function getJWTIdentifier()
     {
         return $this->getKey();  // Eloquent model method
     }
 
     /**
-     * @return array
-     */
+    * @return array
+    */
     public function getJWTCustomClaims()
     {
         return [
             'user' => [
                 'id' => $this->id,
-             ]
+            ]
         ];
+    }
+
+    public function Children() {
+        return $this->hasMany('App\Child', 'user_id');
+    }
+
+    public function achievements()
+    {
+        return $this->belongsToMany('App\Achievement', 'achievement__users',
+        'user_id', 'achievement_id');
+    }
+
+    public function news()
+    {
+        return $this->belongsToMany('App\News', 'news__users',
+        'user_id', 'news_id');
     }
 }

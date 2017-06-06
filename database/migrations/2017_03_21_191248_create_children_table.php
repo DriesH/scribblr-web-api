@@ -16,12 +16,13 @@ class CreateChildrenTable extends Migration
         Schema::create('children', function (Blueprint $table) {
             $table->increments('id');
             $table->string('short_id', 8)->unique();
+            $table->string('avatar_url_id')->nullable();
             $table->integer('user_id')->unsigned();
             $table->string('gender');
-            $table->string('first_name');
-            $table->string('last_name');
+            $table->string('full_name');
             $table->date('date_of_birth');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
