@@ -73,6 +73,8 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
 
         Route::delete('{childShortId}/posts/{postShortId}/delete', 'PostController@delete');
 
+        Route::get('{childShortId}/posts/{postShortId}', 'PostController@getPost');
+
         //share
         Route::get('{childShortId}/posts/{postShortId}/share', 'ShareController@sharePost');
 

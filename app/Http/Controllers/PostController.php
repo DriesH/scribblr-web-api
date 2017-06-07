@@ -350,4 +350,23 @@ class PostController extends Controller
         ->response()
         ->header('Cache-Control', 'private, max-age=864000');
     }
+
+    function getPost(Request $request, $childShortId, $postShortId) {
+        $user = Auth::user();
+
+        $post = Post::whereHas('child', function($query) use($user){
+            $query->where('children.user_id', $user->id);
+        })
+        ->where('short_id', $postShortId)
+        ->first();
+
+        if (!$post) {
+            return self::RespondModelNotFound();
+        }
+
+        return response()->json([
+            self::SUCCESS => true,
+            'post' => $post
+        ]);
+    }
 }
