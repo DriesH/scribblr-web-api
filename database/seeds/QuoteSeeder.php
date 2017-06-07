@@ -27,6 +27,21 @@ class QuoteSeeder extends Seeder
             "No, in our car you can not put the steering wheel on the other side"
         ];
 
+        $fonts = [
+            4,
+            1,
+            2,
+            7,
+            7,
+            6,
+            6,
+            5,
+            5,
+            6,
+            2,
+            4
+        ];
+
         $counter = 0;
         foreach ($quotes as $quote) {
             $for_child = ($counter <= count($quotes) / 2) ? 1 : 2;
@@ -40,7 +55,7 @@ class QuoteSeeder extends Seeder
             $new_quote->img_original_url_id = md5(uniqid(mt_rand(), true));
             $new_quote->img_baked_url_id = md5(uniqid(mt_rand(), true));
             $new_quote->is_memory = false;
-            $new_quote->font_id = 1;
+            $new_quote->font_id = $fonts[$counter-1];
             $new_quote->save();
             $new_quote->addMedia(storage_path() . '/quote-seeder-img/original/img' . $counter . '.jpg')->preservingOriginal()->toMediaLibrary('original');
             $new_quote->addMedia(storage_path() . '/quote-seeder-img/baked/img' . $counter . '.jpg')->preservingOriginal()->toMediaLibrary('baked');
