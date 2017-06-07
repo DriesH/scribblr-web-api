@@ -60,7 +60,11 @@ class ChildController extends Controller
     function allPosts($childShortId)
     {
         $userId = Auth::user()->id;
-        $allChildPosts = Child::where('short_id', $childShortId)->where('user_id', $userId)->with('Posts')->first();
+        $allChildPosts = Child::where('short_id', $childShortId)
+                            ->where('user_id', $userId)
+                            ->with('Posts')
+                            ->with('posts.font')
+                            ->first();
         if (!$allChildPosts) {
             return self::RespondModelNotFound();
         }
