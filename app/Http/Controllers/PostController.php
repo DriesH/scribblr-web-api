@@ -358,6 +358,7 @@ class PostController extends Controller
             $query->where('children.user_id', $user->id);
         })
         ->where('short_id', $postShortId)
+        ->with('font')
         ->first();
 
         if (!$post) {
