@@ -40,7 +40,7 @@ class ShareController extends Controller
             return response()->json([
                 self::SUCCESS => false,
                 self::ERROR_TYPE => self::ERROR_TYPE_IMAGE_NOT_FOUND
-            ]);
+            ], 400);
         }
 
         return response()->json([

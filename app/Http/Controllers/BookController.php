@@ -610,7 +610,7 @@ class BookController extends Controller
                     self::SUCCESS => false,
                     self::ERROR_TYPE => 'book_contains_duplicates',
                     self::ERROR_MESSAGE => 'Book contains duplicate posts'
-                ]);
+                ], 400);
             }
             array_push($post_ids_to_attach_to_new_book, $post['id']);
         }
@@ -687,7 +687,7 @@ class BookController extends Controller
                         self::SUCCESS => false,
                         self::ERROR_TYPE => 'book_contains_duplicates',
                         self::ERROR_MESSAGE => 'Book contains duplicate posts'
-                    ]);
+                    ], 400);
                 }
 
                 array_push($post_ids_to_attach_to_new_book, $post['id']);

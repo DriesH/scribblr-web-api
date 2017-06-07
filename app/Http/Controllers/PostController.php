@@ -139,7 +139,7 @@ class PostController extends Controller
             return response()->json([
                 self::SUCCESS => false,
                 self::ERROR_TYPE => self::ERROR_TYPE_IMAGE_NOT_FOUND
-            ]);
+            ], 400);
         }
 
         $img_original_url_id = hash_hmac('sha256', Str::random(40), config('app.key'));
@@ -326,7 +326,7 @@ class PostController extends Controller
             return response()->json([
                 self::SUCCESS => false,
                 self::ERROR_TYPE => self::ERROR_TYPE_IMAGE_NOT_FOUND
-            ]);
+            ], 400);
         }
 
         return Image::make($post->getMedia('original')[0]
@@ -342,7 +342,7 @@ class PostController extends Controller
             return response()->json([
                 self::SUCCESS => false,
                 self::ERROR_TYPE => self::ERROR_TYPE_IMAGE_NOT_FOUND
-            ]);
+            ], 400);
         }
 
         return Image::make($post->getMedia('baked')[0]
