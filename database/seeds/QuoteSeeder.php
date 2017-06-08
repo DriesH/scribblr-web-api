@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\Post;
+use Carbon\Carbon;
 
 class QuoteSeeder extends Seeder
 {
@@ -56,6 +57,7 @@ class QuoteSeeder extends Seeder
             $new_quote->img_baked_url_id = md5(uniqid(mt_rand(), true));
             $new_quote->is_memory = false;
             $new_quote->font_id = $fonts[$counter-1];
+            $new_quote->created_at = Carbon::now()->format('Y-m-d H:i:s');
             $new_quote->save();
             $new_quote->addMedia(storage_path() . '/quote-seeder-img/original/img' . $counter . '.jpg')->preservingOriginal()->toMediaLibrary('original');
             $new_quote->addMedia(storage_path() . '/quote-seeder-img/baked/img' . $counter . '.jpg')->preservingOriginal()->toMediaLibrary('baked');

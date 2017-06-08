@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\Post;
+use Carbon\Carbon;
 
 class MemorySeeder extends Seeder
 {
@@ -47,6 +48,7 @@ class MemorySeeder extends Seeder
             $new_memory->lqip = self::getSmallSizeImage(storage_path() . '/quote-seeder-img/stories/img' . $counter . '.jpg');
             $new_memory->img_baked_url_id = md5(uniqid(mt_rand(), true));
             $new_memory->is_memory = true;
+            $new_memory->created_at = Carbon::now()->format('Y-m-d H:i:s');
             $new_memory->save();
             $new_memory->addMedia(storage_path() . '/quote-seeder-img/stories/img' . $counter . '.jpg')->preservingOriginal()->toMediaLibrary('baked');
         }
