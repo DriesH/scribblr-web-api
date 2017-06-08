@@ -66,6 +66,8 @@ class OrderController extends Controller
             $new_book_order->order_id = $order->id;
             $new_book_order->save();
 
+            $book = Book::find($book['id']);
+
             foreach ($book->posts()->get() as $post) {
                 $post->is_printed = true;
                 $post->save();
