@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
            'city' => 'Antwerp',
            'postal_code' => '2000',
            'country' => 'Belgium',
-           'password' => bcrypt('testtest123')
+           'password' => bcrypt('testtest123'),
            'created_at' => Carbon::now()->format('Y-m-d H:i:s')
        ]);
     }
