@@ -377,6 +377,7 @@ class PostController extends Controller
         $latest_posts = Post::whereHas('child', function($query) use($user) {
             $query->where('user_id', $user->id);
         })
+        ->with('child')
         ->orderBy('created_at', 'desc')
         ->take(5)
         ->get();
