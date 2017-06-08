@@ -370,4 +370,20 @@ class PostController extends Controller
             'post' => $post
         ]);
     }
+
+    function getLatestPosts(Request $request) {
+        $user = Auth::user();
+
+        $latest_posts = Post::whereHas('child', function($query) use($user) {
+            $query->where('user_id', $user->id);
+        })
+        ->orderBy('created_at', 'desc')
+        ->take(5)
+        ->get();
+
+        return response()->json([
+            self::SUCCESS => true,
+            'latest_posts' => $latest_posts
+        ]);
+    }
 }

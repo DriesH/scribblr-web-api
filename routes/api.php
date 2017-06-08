@@ -82,6 +82,7 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
 
     Route::group(['prefix' => 'posts'], function () {
         Route::get('/', 'PostController@getAllPosts');
+        Route::get('/latest', 'PostController@getLatestPosts');
     });
 
     /*
