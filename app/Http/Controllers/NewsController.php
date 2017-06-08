@@ -36,31 +36,18 @@ class NewsController extends Controller
     }
 
 
-    function markAsRead($news_id) {
+    function markAllAsRead(Request $request) {
         $user = Auth::user();
-        $news_to_mark_read = News::find($news_id);
+        $news_items_to_mark_read = News::whereDoesntHave('user', function($query) use($user) {
+            $query->where('user_id', $user->id);
+        })->get();
 
-        if (!$news_to_mark_read) {
-            return self::RespondModelNotFound();
+        foreach ($news_items_to_mark_read as $news_item) {
+            $user->news()->attach($news_item);
         }
 
-        //check if already read
-        $already_read = $user->whereHas('news', function($query) use($news_to_mark_read) {
-            $query->where('news.id', $news_to_mark_read->id);
-        })
-        ->first();
-
-        if ($already_read) {
-            return response()->json([
-                self::SUCCESS => false,
-                self::ERROR_TYPE => self::ERROR_TYPE_RELATION_ALREADY_EXISTS
-            ], 400);
-        }
-
-        $user->news()->attach($news_to_mark_read);
         return response()->json([
-            self::SUCCESS => true,
-            'read_news' => $news_to_mark_read
+            self::SUCCESS => true
         ]);
     }
 

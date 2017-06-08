@@ -14,7 +14,7 @@ class News extends Model
 
     public function user()
     {
-        return $this->belongsToMany('App\Users', 'news__users',
+        return $this->belongsToMany('App\User', 'news__users',
         'news_id', 'user_id');
     }
 }
