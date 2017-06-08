@@ -129,4 +129,8 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
         Route::get('/', 'CountryController@getAllCountries');
     });
 
+    Route::group(['prefix' => 'stats'], function () {
+        Route::get('/', 'StatsController@getAllStats');
+    });
+
 });
