@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
            'short_id' => 'aaaaaaaa',
            'first_name' => 'admin',
            'last_name' => 'admin',
-           'email' => 'admin@scribblr.com',
+           'email' => 'admin@scribblr.be',
            'street_name' => 'Scribblestreet',
            'house_number' => '25',
            'city' => 'Antwerp',
