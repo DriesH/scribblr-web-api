@@ -60,25 +60,20 @@ class ChildController extends Controller
     function allPosts($childShortId)
     {
         $userId = Auth::user()->id;
-        $allChildPosts = Child::where('short_id', $childShortId)
-                            ->where('user_id', $userId)
-                            ->with('Posts')
-                            ->with('posts.font')
-                            ->orderBy('posts.created_at', 'desc')
-                            ->first();
-        if (!$allChildPosts) {
+        $child = Child::where('short_id', $childShortId)->where('user_id', $user->id)->first();
+
+        if (!$child) {
             return self::RespondModelNotFound();
         }
 
-        $quote_count = $allChildPosts->posts->where('is_memory', false)->count();
-        $memory_count = $allChildPosts->posts->where('is_memory', true)->count();
-
+        $allChildPosts = Post::where('child_id', $child->id)
+        ->with('font')
+        ->orderBy('created_at', 'desc')
+        ->get();
 
         return response()->json([
             self::SUCCESS => true,
-            'posts' => $allChildPosts->posts->toArray(),
-            'quote_count' => $quote_count,
-            'memory_count' => $memory_count
+            'posts' => $allChildPosts
         ]);
     }
 
