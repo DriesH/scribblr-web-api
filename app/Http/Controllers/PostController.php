@@ -272,7 +272,7 @@ class PostController extends Controller
 
         //image
         if ($request->img_baked) {
-            if($resp = self::addMemoryOriginal($memory, $request->img_original)) return $resp;
+            if($resp = self::addPostOriginal($memory, $request->img_original)) return $resp;
         }
 
         return response()->json([
