@@ -188,7 +188,7 @@ class ChildController extends Controller
 
         if ($request->avatar) {
             $childToUpdate->clearMediaCollection('avatar');
-            self::addChildThumnail($newChild, $request->avatar);
+            self::addChildThumnail($childToUpdate, $request->avatar);
         }
 
         return response()->json([
