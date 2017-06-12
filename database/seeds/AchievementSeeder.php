@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Carbon\Carbon;
 
 class AchievementSeeder extends Seeder
 {
@@ -116,6 +117,39 @@ class AchievementSeeder extends Seeder
             'scope_name' => 'order_book',
             'amount_to_complete' => 3,
             'category' => 'Books',
+        ]);
+
+
+        //for main user
+        DB::table('achievement__users')->insert([
+            'user_id' => 1,
+            'achievement_id' => 1,
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s')
+        ]);
+        DB::table('achievement__users')->insert([
+            'user_id' => 1,
+            'achievement_id' => 2,
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s')
+        ]);
+        DB::table('achievement__users')->insert([
+            'user_id' => 1,
+            'achievement_id' => 3,
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s')
+        ]);
+        DB::table('achievement__users')->insert([
+            'user_id' => 1,
+            'achievement_id' => 4,
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s')
+        ]);
+        DB::table('achievement__users')->insert([
+            'user_id' => 1,
+            'achievement_id' => 5,
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s')
+        ]);
+        DB::table('achievement__users')->insert([
+            'user_id' => 1,
+            'achievement_id' => 6,
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s')
         ]);
 
     }

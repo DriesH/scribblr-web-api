@@ -15,8 +15,8 @@ class ChildSeeder extends Seeder
         DB::table('children')->insert([
            'short_id' => 'gkhjtubh',
            'user_id' => 1,
-           'gender' => 'Male',
-           'full_name' => 'Druis',
+           'gender' => 'Female',
+           'full_name' => 'Amy',
            'date_of_birth' => '2015-02-03',
            'created_at' => Carbon::now()->format('Y-m-d H:i:s')
        ]);
@@ -24,9 +24,9 @@ class ChildSeeder extends Seeder
         DB::table('children')->insert([
            'short_id' => 'gmhledkh',
            'user_id' => 1,
-           'gender' => 'Female',
-           'full_name' => 'Miranda',
-           'date_of_birth' => '2014-07-15',
+           'gender' => 'Male',
+           'full_name' => 'Tommy',
+           'date_of_birth' => '2013-07-15',
            'created_at' => Carbon::now()->format('Y-m-d H:i:s')
        ]);
 

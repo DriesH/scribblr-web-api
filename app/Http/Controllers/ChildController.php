@@ -174,7 +174,7 @@ class ChildController extends Controller
             'gender' => [self::REQUIRED, Rule::in(Child::$genders)],
             'full_name' => self::REQUIRED.'|max:50',
             'date_of_birth' => self::REQUIRED.'|date',
-            'avatar' => 'file|image|size:10485760'
+            'avatar' => 'file|image|max:10485760'
         ]);
 
         if ($validator->fails()) {
