@@ -64,6 +64,7 @@ class ChildController extends Controller
                             ->where('user_id', $userId)
                             ->with('Posts')
                             ->with('posts.font')
+                            ->orderBy('posts.created_at', 'desc')
                             ->first();
         if (!$allChildPosts) {
             return self::RespondModelNotFound();

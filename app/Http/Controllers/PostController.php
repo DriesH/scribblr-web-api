@@ -25,6 +25,7 @@ class PostController extends Controller
             $query->where('children.user_id', $userId);
         })
         ->with('child')
+        ->orderBy('created_at', 'desc')
         ->get();
 
         if (!$posts) {
