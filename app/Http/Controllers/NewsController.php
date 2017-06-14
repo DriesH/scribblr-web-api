@@ -7,6 +7,7 @@ use App\User;
 use Auth;
 use App\News;
 
+
 class NewsController extends Controller
 {
 
@@ -59,6 +60,26 @@ class NewsController extends Controller
         return response()->json([
             self::SUCCESS => true,
             'unread_count' => $unread_count
+        ]);
+    }
+
+    function markSingleItemAsRead($id) {
+        $user = Auth::user();
+
+        $news_item = News::find($id);
+
+        if (!$news_item) {
+            return self::model_not_found();
+        }
+
+        $already_read_item = $user->news()->where('news.id', $id)->first();
+
+        if (!$already_read_item) {
+            $user->news()->attach($id);
+        }
+
+        return response()->json([
+            self::SUCCESS => true
         ]);
     }
 }

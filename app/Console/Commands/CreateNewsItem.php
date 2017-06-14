@@ -44,6 +44,7 @@ class CreateNewsItem extends Command
         $news_item = new News();
         $news_item->title = $title;
         $news_item->message = $message;
+        $news_item->url = strtolower(trim(preg_replace('/[^a-zA-Z0-9]+/', '-', $title), '-'));
         $news_item->save();
 
 

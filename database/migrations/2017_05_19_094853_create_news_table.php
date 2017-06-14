@@ -17,6 +17,7 @@ class CreateNewsTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->longText('message');
+            $table->string('url');
             $table->timestamps();
             $table->softDeletes();
         });

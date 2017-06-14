@@ -121,6 +121,7 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
     Route::group(['prefix' => 'news'], function () {
         Route::get('/', 'NewsController@getAllNews');
         Route::get('/read/all', 'NewsController@markAllAsRead');
+        Route::get('/read/{id}', 'NewsController@markSingleItemAsRead');
         Route::get('/unread', 'NewsController@getUnreadCount');
     });
 
