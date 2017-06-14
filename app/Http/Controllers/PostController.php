@@ -136,7 +136,9 @@ class PostController extends Controller
     }
 
     private function addPostOriginal($post, $img_original){
-        if (!@getimagesize($img_original)) {
+        $isScribblrUrl = substr($img_original, 0, strlen('https://scribblr-dev.local')) == 'https://scribblr-dev.local';
+
+        if (!$isScribblrUrl && !@getimagesize($img_original)) {
             return response()->json([
                 self::SUCCESS => false,
                 self::ERROR_TYPE => self::ERROR_TYPE_IMAGE_NOT_FOUND
@@ -145,11 +147,17 @@ class PostController extends Controller
 
         $img_original_url_id = hash_hmac('sha256', Str::random(40), config('app.key'));
 
-        $post->clearMediaCollection('original');
+        if (!$isScribblrUrl) {
+            $post->clearMediaCollection('original');
+        }
 
         $post->addMediaFromUrl($img_original)
         ->withCustomProperties(['url_id' => $img_original_url_id])
         ->toMediaLibrary('original');
+
+        if ($isScribblrUrl && count($post->getMedia()) > 0) {
+            $post->getMedia()[0]->delete();
+        }
 
         $post->img_original_url_id = $img_original_url_id;
 
@@ -235,7 +243,6 @@ class PostController extends Controller
         $quote->save();
 
         //image
-
         if($resp = self::addPostOriginal($quote, $request->img_original)) return $resp;
 
         self::addQuoteBaked($quote, $request->img_baked);
@@ -329,7 +336,12 @@ class PostController extends Controller
                 self::ERROR_TYPE => self::ERROR_TYPE_IMAGE_NOT_FOUND
             ], 400);
         }
-
+        if (!count($post->getMedia('original')) > 0) {
+            return response()->json([
+                self::SUCCESS => false,
+                self::ERROR_TYPE => self::ERROR_TYPE_IMAGE_NOT_FOUND
+            ]);
+        }
         return Image::make($post->getMedia('original')[0]
         ->getPath())
         ->response()
