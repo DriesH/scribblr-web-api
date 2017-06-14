@@ -22,8 +22,8 @@ class Controller extends BaseController
     const CONFIRM_EMAIL = 'confirm_email';
     const COMPLETE_ACCOUNT_INFO = 'complete_account_info';
     const ADD_CHILD = 'add_child';
-    const ADD_SCRIBBLE = 'add_scribble';
-    const SHARE_SCRIBBLE = 'share_scribble';
+    const ADD_SCRIBBLE = 'add_memory';
+    const SHARE_SCRIBBLE = 'share_memory';
     const ADD_BOOK = 'add_book';
     const ORDER_BOOK = 'order_book';
 
