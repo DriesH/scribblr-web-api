@@ -40,4 +40,18 @@ class AchievementController extends Controller
             'total_points' => $total_points
         ]);
     }
+
+    function latest() {
+        $user = Auth::user();
+        $last_completed_achievement = $user->achievements()
+                                        ->orderBy('created_at', 'desc')
+                                        ->first();
+
+        return rsponse()->json([
+            self::SUCCESS => true,
+            'last_completed_achievement' => $last_completed_achievement
+        ]);
+
+
+    }
 }

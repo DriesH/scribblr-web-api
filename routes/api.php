@@ -115,6 +115,7 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
 
     Route::group(['prefix' => 'achievements'], function () {
         Route::get('/', 'AchievementController@all');
+        Route::get('/latest', 'AchievementController@latest');
     });
 
     Route::group(['prefix' => 'news'], function () {

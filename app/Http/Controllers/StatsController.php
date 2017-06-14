@@ -25,12 +25,20 @@ class StatsController extends Controller
 
         $book_count = Book::where('user_id', $user->id)->count();
 
+        $completed_achievements = $user->achievements()->get();
+        $achievement_points = $completed_achievements->sum('points') - $user->achievement_points_used;
+
+        if ($achievement_points < 0) {
+            $achievement_points = 0;
+        }
+
         return response()->json([
             self::SUCCESS => true,
             'memory_count' => $memory_count,
             'book_count' => $book_count,
             'shared_count' => $shared_count,
-            'printed_memories_count' => $printed_memories_count
+            'printed_memories_count' => $printed_memories_count,
+            'achievement_points' => $achievement_points
         ]);
     }
 }
