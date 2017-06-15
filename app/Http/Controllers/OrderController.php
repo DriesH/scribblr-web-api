@@ -125,7 +125,7 @@ class OrderController extends Controller
     function status() {
         $user = Auth::user();
 
-        $order = Order::where('user_id', $user->id)->get();
+        $order = Order::where('user_id', $user->id)->with('books')->get();
 
         return response()->json([
             self::SUCCESS => true,
