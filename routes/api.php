@@ -110,7 +110,7 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
     Route::group(['prefix' => 'orders'], function () {
         Route::get('/prices', 'OrderController@getPrices');
         Route::post('/checkout', 'OrderController@checkout');
-        Route::post('/status', 'OrderController@status');
+        Route::get('/status', 'OrderController@status');
         // Route::post('/pay', 'OrderController@pay');
     });
 
