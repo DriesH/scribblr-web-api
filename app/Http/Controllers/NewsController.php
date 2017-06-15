@@ -63,23 +63,24 @@ class NewsController extends Controller
         ]);
     }
 
-    function markSingleItemAsRead($id) {
+    function markSingleItemAsRead($url_id) {
         $user = Auth::user();
 
-        $news_item = News::find($id);
+        $news_item = News::where('url', $url_id)->first();
 
         if (!$news_item) {
             return self::model_not_found();
         }
 
-        $already_read_item = $user->news()->where('news.id', $id)->first();
+        $already_read_item = $user->news()->where('news.id', $news_item->id)->first();
 
         if (!$already_read_item) {
-            $user->news()->attach($id);
+            $user->news()->attach($news_item->id);
         }
 
         return response()->json([
-            self::SUCCESS => true
+            self::SUCCESS => true,
+            'news_item' => $news_item
         ]);
     }
 }
