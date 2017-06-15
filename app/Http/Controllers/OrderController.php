@@ -121,4 +121,15 @@ class OrderController extends Controller
             'remaining_points' => $remaining_points
         ]);
     }
+
+    function status() {
+        $user = Auth::user();
+
+        $order = Order::where('user_id', $user->id)->get();
+
+        return response()->json([
+            self::SUCCESS => true,
+            'orders' => $order
+        ]);
+    }
 }
