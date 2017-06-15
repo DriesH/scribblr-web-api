@@ -52,7 +52,6 @@ class NewsSeeder extends Seeder
                 <li>Barrio</li>
                 <li>Satisfy</li>
             </ul>
-            </br>
             Go ahead and try \'em out!',
             'url' => strtolower(trim(preg_replace('/[^a-zA-Z0-9]+/', '-', 'Update: added more fonts'), '-')),
             'img' => '/assets/news/news-fonts.png',
