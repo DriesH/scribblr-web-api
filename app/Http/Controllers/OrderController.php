@@ -102,7 +102,7 @@ class OrderController extends Controller
             $message->to($user->email, 'Scribblr')
                     ->subject('Thanks for your purchase at Scribblr, ' . $user->first_name . '!')
                     ->from("info@scribblr.be", "Scribblr");
-            //FIXME email of user
+            
         });
     }
 

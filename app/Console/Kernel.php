@@ -49,7 +49,6 @@ class Kernel extends ConsoleKernel
                         $message->to('joren.vh@hotmail.com', 'Scribblr')
                                 ->subject('🎉 Celebrate ' . $child_name_for_subject . ' birthday with Scribblr! 🎁')
                                 ->from("info@scribblr.be", "Scribblr");
-                        //FIXME email of user
                     });
                 }
             }
@@ -61,7 +60,7 @@ class Kernel extends ConsoleKernel
             // });
 
         })
-        // ->dailyAt('09:00')
+        ->dailyAt('09:00')
         ->timezone('Europe/Brussels');
     }
 

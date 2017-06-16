@@ -35,7 +35,7 @@ class BirthdayNotice extends Mailable
     public function build()
     {
         return $this->subject('Celebrate ' . $this->child_name_for_subject . ' birthday with Scribblr!')
-        //FIXME email of user
+        
         ->from("info@scribblr.be")
         ->view('emails.birthday-notice', [
             'child' => $child,

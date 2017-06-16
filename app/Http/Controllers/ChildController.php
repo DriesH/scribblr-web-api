@@ -98,7 +98,7 @@ class ChildController extends Controller
             $shortId = $shortIdGenerator->generateId(8);
         } while ( count( Child::where('short_id', $shortId)->first()) >= 1 );
         $newChild->short_id = $shortId;
-        $newChild->user_id = Auth::user()->id; // FIXME: get current user, works with jwt???
+        $newChild->user_id = Auth::user()->id;
         $newChild->gender = $request->gender;
         $newChild->full_name = $request->full_name;
         $newChild->date_of_birth = (new \DateTime($request->date_of_birth))->format('Y-m-d');
