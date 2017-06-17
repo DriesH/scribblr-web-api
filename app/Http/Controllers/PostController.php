@@ -306,16 +306,19 @@ class PostController extends Controller
             return self::RespondModelNotFound();
         }
 
-        $book_posts_to_turn_null = Book_Post::where('post_id', $postToDelete->id)->get();
-
-        foreach ($book_posts_to_turn_null as $post) {
-            $post->post_id = null;
+        // $book_posts_to_turn_null = Book_Post::where('post_id', $postToDelete->id)->get();
+        if (Book_Post::where('post_id', $postToDelete->id)->count() > 0) {
+            return response()->json([
+                self::SUCCESS => true,
+                'can_delete' => false
+            ]);
         }
 
         $postToDelete->deletePreservingMedia();
 
         return response()->json([
-            self::SUCCESS => true
+            self::SUCCESS => true,
+            'can_delete' => true
         ]);
     }
 
