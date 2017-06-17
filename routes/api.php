@@ -111,6 +111,7 @@ Route::group(['prefix' => 'application', 'middleware' => 'jwt.auth'], function (
         Route::get('/prices', 'OrderController@getPrices');
         Route::post('/checkout', 'OrderController@checkout');
         Route::get('/status', 'OrderController@status');
+        Route::get('/check-empty-pages/{shortId}', 'OrderController@checkBookEmptyPages');
         // Route::post('/pay', 'OrderController@pay');
     });
 

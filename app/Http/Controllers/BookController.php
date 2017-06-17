@@ -51,7 +51,7 @@ class BookController extends Controller
             return response()->json([
                 self::SUCCESS => true,
                 'can_delete' => false
-            ])
+            ]);
         }
 
         $book_to_delete->delete();

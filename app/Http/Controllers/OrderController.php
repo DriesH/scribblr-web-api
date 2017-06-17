@@ -9,6 +9,7 @@ use Validator;
 use App\Achievement_User;
 use App\Order;
 use App\Book_Order;
+use App\Book_Post;
 use App\Classes\ShortIdGenerator;
 use Carbon\Carbon;
 use Mail;
@@ -102,7 +103,7 @@ class OrderController extends Controller
             $message->to($user->email, 'Scribblr')
                     ->subject('Thanks for your purchase at Scribblr, ' . $user->first_name . '!')
                     ->from("info@scribblr.be", "Scribblr");
-            
+
         });
     }
 
@@ -130,6 +131,41 @@ class OrderController extends Controller
         return response()->json([
             self::SUCCESS => true,
             'orders' => $order
+        ]);
+    }
+
+    function checkBookEmptyPages($shortId) {
+        $user = Auth::user();
+        $book = Book::where('user_id', $user->id)->where('short_id', $shortId)->first();
+        $hasEmptyPages = false;
+        $amountAlreadyPrinted = 0;
+
+        if (!$book) {
+            return self::RespondModelNotFound();
+        }
+
+        $book_pages = Book_Post::where('book_id', $book->id)->orderBy('page_nr')->with('post')->get();
+        $amountAlreadyPrinted = $book_pages->where('post.is_printed', true)->count();
+
+        if ($book->is_flip_over && count($book_pages->where('post_id', null)) > 0) {
+            $hasEmptyPages = true;
+        }
+        elseif (!$book->is_flip_over) {
+            $counter == -1;
+            foreach ($book_pages as $page) {
+                $counter++;
+                if (!$page->post) {
+                    if (($page->page_nr % 2 == 0 && !$book_pages[$counter-1]->is_memory) || $page->page_nr % 2 != 0) {
+                        $hasEmptyPages = true;
+                    }
+                }
+            }
+        }
+
+        return response()->json([
+            self::SUCCESS => true,
+            'has_empty_pages' => $hasEmptyPages,
+            'amount_already_printed' => $amountAlreadyPrinted
         ]);
     }
 }
