@@ -54,7 +54,10 @@ class BookController extends Controller
             ]);
         }
 
+
+
         $book_to_delete->delete();
+        Book_Post::where('book_id', $book_to_delete->id)->delete();
 
         return response()->json([
             self::SUCCESS => true,
