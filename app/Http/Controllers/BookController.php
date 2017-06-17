@@ -49,14 +49,16 @@ class BookController extends Controller
 
         if ($book_is_ordered) {
             return response()->json([
-                self::SUCCESS => false
+                self::SUCCESS => true,
+                'can_delete' => false
             ])
         }
 
         $book_to_delete->delete();
 
         return response()->json([
-            self::SUCCESS => true
+            self::SUCCESS => true,
+            'can_delete' => true
         ]);
     }
 
