@@ -151,7 +151,7 @@ class OrderController extends Controller
             $hasEmptyPages = true;
         }
         elseif (!$book->is_flip_over) {
-            $counter == -1;
+            $counter = -1;
             foreach ($book_pages as $page) {
                 $counter++;
                 if (!$page->post) {
