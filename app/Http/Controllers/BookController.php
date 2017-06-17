@@ -9,6 +9,8 @@ use stdClass;
 use App\Child;
 use App\Book;
 use App\Book_Post;
+use App\Book_Order;
+use App\Order;
 use Validator;
 use App\Classes\ShortIdGenerator;
 
@@ -41,6 +43,14 @@ class BookController extends Controller
 
         if (!$book_to_delete) {
             return self::RespondModelNotFound();
+        }
+
+        $book_is_ordered = Book_Order::where('book_id', $book_to_delete->id)->first();
+
+        if ($book_is_ordered) {
+            return response()->json([
+                self::SUCCESS => false
+            ])
         }
 
         $book_to_delete->delete();
