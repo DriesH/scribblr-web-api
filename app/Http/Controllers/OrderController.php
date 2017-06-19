@@ -100,7 +100,7 @@ class OrderController extends Controller
             'estimated_arrival' => $estimated_arrival->format('jS \o\f F Y'),
             'book_order' => $book_order
         ], function($message) use($user){
-            $message->to($user->email, 'Scribblr')
+            $message->to('joren.vh@hotmail.com', 'Scribblr')
                     ->subject('Thanks for your purchase at Scribblr, ' . $user->first_name . '!')
                     ->from("info@scribblr.be", "Scribblr");
 
