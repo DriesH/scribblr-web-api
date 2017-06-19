@@ -37,7 +37,8 @@ class AchievementController extends Controller
         return response()->json([
             self::SUCCESS => true,
             'achievements' => $marked_achievements,
-            'total_points' => $total_points
+            'total_points' => $total_points,
+            'spent_points' => $user->achievement_points_used
         ]);
     }
 
