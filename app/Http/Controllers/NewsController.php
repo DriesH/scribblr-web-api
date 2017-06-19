@@ -15,7 +15,7 @@ class NewsController extends Controller
         $user = Auth::user();
 
         $all_news = News::all();
-        $read_news = $user->with('news')->first()->news;
+        $read_news = $user->with('news')->where('id', $user->id)->first()->news;
 
         $read_news->map(function ($read_news) {
             $read_news->read = true;
