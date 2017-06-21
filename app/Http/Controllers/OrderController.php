@@ -145,6 +145,7 @@ class OrderController extends Controller
         }
 
         $book_pages = Book_Post::where('book_id', $book->id)->orderBy('page_nr')->with('post')->get();
+
         $amountAlreadyPrinted = $book_pages->where('post.is_printed', true)->count();
 
         if ($book->is_flip_over && count($book_pages->where('post_id', null)) > 0) {
@@ -155,7 +156,7 @@ class OrderController extends Controller
             foreach ($book_pages as $page) {
                 $counter++;
                 if (!$page->post) {
-                    if (($page->page_nr % 2 == 0 && !$book_pages[$counter-1]->is_memory) || $page->page_nr % 2 != 0) {
+                    if (($page->page_nr % 2 == 0 && !$book_pages[$counter-1]->post->is_memory) || $page->page_nr % 2 != 0) {
                         $hasEmptyPages = true;
                     }
                 }
